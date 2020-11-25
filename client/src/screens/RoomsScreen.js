@@ -1,7 +1,18 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import Banner from '../components/Banner';
+import Hero from '../components/Hero';
 
 const RoomsScreen = () => {
-  return <div>Hello from Room Screen</div>;
+  return (
+    <Hero hero='roomsHero'>
+      <Banner title='our rooms'>
+        <Link to='/'>
+          <button className='btn-primary'>return home</button>
+        </Link>
+      </Banner>
+    </Hero>
+  );
 };
 
 export default RoomsScreen;
