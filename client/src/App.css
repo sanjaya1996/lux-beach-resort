@@ -283,4 +283,12 @@ h6 {
 .img-container:hover .room-link {
   transform: translate(-50%, -50%) scale(1);
 }
+.room-info {
+  background: var(--darkGrey);
+  text-transform: capitalize;
+  padding: 0.5rem 0;
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: var(--mainSpacing);
+}
 /* end of room */
