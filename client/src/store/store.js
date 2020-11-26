@@ -4,7 +4,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { roomsReducer } from './reducers/rooms';
 
 const rootReducer = combineReducers({
-  rooms: roomsReducer,
+  roomList: roomsReducer,
 });
 
 const initialState = {};
