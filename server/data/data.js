@@ -378,4 +378,4 @@ const ROOMS = [
   },
 ];
 
-export default ROOMS;
+module.exports = ROOMS;

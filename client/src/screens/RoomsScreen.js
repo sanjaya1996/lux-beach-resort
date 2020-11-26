@@ -5,7 +5,7 @@ import Hero from '../components/Hero';
 
 const RoomsScreen = () => {
   return (
-    <Hero hero='roomsHero'>
+    <Hero hero='roomsHero' heroImage='/images/room-2.jpeg'>
       <Banner title='our rooms'>
         <Link to='/'>
           <button className='btn-primary'>return home</button>

@@ -1,0 +1,22 @@
+{
+  "name": "lux-beach-resort",
+  "version": "1.0.0",
+  "description": "Mysql Express React Nodejs lux beach resort app",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server/server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sanjaya1996/lux-beach-resort.git"
+  },
+  "author": "Sanjay Dahal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sanjaya1996/lux-beach-resort/issues"
+  },
+  "homepage": "https://github.com/sanjaya1996/lux-beach-resort#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaAlignRight } from 'react-icons/fa';
-import logo from '../images/logo.svg';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,7 +10,7 @@ const Navbar = () => {
       <div className='nav-center'>
         <div className='nav-header'>
           <Link to='/'>
-            <img src={logo} alt='Beach Resort' />
+            <img src='/images/logo.svg' alt='Beach Resort' />
           </Link>
           <button
             type='button'
