@@ -13,7 +13,7 @@ const FeaturedRooms = () => {
   const { loading, featuredRooms, error } = roomList;
 
   useEffect(() => {
-    dispatch(roomActions.fetchRoomList());
+    dispatch(roomActions.listRooms());
   }, [dispatch]);
   return (
     <section className='featured-rooms'>
