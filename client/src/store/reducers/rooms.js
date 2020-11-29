@@ -10,7 +10,6 @@ import {
 const roomsInitialState = {
   rooms: [],
   featuredRooms: [],
-  loading: false,
 };
 
 export const roomListReducer = (state = roomsInitialState, action) => {
@@ -34,7 +33,7 @@ export const roomListReducer = (state = roomsInitialState, action) => {
 export const roomDetailsReducer = (state = {}, action) => {
   switch (action.type) {
     case ROOM_DETAILS_REQUEST:
-      return { ...state, loading: true };
+      return { loading: true };
     case ROOM_DETAILS_SUCCESS:
       return {
         loading: false,
