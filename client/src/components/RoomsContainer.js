@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import RoomsFilter from './RoomFilter';
-import RoomsList from './RoomList';
+import RoomsFilter from './RoomsFilter';
+import RoomList from './RoomList';
 import Loading from './Loading';
 import * as roomsActions from '../store/actions/rooms';
 
@@ -23,7 +23,7 @@ const RoomsContainer = () => {
   return (
     <>
       <RoomsFilter rooms={rooms} />
-      <RoomsList rooms={rooms} />
+      <RoomList rooms={rooms} />
     </>
   );
 };
