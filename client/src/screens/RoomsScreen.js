@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import Banner from '../components/Banner';
 import Hero from '../components/Hero';
-import RoomContainer from '../components/RoomContainer';
+import RoomsContainer from '../components/RoomsContainer';
+import Loading from '../components/Loading';
+import * as roomsActions from '../store/actions/rooms';
 
 const RoomsScreen = () => {
   return (
@@ -15,7 +17,7 @@ const RoomsScreen = () => {
           </Link>
         </Banner>
       </Hero>
-      <RoomContainer />
+      <RoomsContainer />
     </>
   );
 };
