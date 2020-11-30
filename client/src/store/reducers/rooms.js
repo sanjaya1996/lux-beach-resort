@@ -29,13 +29,13 @@ export const roomListReducer = (state = roomsInitialState, action) => {
     case ROOM_LIST_FAIL:
       return { ...state, loading: false, error: action.payload };
     case ROOM_LIST_FILTER:
+      // all the rooms
       let tempRooms = [...state.rooms];
 
       const {
         type,
         capacity,
         price,
-        minPrice,
         maxPrice,
         minSize,
         maxSize,
@@ -43,10 +43,32 @@ export const roomListReducer = (state = roomsInitialState, action) => {
         pets,
       } = action.payload;
 
+      // filter by type
       if (type !== 'all') {
         tempRooms = tempRooms.filter((room) => room.type === type);
       }
 
+      // filter by capacity
+      if (capacity !== 1) {
+        tempRooms = tempRooms.filter((room) => room.capacity >= capacity);
+      }
+
+      // filter by price
+      if (price !== maxPrice) {
+        tempRooms = tempRooms.filter((room) => room.price <= price);
+      }
+      //filter by room roomSize
+      tempRooms = tempRooms.filter(
+        (room) => room.size >= minSize && room.size <= maxSize
+      );
+      //filter by breakfast
+      if (breakfast) {
+        tempRooms = tempRooms.filter((room) => room.breakfast === true);
+      }
+      //filter by pets
+      if (pets) {
+        tempRooms = tempRooms.filter((room) => room.pets === true);
+      }
       return { ...state, filteredRooms: tempRooms };
     default:
       return state;
