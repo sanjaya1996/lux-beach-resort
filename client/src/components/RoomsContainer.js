@@ -10,7 +10,7 @@ const RoomsContainer = () => {
   const dispatch = useDispatch();
 
   const roomList = useSelector((state) => state.roomList);
-  const { loading, rooms, error } = roomList;
+  const { loading, rooms, filteredRooms, error } = roomList;
 
   useEffect(() => {
     dispatch(roomsActions.listRooms());
@@ -23,7 +23,7 @@ const RoomsContainer = () => {
   return (
     <>
       <RoomsFilter rooms={rooms} />
-      <RoomList rooms={rooms} />
+      <RoomList rooms={filteredRooms} />
     </>
   );
 };

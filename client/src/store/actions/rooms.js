@@ -4,6 +4,8 @@ export const ROOM_LIST_REQUEST = 'ROOM_LIST_REQUEST';
 export const ROOM_LIST_SUCCESS = 'ROOM_LIST_SUCCESS';
 export const ROOM_LIST_FAIL = 'ROOM_LIST_FAIL';
 
+export const ROOM_LIST_FILTER = 'ROOM_LIST_FILTER';
+
 export const ROOM_DETAILS_REQUEST = 'ROOM_DETAILS_REQUEST';
 export const ROOM_DETAILS_SUCCESS = 'ROOM_DETAILS_SUCCESS';
 export const ROOM_DETAILS_FAIL = 'ROOM_DETAILS_FAIL';
@@ -19,6 +21,35 @@ export const listRooms = () => {
     } catch (err) {
       dispatch({ type: ROOM_LIST_FAIL, payload: err.message });
     }
+  };
+};
+
+export const filterRooms = (
+  type,
+  capacity,
+  price,
+  minPrice,
+  maxPrice,
+  minSize,
+  maxSize,
+  breakfast,
+  pets
+) => {
+  return (dispatch) => {
+    dispatch({
+      type: ROOM_LIST_FILTER,
+      payload: {
+        type,
+        capacity,
+        price,
+        minPrice,
+        maxPrice,
+        minSize,
+        maxSize,
+        breakfast,
+        pets,
+      },
+    });
   };
 };
 

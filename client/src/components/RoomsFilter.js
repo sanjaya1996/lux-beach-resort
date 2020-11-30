@@ -1,6 +1,8 @@
-import React, { useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
+import { useDispatch } from 'react-redux';
 
 import Title from './Title';
+import * as roomsActions from '../store/actions/rooms';
 
 const FORM_FILTER_UPDATE = 'FORM_FILTER_UPDATE';
 
@@ -22,7 +24,10 @@ const getUnique = (items, value) => {
   return [...new Set(items.map((item) => item[value]))];
 };
 
+// MAIN COMPONENT
 const RoomsFilter = ({ rooms }) => {
+  const dispatch = useDispatch();
+
   const [formState, dispatchFormState] = useReducer(formReducer, {
     type: 'all',
     capacity: 1,
@@ -39,6 +44,22 @@ const RoomsFilter = ({ rooms }) => {
   let types = getUnique(rooms, 'type');
   // add all
   types = ['all', ...types];
+
+  useEffect(() => {
+    dispatch(
+      roomsActions.filterRooms(
+        formState.type,
+        formState.capacity,
+        formState.price,
+        formState.minPrice,
+        formState.maxPrice,
+        formState.minSize,
+        formState.maxSize,
+        formState.breakfast,
+        formState.pets
+      )
+    );
+  }, [dispatch, formState]);
 
   const inputChangeHandler = (event) => {
     const target = event.target;

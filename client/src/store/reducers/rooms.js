@@ -5,11 +5,13 @@ import {
   ROOM_LIST_FAIL,
   ROOM_LIST_REQUEST,
   ROOM_LIST_SUCCESS,
+  ROOM_LIST_FILTER,
 } from '../actions/rooms';
 
 const roomsInitialState = {
   rooms: [],
   featuredRooms: [],
+  filteredRooms: [],
 };
 
 export const roomListReducer = (state = roomsInitialState, action) => {
@@ -22,9 +24,30 @@ export const roomListReducer = (state = roomsInitialState, action) => {
         loading: false,
         rooms: action.payload,
         featuredRooms: action.payload.filter((room) => room.featured === true),
+        filteredRooms: action.payload,
       };
     case ROOM_LIST_FAIL:
       return { ...state, loading: false, error: action.payload };
+    case ROOM_LIST_FILTER:
+      let tempRooms = [...state.rooms];
+
+      const {
+        type,
+        capacity,
+        price,
+        minPrice,
+        maxPrice,
+        minSize,
+        maxSize,
+        breakfast,
+        pets,
+      } = action.payload;
+
+      if (type !== 'all') {
+        tempRooms = tempRooms.filter((room) => room.type === type);
+      }
+
+      return { ...state, filteredRooms: tempRooms };
     default:
       return state;
   }
