@@ -55,7 +55,7 @@ const SingleRoomScreen = ({ match }) => {
 
   return (
     <>
-      <StyledHero img={mainImg.url}>
+      <StyledHero img={mainImg}>
         <Banner title={`${name} room`}>
           <Link to='/rooms' className='btn-primary'>
             back to rooms
@@ -65,7 +65,7 @@ const SingleRoomScreen = ({ match }) => {
       <section className='single-room'>
         <div className='single-room-images'>
           {defaultImages.map((item, index) => (
-            <img key={index} src={item.url} alt={name} />
+            <img key={index} src={item} alt={name} />
           ))}
         </div>
         <div className='single-room-info'>
