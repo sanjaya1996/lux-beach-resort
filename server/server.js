@@ -3,7 +3,7 @@ const dotenv = require('dotenv');
 const morgan = require('morgan');
 
 const roomRoutes = require('./routes/roomRoutes');
-const { notFound, erroHandler } = require('./middleware/errorMiddleware');
+const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
 // Load config
 dotenv.config();
@@ -23,7 +23,7 @@ app.use('/api/rooms', roomRoutes);
 
 app.use(notFound);
 
-app.use(erroHandler);
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
