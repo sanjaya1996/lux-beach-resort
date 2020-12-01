@@ -2,7 +2,6 @@ const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 
-const db = require('./db/db.js');
 const roomRoutes = require('./routes/roomRoutes');
 
 // Load config
@@ -19,10 +18,7 @@ app.get('/', (req, res) => {
 });
 
 // Room routes
-app.use('/api/rooms', async (req, res) => {
-  const rooms = await db.query('SELECT * FROM rooms');
-  res.send(rooms);
-});
+app.use('/api/rooms', roomRoutes);
 
 const PORT = process.env.PORT || 5000;
 
