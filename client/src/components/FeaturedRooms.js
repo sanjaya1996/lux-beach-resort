@@ -5,6 +5,7 @@ import Loading from './Loading';
 import Room from './Room';
 import Title from './Title';
 import * as roomActions from '../store/actions/rooms';
+import AlertBox from './AlertBox';
 
 const FeaturedRooms = () => {
   const dispatch = useDispatch();
@@ -21,6 +22,8 @@ const FeaturedRooms = () => {
       <div className='featured-rooms-center'>
         {loading ? (
           <Loading />
+        ) : error ? (
+          <AlertBox />
         ) : (
           featuredRooms.map((room) => <Room key={room.id} room={room} />)
         )}

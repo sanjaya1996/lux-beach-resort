@@ -5,6 +5,7 @@ import RoomsFilter from './RoomsFilter';
 import RoomList from './RoomList';
 import Loading from './Loading';
 import * as roomsActions from '../store/actions/rooms';
+import AlertBox from './AlertBox';
 
 const RoomsContainer = () => {
   const dispatch = useDispatch();
@@ -18,6 +19,14 @@ const RoomsContainer = () => {
 
   if (loading) {
     return <Loading />;
+  }
+
+  if (error) {
+    return (
+      <div style={{ margin: 50 }}>
+        <AlertBox />
+      </div>
+    );
   }
 
   return (

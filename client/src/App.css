@@ -79,6 +79,19 @@ h6 {
   text-transform: uppercase;
   margin: 2rem 0;
 }
+.error-card {
+  /* letter-spacing: var(--mainSpacing);
+  color: #cd472b;
+  */
+  text-align: center;
+  padding: 20px;
+  background-color: #cd472b; /* Red */
+  color: white;
+  margin-bottom: 15px;
+}
+.error-card h4 {
+  margin: auto;
+}
 .empty-search {
   text-align: center;
   text-transform: capitalize;

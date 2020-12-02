@@ -6,6 +6,7 @@ import Loading from '../components/Loading';
 import Banner from '../components/Banner';
 import StyledHero from '../components/StyledHero';
 import * as roomsActions from '../store/actions/rooms';
+import ErrorScreen from './ErrorScreen';
 
 const SingleRoomScreen = ({ match }) => {
   const dispatch = useDispatch();
@@ -23,9 +24,9 @@ const SingleRoomScreen = ({ match }) => {
 
   if (error) {
     return (
-      <div className='error'>
-        <h3>{error}</h3>
-      </div>
+      <ErrorScreen title='Error' subtitle={error} redirect='/rooms'>
+        return back
+      </ErrorScreen>
     );
   }
 

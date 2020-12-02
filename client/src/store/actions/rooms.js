@@ -19,7 +19,13 @@ export const listRooms = () => {
 
       dispatch({ type: ROOM_LIST_SUCCESS, payload: data });
     } catch (err) {
-      dispatch({ type: ROOM_LIST_FAIL, payload: err.message });
+      dispatch({
+        type: ROOM_LIST_FAIL,
+        payload:
+          err.response && err.response.data.message
+            ? err.response.data.message
+            : err.message,
+      });
     }
   };
 };
@@ -60,7 +66,13 @@ export const listRoomDetails = (id) => {
 
       dispatch({ type: ROOM_DETAILS_SUCCESS, payload: data });
     } catch (err) {
-      dispatch({ type: ROOM_DETAILS_FAIL, payload: err.message });
+      dispatch({
+        type: ROOM_DETAILS_FAIL,
+        payload:
+          err.response && err.response.data.message
+            ? err.response.data.message
+            : err.message,
+      });
     }
   };
 };
