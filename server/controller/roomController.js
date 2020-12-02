@@ -71,7 +71,7 @@ const createRoom = async (req, res, next) => {
     };
 
     const results = await db.query(query);
-    res.json(results.rows[0]);
+    res.status(201).json(results.rows[0]);
   } catch (err) {
     next(err);
   }

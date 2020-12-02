@@ -1,8 +1,10 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
+const path = require('path');
 
 const roomRoutes = require('./routes/roomRoutes');
+const uploadRoutes = require('./routes/uploadRoutes');
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
 // Load config
@@ -22,6 +24,12 @@ app.get('/', (req, res) => {
 
 // Room routes
 app.use('/api/rooms', roomRoutes);
+
+// File upload routes
+app.use('/api/uploads', uploadRoutes);
+
+// Make uploads folder static
+app.use('/uploads', express.static('uploads'));
 
 app.use(notFound);
 
