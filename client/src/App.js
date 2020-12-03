@@ -14,10 +14,10 @@ const App = () => {
     <>
       <Navbar />
       <Switch>
-        <Route exact path='/' component={HomeScreen} />
-        <Route exact path='/rooms' component={RoomsScreen} />
-        <Route exact path='/rooms/:id' component={SingleRoomScreen} />
+        <Route path='/rooms/:id' component={SingleRoomScreen} />
+        <Route path='/rooms' component={RoomsScreen} exact />
         <Route path='/room/:id?/edit' component={EditRoomScreen} />
+        <Route path='/' component={HomeScreen} exact />
         <Route component={ErrorScreen} />
       </Switch>
     </>

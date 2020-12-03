@@ -56,7 +56,7 @@ const EditRoomScreen = () => {
         },
       };
 
-      const { data } = await axios.post('/api/uploads', formData, config);
+      const { data } = await axios.post('/api/upload', formData, config);
 
       setImages(data);
       setUploading(false);

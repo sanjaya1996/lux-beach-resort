@@ -93,7 +93,6 @@ export const createRoom = (room) => {
       };
 
       const { data } = await axios.post('/api/rooms', room, config);
-      console.log(data);
 
       dispatch({ type: ROOM_CREATE_SUCCESS, payload: data });
     } catch (error) {

@@ -2,6 +2,8 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 
+const router = express.Router();
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'uploads/');
@@ -32,8 +34,6 @@ const upload = multer({
   fileFilter: fileFilter,
 }).array('roomImages', 5);
 
-const router = express.Router();
-
 router.post('/', (req, res, next) => {
   upload(req, res, function (err) {
     if (err instanceof multer.MulterError) {
@@ -51,7 +51,7 @@ router.post('/', (req, res, next) => {
       next(error);
     } else {
       //success upload
-      const imagesPath = req.files.map((file) => file.path);
+      const imagesPath = req.files.map((file) => '/' + file.path);
       res.send(imagesPath);
     }
   });

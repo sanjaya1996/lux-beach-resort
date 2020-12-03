@@ -53,6 +53,7 @@ const SingleRoomScreen = ({ match }) => {
     images,
   } = room;
   const [mainImg, ...defaultImages] = images;
+  console.log(defaultImages);
 
   return (
     <>

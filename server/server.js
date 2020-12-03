@@ -26,10 +26,10 @@ app.get('/', (req, res) => {
 app.use('/api/rooms', roomRoutes);
 
 // File upload routes
-app.use('/api/uploads', uploadRoutes);
+app.use('/api/upload', uploadRoutes);
 
 // Make uploads folder static
-app.use('/uploads', express.static('uploads'));
+app.use('/uploads', express.static('/uploads'));
 
 app.use(notFound);
 
