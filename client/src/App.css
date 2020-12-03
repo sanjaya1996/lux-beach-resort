@@ -476,7 +476,7 @@ h6 {
 .filter-container {
   padding: 5rem 0;
 }
-.filter-form {
+#filter-form {
   width: 60vw;
   margin: 0 auto;
   display: grid;
@@ -484,30 +484,30 @@ h6 {
   grid-row-gap: 2rem;
   grid-column-gap: 40px;
 }
-.form-group {
+#filter-form .form-group {
   text-transform: capitalize;
 }
-.form-group label {
+#filter-form .form-group label {
   display: block;
   letter-spacing: var(--mainSpacing);
   margin-bottom: 0.5rem;
 }
-.form-control {
+#filter-form .form-control {
   width: 100%;
   background: transparent;
   font-size: 1rem;
 }
-.size-inputs {
+#filter-form .size-inputs {
   display: flex;
 }
-.size-input {
+#filter-form .size-input {
   width: 40%;
   padding: 0.2rem;
   border: 1px solid var(--mainBlack);
   border-radius: 0.3rem;
   margin-right: 0.3rem;
 }
-.single-extra label {
+#filter-form .single-extra label {
   display: inline-block;
   font-size: 0.8rem;
   margin-left: 0.5rem;
@@ -524,3 +524,55 @@ h6 {
   }
 }
 /* end of rooms fitler*/
+
+/* Login form */
+.edit-room {
+  padding: 3rem 5rem;
+  max-width: 50rem;
+}
+.form-group {
+  text-transform: capitalize;
+  margin-bottom: 1em;
+  display: flex;
+  flex-direction: column;
+}
+.form-group label {
+  padding-bottom: 0.5em;
+}
+.form-control {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  resize: vertical;
+}
+
+.extras-input input {
+  height: 5px;
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.extra-list {
+  list-style: none;
+  padding: 1rem;
+}
+.extra-list:hover {
+  cursor: context-menu;
+}
+.note {
+  padding-top: 0.8rem;
+  font-size: 0.8rem;
+  text-transform: none;
+}
+.single-extra label {
+  display: inline-block;
+  font-size: 0.8rem;
+  margin-left: 0.5rem;
+}
+.form-group button {
+  width: 8rem;
+}
+/* end of Login form */

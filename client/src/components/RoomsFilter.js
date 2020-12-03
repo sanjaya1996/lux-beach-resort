@@ -77,7 +77,7 @@ const RoomsFilter = ({ rooms }) => {
   return (
     <section className='filter-container'>
       <Title title='filter rooms' />
-      <form className='filter-form'>
+      <form id='filter-form'>
         {/* select type */}
         <div className='form-group'>
           <label htmlFor='type'>room type</label>
