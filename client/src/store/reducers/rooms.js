@@ -6,6 +6,9 @@ import {
   ROOM_LIST_REQUEST,
   ROOM_LIST_SUCCESS,
   ROOM_LIST_FILTER,
+  ROOM_CREATE_REQUEST,
+  ROOM_CREATE_SUCCESS,
+  ROOM_CREATE_FAIL,
 } from '../actions/rooms';
 
 const roomsInitialState = {
@@ -85,6 +88,19 @@ export const roomDetailsReducer = (state = {}, action) => {
         room: action.payload,
       };
     case ROOM_DETAILS_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const roomCreateReducer = (state = {}, action) => {
+  switch (action.type) {
+    case ROOM_CREATE_REQUEST:
+      return { loading: true };
+    case ROOM_CREATE_SUCCESS:
+      return { loading: false, success: true, room: action.payload };
+    case ROOM_CREATE_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;

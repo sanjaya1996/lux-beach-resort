@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
 
 import Loading from '../components/Loading';
+import * as roomActions from '../store/actions/rooms';
 
 const EditRoomScreen = () => {
   const [uploading, setUploading] = useState(false);
@@ -13,14 +15,31 @@ const EditRoomScreen = () => {
   const [images, setImages] = useState([]);
   const [description, setDescription] = useState('');
   const [extra, setExtra] = useState('');
-  const [extraList, setExtraList] = useState([]);
+  const [extras, setExtras] = useState([]);
   const [pets, setPets] = useState(false);
   const [breakfast, setBreakfast] = useState(false);
   const [featured, setFeatured] = useState(false);
 
-  // const inputChangeHandler = (event) => {
-  //   console.log(event.target.value);
-  // };
+  const dispatch = useDispatch();
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    dispatch(
+      roomActions.createRoom({
+        name,
+        type,
+        price,
+        size,
+        capacity,
+        images,
+        description,
+        extras,
+        pets,
+        breakfast,
+        featured,
+      })
+    );
+  };
 
   const uploadFileHandler = async (e) => {
     const files = e.target.files;
@@ -48,12 +67,12 @@ const EditRoomScreen = () => {
   };
 
   const deleteExtraHandler = (index) => {
-    setExtraList(extraList.filter((item, i) => i !== index));
+    setExtras(extras.filter((item, i) => i !== index));
   };
 
   return (
     <div className='edit-room'>
-      <form className='form-container'>
+      <form onSubmit={submitHandler} className='form-container'>
         <div className='form-group'>
           <label htmlFor='name'>Room Name:</label>
           <input
@@ -136,19 +155,19 @@ const EditRoomScreen = () => {
             <button
               type='button'
               style={{ width: 'auto' }}
-              onClick={() => setExtraList((prevState) => [...prevState, extra])}
+              onClick={() => setExtras((prevState) => [...prevState, extra])}
             >
               Add to list
             </button>
           </div>
           <ul className='extra-list'>
-            {extraList.map((item, index) => (
+            {extras.map((item, index) => (
               <li key={index} onClick={() => deleteExtraHandler(index)}>
                 - {item}
               </li>
             ))}
           </ul>
-          {extraList.length > 0 && (
+          {extras.length > 0 && (
             <p className='note'>
               <i>*click an item to remove*</i>
             </p>
