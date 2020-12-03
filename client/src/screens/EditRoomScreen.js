@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+
+import Loading from '../components/Loading';
 
 const EditRoomScreen = () => {
+  const [uploading, setUploading] = useState(false);
   const [name, setName] = useState('');
   const [type, setType] = useState('');
   const [price, setPrice] = useState(0);
@@ -17,6 +21,31 @@ const EditRoomScreen = () => {
   // const inputChangeHandler = (event) => {
   //   console.log(event.target.value);
   // };
+
+  const uploadFileHandler = async (e) => {
+    const files = e.target.files;
+    const formData = new FormData();
+    for (let i = 0; i < files.length; i++) {
+      formData.append('roomImages', files[i]);
+    }
+    setUploading(true);
+
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      };
+
+      const { data } = await axios.post('/api/uploads', formData, config);
+
+      setImages(data);
+      setUploading(false);
+    } catch (err) {
+      console.log(err);
+      setUploading(false);
+    }
+  };
 
   const deleteExtraHandler = (index) => {
     setExtraList(extraList.filter((item, i) => i !== index));
@@ -82,14 +111,13 @@ const EditRoomScreen = () => {
         </div>
         <div className='form-group'>
           <label htmlFor='images'>Images:</label>
+          {uploading && Loading}
           <input
             type='file'
             name='images'
             id='images'
-            value={images}
-            onChange={(e) =>
-              setImages((prevState) => [...prevState, e.target.value])
-            }
+            multiple
+            onChange={uploadFileHandler}
             className='form-control'
           />
         </div>
@@ -101,6 +129,7 @@ const EditRoomScreen = () => {
               name='extra'
               id='extra'
               value={extra}
+              multiple
               onChange={(e) => setExtra(e.target.value)}
               className='form-control'
             />

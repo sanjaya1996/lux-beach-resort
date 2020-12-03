@@ -41,16 +41,18 @@ router.post('/', (req, res, next) => {
       next(err);
     } else if (err) {
       // An unknown error occured while uploading
+
       next(err);
     } else if (req.files.length === 0) {
       // when no file was choosen while uploading
+
       const error = new Error('please choose files');
       res.status(400);
       next(error);
     } else {
       //success upload
       const imagesPath = req.files.map((file) => file.path);
-      res.json(imagesPath);
+      res.send(imagesPath);
     }
   });
 });
