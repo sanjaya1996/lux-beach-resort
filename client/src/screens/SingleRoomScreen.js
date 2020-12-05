@@ -53,11 +53,10 @@ const SingleRoomScreen = ({ match }) => {
     images,
   } = room;
   const [mainImg, ...defaultImages] = images;
-  console.log(defaultImages);
-
+  const mainImgCorrectPath = mainImg.replace('\\', '\\\\');
   return (
     <>
-      <StyledHero img={mainImg}>
+      <StyledHero img={mainImgCorrectPath}>
         <Banner title={`${name} room`}>
           <Link to='/rooms' className='btn-primary'>
             back to rooms

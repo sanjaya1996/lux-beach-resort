@@ -14,8 +14,8 @@ const App = () => {
     <>
       <Navbar />
       <Switch>
-        <Route path='/rooms/:id' component={SingleRoomScreen} />
         <Route path='/rooms' component={RoomsScreen} exact />
+        <Route path='/rooms/:id' component={SingleRoomScreen} />
         <Route path='/room/:id?/edit' component={EditRoomScreen} />
         <Route path='/' component={HomeScreen} exact />
         <Route component={ErrorScreen} />

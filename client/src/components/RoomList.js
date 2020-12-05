@@ -10,6 +10,7 @@ const RoomList = ({ rooms }) => {
       </div>
     );
   }
+
   return (
     <section className='roomsList'>
       <div className='roomslist-center'>
