@@ -69,6 +69,13 @@ h6 {
   background: transparent;
   color: var(--primaryColor);
 }
+
+.btn-sm {
+  letter-spacing: var(--mainSpacing);
+  display: inline-block;
+  width: fit-content;
+  height: fit-content;
+}
 .loading {
   text-transform: capitalize;
   text-align: center;

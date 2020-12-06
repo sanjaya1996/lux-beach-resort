@@ -11,10 +11,13 @@ import {
   ROOM_CREATE_FAIL,
 } from '../actions/rooms';
 
+export const ROOM_LIST_FILTER_RESET = 'ROOM_LIST_FILTER_RESET';
+
 const roomsInitialState = {
   rooms: [],
   featuredRooms: [],
   filteredRooms: [],
+  filters: {},
 };
 
 export const roomListReducer = (state = roomsInitialState, action) => {
@@ -72,7 +75,20 @@ export const roomListReducer = (state = roomsInitialState, action) => {
       if (pets) {
         tempRooms = tempRooms.filter((room) => room.pets === true);
       }
-      return { ...state, filteredRooms: tempRooms };
+
+      const currentFilters = {
+        type,
+        capacity,
+        price,
+        maxPrice,
+        minSize,
+        maxSize,
+        breakfast,
+        pets,
+      };
+      return { ...state, filteredRooms: tempRooms, filters: currentFilters };
+    case ROOM_LIST_FILTER_RESET:
+      return { ...state, filteredRooms: state.rooms, filters: {} };
     default:
       return state;
   }

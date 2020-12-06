@@ -11,7 +11,7 @@ const RoomsContainer = () => {
   const dispatch = useDispatch();
 
   const roomList = useSelector((state) => state.roomList);
-  const { loading, rooms, filteredRooms, error } = roomList;
+  const { loading, rooms, filteredRooms, filters, error } = roomList;
 
   useEffect(() => {
     dispatch(roomsActions.listRooms());
@@ -31,7 +31,7 @@ const RoomsContainer = () => {
 
   return (
     <>
-      <RoomsFilter rooms={rooms} />
+      <RoomsFilter rooms={rooms} filters={filters} />
       <RoomList rooms={filteredRooms} />
     </>
   );

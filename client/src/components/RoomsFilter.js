@@ -3,8 +3,10 @@ import { useDispatch } from 'react-redux';
 
 import Title from './Title';
 import * as roomsActions from '../store/actions/rooms';
+import { ROOM_LIST_FILTER_RESET } from '../store/reducers/rooms';
 
 const FORM_FILTER_UPDATE = 'FORM_FILTER_UPDATE';
+const FORM_FILTER_RESET = 'FORM_FILTER_RESET';
 
 const formReducer = (state, action) => {
   switch (action.type) {
@@ -14,6 +16,19 @@ const formReducer = (state, action) => {
         [action.name]: action.value,
       };
       return updatedValues;
+    case FORM_FILTER_RESET:
+      const initialValues = {
+        type: 'all',
+        capacity: 1,
+        price: state.maxPrice,
+        minPrice: 0,
+        maxPrice: state.maxPrice,
+        minSize: 0,
+        maxSize: state.maxSize,
+        breakfast: false,
+        pets: false,
+      };
+      return initialValues;
     default:
       return state;
   }
@@ -25,22 +40,22 @@ const getUnique = (items, value) => {
 };
 
 // MAIN COMPONENT
-const RoomsFilter = ({ rooms }) => {
+const RoomsFilter = ({ rooms, filters }) => {
   const dispatch = useDispatch();
 
   const maxPrice = Math.max(...rooms.map((item) => item.price));
   const maxSize = Math.max(...rooms.map((item) => item.size));
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
-    type: 'all',
-    capacity: 1,
-    price: maxPrice,
+    type: filters.type ? filters.type : 'all',
+    capacity: filters.capacity ? filters.capacity : 1,
+    price: filters.price ? filters.price : maxPrice,
     minPrice: 0,
     maxPrice: maxPrice,
-    minSize: 0,
-    maxSize: maxSize,
-    breakfast: false,
-    pets: false,
+    minSize: filters.minSize ? filters.minSize : 0,
+    maxSize: filters.maxSize ? filters.maxSize : maxSize,
+    breakfast: filters.breakfast ? true : false,
+    pets: filters.pets ? true : false,
   });
 
   // get unique types
@@ -72,6 +87,11 @@ const RoomsFilter = ({ rooms }) => {
     const name = target.name;
 
     dispatchFormState({ type: FORM_FILTER_UPDATE, name: name, value: value });
+  };
+
+  const resetFiltersHandler = () => {
+    dispatch({ type: ROOM_LIST_FILTER_RESET });
+    dispatchFormState({ type: FORM_FILTER_RESET });
   };
 
   return (
@@ -176,6 +196,9 @@ const RoomsFilter = ({ rooms }) => {
           </div>
         </div>
         {/* end of extras */}
+        <button type='button' className='btn-sm' onClick={resetFiltersHandler}>
+          reset my filters
+        </button>
       </form>
     </section>
   );
