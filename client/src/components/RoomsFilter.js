@@ -1,5 +1,7 @@
 import React, { useEffect, useReducer } from 'react';
 import { useDispatch } from 'react-redux';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 import Title from './Title';
 import * as roomsActions from '../store/actions/rooms';
