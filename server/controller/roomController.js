@@ -83,42 +83,51 @@ const createRoom = async (req, res, next) => {
 const updateRoom = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const {
-      name,
-      type,
-      price,
-      size,
-      capacity,
-      pets,
-      breakfast,
-      featured,
-      description,
-      extras,
-      images,
-    } = req.body;
 
-    const query = {
-      text:
-        'UPDATE rooms SET name = $1, type = $2, price = $3, size = $4, capacity = $5, pets = $6, breakfast = $7, featured = $8, description = $9, extras = $10, images = $11 WHERE id = $12 RETURNING *',
-      values: [
-        name,
-        type,
-        price,
-        size,
-        capacity,
-        pets,
-        breakfast,
-        featured,
-        description,
-        extras,
-        images,
-        id,
-      ],
-    };
+    const existedRoom = await db.query('SELECT * FROM rooms WHERE id = $1', [
+      id,
+    ]);
 
-    const results = await db.query(query);
+    if (existedRoom.rowCount === 1) {
+      const room = existedRoom.rows[0];
 
-    if (results.rowCount || results.rows.length != 0) {
+      const name = req.body.name || room.name;
+      const type = req.body.type || room.type;
+      const price = req.body.price || room.price;
+      const size = req.body.size || room.size;
+      const capacity = req.body.capacity || room.capacity;
+      const pets = req.body.pets === undefined ? room.pets : req.body.pets;
+      const breakfast =
+        req.body.breakfast === undefined ? room.breakfast : req.body.breakfast;
+      const featured =
+        req.body.featured === undefined ? room.featured : req.body.featured;
+      const description = req.body.description || room.description;
+      const extras = req.body.extras || room.extras;
+      const images = req.body.images || room.images;
+      const is_booked =
+        req.body.is_booked === undefined ? room.is_booked : req.body.is_booked;
+
+      const query = {
+        text:
+          'UPDATE rooms SET name = $1, type = $2, price = $3, size = $4, capacity = $5, pets = $6, breakfast = $7, featured = $8, description = $9, extras = $10, images = $11, is_booked= $12 WHERE id = $13 RETURNING *',
+        values: [
+          name,
+          type,
+          price,
+          size,
+          capacity,
+          pets,
+          breakfast,
+          featured,
+          description,
+          extras,
+          images,
+          is_booked,
+          id,
+        ],
+      };
+
+      const results = await db.query(query);
       res.json(results.rows[0]);
     } else {
       res.status(404);

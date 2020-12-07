@@ -9,14 +9,23 @@ CREATE TABLE rooms (
    price DECIMAL(20,2) NOT NULL,
    size DECIMAL(20,2) NOT NULL,
    capacity INT NOT NULL,
-   pets BOOLEAN NOT NULL DEFAULT FALSE,
-   breakfast BOOLEAN NOT NULL DEFAULT FALSE,
-   featured BOOLEAN NOT NULL DEFAULT FALSE,
+   pets BOOLEAN NOT NULL DEFAULT false,
+   breakfast BOOLEAN NOT NULL DEFAULT false,
+   featured BOOLEAN NOT NULL DEFAULT false,
    description TEXT NOT NULL,
    extras TEXT[],
    images VARCHAR(500)[],
    PRIMARY KEY(id)
 );
+
+ALTER TABLE rooms
+ADD COLUMN isBooked BOOLEAN DEFAULT false;
+
+ALTER TABLE rooms
+ALTER COLUMN isBooked SET NOT NULL ;
+
+ALTER TABLE rooms 
+RENAME COLUMN isBooked TO is_booked;
 
 -- Create table Guests
 CREATE TABLE guests (
@@ -30,16 +39,17 @@ CREATE TABLE guests (
 -- Create table Bookings
 CREATE TABLE bookings (
    id SERIAL NOT NULL,
-   roomId INT,
-   guestId INT,
-   checkInDate DATE NOT NULL,
-   checkOutDate DATE NOT NULL,
-   bookedDate DATE NOT NULL DEFAULT CURRENT_DATE, 
+   room_id INT,
+   guest_id INT,
+   checkin_date DATE NOT NULL,
+   checkout_date DATE NOT NULL,
+   booked_date DATE NOT NULL DEFAULT CURRENT_DATE, 
    vacated BOOLEAN NOT NULL DEFAULT FALSE,
    PRIMARY KEY (id),
-   CONSTRAINT roomId FOREIGN KEY(roomId) REFERENCES rooms(id),
-   CONSTRAINT guestId FOREIGN KEY(guestId) REFERENCES guests(id)
+   CONSTRAINT room_id FOREIGN KEY(room_id) REFERENCES rooms(id),
+   CONSTRAINT guest_id FOREIGN KEY(guest_id) REFERENCES guests(id)
 );
+
 
 -- Insert first Value into rooms
 

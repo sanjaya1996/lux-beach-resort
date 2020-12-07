@@ -22,11 +22,11 @@ const formReducer = (state, action) => {
       const initialValues = {
         type: 'all',
         capacity: 1,
-        price: state.maxPrice,
+        price: action.maxPrice,
         minPrice: 0,
-        maxPrice: state.maxPrice,
+        maxPrice: action.maxPrice,
         minSize: 0,
-        maxSize: state.maxSize,
+        maxSize: action.maxSize,
         breakfast: false,
         pets: false,
       };
@@ -43,13 +43,15 @@ const getUnique = (items, value) => {
 
 // MAIN COMPONENT
 const RoomsFilter = ({ rooms, filters }) => {
-  const dispatch = useDispatch();
-
-  const [checkInDate, setCheckInDate] = useState();
-  const [checkOutDate, setCheckOutDate] = useState();
-
   const maxPrice = Math.max(...rooms.map((item) => item.price));
   const maxSize = Math.max(...rooms.map((item) => item.size));
+
+  const [checkInDate, setCheckInDate] = useState(
+    filters.checkInDate ? filters.checkInDate : null
+  );
+  const [checkOutDate, setCheckOutDate] = useState(
+    filters.checkOutDate ? filters.checkOutDate : null
+  );
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
     type: filters.type ? filters.type : 'all',
@@ -71,11 +73,12 @@ const RoomsFilter = ({ rooms, filters }) => {
   //get unique room capacity option
   const people = getUnique(rooms, 'capacity');
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
+    // if (isFinite(maxPrice)) {
     dispatch(
       roomsActions.filterRooms(
-        checkInDate,
-        checkOutDate,
         formState.type,
         +formState.capacity,
         +formState.price,
@@ -83,40 +86,40 @@ const RoomsFilter = ({ rooms, filters }) => {
         +formState.minSize,
         +formState.maxSize,
         formState.breakfast,
-        formState.pets
+        formState.pets,
+        checkInDate,
+        checkOutDate
       )
     );
-  }, [dispatch, formState, checkInDate, checkOutDate]);
+    // }
+  }, [dispatch, formState, checkInDate, checkOutDate, maxPrice]);
 
   const inputChangeHandler = (event) => {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
-    console.log(target);
 
     dispatchFormState({ type: FORM_FILTER_UPDATE, name: name, value: value });
   };
 
   const resetFiltersHandler = () => {
     dispatch({ type: ROOM_LIST_FILTER_RESET });
-    dispatchFormState({ type: FORM_FILTER_RESET });
+    dispatchFormState({ type: FORM_FILTER_RESET, maxSize, maxPrice });
   };
 
   return (
     <section className='filter-container'>
       <Title title='filter rooms' />
       <form id='filter-form'>
-        <div className='form-group'>
+        <div>
           <label htmlFor='date'>Check-in :</label>{' '}
           <DatePicker
-            name='checkInDate'
             selected={checkInDate}
             onChange={(date) => setCheckInDate(date)}
             className='date-input'
           />
           <label htmlFor='date'>Check-out :</label>{' '}
           <DatePicker
-            name='checkOutDate'
             selected={checkOutDate}
             onChange={(date) => setCheckOutDate(date)}
             className='date-input'

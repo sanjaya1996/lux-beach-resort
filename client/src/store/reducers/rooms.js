@@ -47,6 +47,8 @@ export const roomListReducer = (state = roomsInitialState, action) => {
         maxSize,
         breakfast,
         pets,
+        checkInDate,
+        checkOutDate,
       } = action.payload;
 
       // filter by type
@@ -63,10 +65,12 @@ export const roomListReducer = (state = roomsInitialState, action) => {
       if (price !== maxPrice) {
         tempRooms = tempRooms.filter((room) => room.price <= price);
       }
+
       //filter by room roomSize
       tempRooms = tempRooms.filter(
         (room) => room.size >= minSize && room.size <= maxSize
       );
+
       //filter by breakfast
       if (breakfast) {
         tempRooms = tempRooms.filter((room) => room.breakfast === true);
@@ -74,6 +78,37 @@ export const roomListReducer = (state = roomsInitialState, action) => {
       //filter by pets
       if (pets) {
         tempRooms = tempRooms.filter((room) => room.pets === true);
+      }
+
+      //filter by check In-Out date
+      if (checkInDate && checkOutDate) {
+        tempRooms = tempRooms.filter((room) => {
+          if (!room.is_booked) {
+            console.log('not is booked');
+            return true;
+          } else {
+            console.log('is booked');
+            const bookings = [];
+            const bookingsOfCurrentRoom = bookings.filter(
+              (item) => item.room_id === room.id
+            );
+
+            return bookingsOfCurrentRoom.every((booking) => {
+              if (
+                (checkInDate >= booking.checkin_date &&
+                  checkInDate < booking.checkout_date) ||
+                (checkOutDate > booking.checkin_date &&
+                  checkOutDate <= booking.checkout_date)
+              ) {
+                console.log('check date is true');
+                return true;
+              } else {
+                console.log('checked date is false');
+                return false;
+              }
+            });
+          }
+        });
       }
 
       const currentFilters = {
@@ -85,6 +120,8 @@ export const roomListReducer = (state = roomsInitialState, action) => {
         maxSize,
         breakfast,
         pets,
+        checkInDate,
+        checkOutDate,
       };
       return { ...state, filteredRooms: tempRooms, filters: currentFilters };
     case ROOM_LIST_FILTER_RESET:

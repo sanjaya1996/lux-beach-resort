@@ -29,12 +29,16 @@ const RoomsContainer = () => {
     );
   }
 
-  return (
-    <>
-      <RoomsFilter rooms={rooms} filters={filters} />
-      <RoomList rooms={filteredRooms} />
-    </>
-  );
+  if (rooms.length === 0) {
+    return <RoomList rooms={filteredRooms} />;
+  } else {
+    return (
+      <>
+        <RoomsFilter rooms={rooms} filters={filters} />
+        <RoomList rooms={filteredRooms} />
+      </>
+    );
+  }
 };
 
 export default RoomsContainer;

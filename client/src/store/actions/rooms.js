@@ -42,7 +42,9 @@ export const filterRooms = (
   minSize,
   maxSize,
   breakfast,
-  pets
+  pets,
+  checkInDate,
+  checkOutDate
 ) => {
   return (dispatch) => {
     dispatch({
@@ -56,6 +58,8 @@ export const filterRooms = (
         maxSize,
         breakfast,
         pets,
+        checkInDate,
+        checkOutDate,
       },
     });
   };

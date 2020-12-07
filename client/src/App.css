@@ -485,16 +485,15 @@ h6 {
 }
 #filter-form {
   width: 60vw;
+  text-transform: capitalize;
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(202px, 1fr));
   grid-row-gap: 2rem;
   grid-column-gap: 40px;
 }
-#filter-form .form-group {
-  text-transform: capitalize;
-}
-#filter-form .form-group label {
+
+#filter-form label {
   display: block;
   letter-spacing: var(--mainSpacing);
   /* margin-bottom: 0.5rem; */
