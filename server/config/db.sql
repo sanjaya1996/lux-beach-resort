@@ -18,6 +18,29 @@ CREATE TABLE rooms (
    PRIMARY KEY(id)
 );
 
+-- Create table Guests
+CREATE TABLE guests (
+   id SERIAL NOT NULL,
+   name VARCHAR(100) NOT NULL,
+   phone VARCHAR(15) NOT NULL,
+   email VARCHAR(50) NOT NULL,
+   PRIMARY KEY(id)
+);
+
+-- Create table Bookings
+CREATE TABLE bookings (
+   id SERIAL NOT NULL,
+   roomId INT,
+   guestId INT,
+   checkInDate DATE NOT NULL,
+   checkOutDate DATE NOT NULL,
+   bookedDate DATE NOT NULL DEFAULT CURRENT_DATE, 
+   vacated BOOLEAN NOT NULL DEFAULT FALSE,
+   PRIMARY KEY (id),
+   CONSTRAINT roomId FOREIGN KEY(roomId) REFERENCES rooms(id),
+   CONSTRAINT guestId FOREIGN KEY(guestId) REFERENCES guests(id)
+);
+
 -- Insert first Value into rooms
 
 INSERT INTO rooms (id, name, type, price, size, capacity, pets, breakfast, featured, description, extras, images) 
