@@ -416,3 +416,11 @@ CREATE TABLE bookings (
    CONSTRAINT room_id FOREIGN KEY(room_id) REFERENCES rooms(id),
    CONSTRAINT guest_id FOREIGN KEY(guest_id) REFERENCES guests(id)
 );
+
+INSERT INTO bookings 
+   (room_id, guest_id, checkin_date, checkout_date)
+VALUES
+   (20, 1, '2020-12-7', '2020-12-9'),
+   (20, 2, '2020-12-7', '2020-12-9'),
+   (21, 3, '2020-12-7', '2020-12-9'),
+   (22, 4, '2020-12-7', '2020-12-9');

@@ -12,4 +12,22 @@ const getGuests = async (req, res) => {
   }
 };
 
-module.exports = { getGuests };
+const createGuest = async (req, res, next) => {
+  try {
+    const { name, phone, email } = req.body;
+
+    const query = {
+      text:
+        'INSERT INTO guests (name, phone, email) VALUES($1, $2, $3) RETURNING id',
+      values: [name, phone, email],
+    };
+
+    const results = await db.query(query);
+    req.guestId = results.rows[0].id;
+    next();
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { getGuests, createGuest };
