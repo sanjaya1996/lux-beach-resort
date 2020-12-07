@@ -5,6 +5,8 @@ const path = require('path');
 
 const roomRoutes = require('./routes/roomRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
+const bookingRoutes = require('./routes/bookingRoutes');
+const guestRoutes = require('./routes/guestRoutes');
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
 // Load config
@@ -24,6 +26,12 @@ app.get('/', (req, res) => {
 
 // Room routes
 app.use('/api/rooms', roomRoutes);
+
+// Booking routes
+app.use('/api/bookings', bookingRoutes);
+
+// Guest routes
+app.use('/api/guests', guestRoutes);
 
 // File upload routes
 app.use('/api/upload', uploadRoutes);

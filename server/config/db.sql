@@ -384,3 +384,35 @@ values (
        '/images/details-4.jpeg'
     ]
 );
+
+
+-- Create table Guests
+CREATE TABLE guests (
+   id SERIAL NOT NULL,
+   name VARCHAR(100) NOT NULL,
+   phone VARCHAR(15) NOT NULL,
+   email VARCHAR(50) NOT NULL,
+   PRIMARY KEY(id)
+);
+
+INSERT INTO guests
+  ( name, phone, email )
+VALUES
+  ('John', '0459584949', 'john@yahoo.com'), 
+  ('Jane', '0459584949', 'jane@yahoo.com'), 
+  ('Billy', '0459584949', 'billy@yahoo.com'),
+  ('Miranda', '0459584949', 'miranda@yahoo.com');
+
+-- Create table Bookings
+CREATE TABLE bookings (
+   id SERIAL NOT NULL,
+   room_id INT,
+   guest_id INT,
+   checkin_date DATE NOT NULL,
+   checkout_date DATE NOT NULL,
+   booked_date DATE NOT NULL DEFAULT CURRENT_DATE, 
+   vacated BOOLEAN NOT NULL DEFAULT FALSE,
+   PRIMARY KEY (id),
+   CONSTRAINT room_id FOREIGN KEY(room_id) REFERENCES rooms(id),
+   CONSTRAINT guest_id FOREIGN KEY(guest_id) REFERENCES guests(id)
+);
