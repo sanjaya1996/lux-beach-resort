@@ -481,7 +481,7 @@ h6 {
 /* end of roomlist */
 /*  rooms fitler*/
 .filter-container {
-  padding: 5rem 0;
+  padding: 5rem;
 }
 #filter-form {
   width: 60vw;
@@ -497,7 +497,7 @@ h6 {
 #filter-form .form-group label {
   display: block;
   letter-spacing: var(--mainSpacing);
-  margin-bottom: 0.5rem;
+  /* margin-bottom: 0.5rem; */
 }
 #filter-form .form-control {
   width: 100%;
@@ -507,11 +507,14 @@ h6 {
 #filter-form .size-inputs {
   display: flex;
 }
-#filter-form .size-input {
-  width: 40%;
+#filter-form .size-input,
+.date-input {
   padding: 0.2rem;
   border: 1px solid var(--mainBlack);
   border-radius: 0.3rem;
+}
+#filter-form .size-input {
+  width: 40%;
   margin-right: 0.3rem;
 }
 #filter-form .single-extra label {

@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -45,6 +45,9 @@ const getUnique = (items, value) => {
 const RoomsFilter = ({ rooms, filters }) => {
   const dispatch = useDispatch();
 
+  const [checkInDate, setCheckInDate] = useState();
+  const [checkOutDate, setCheckOutDate] = useState();
+
   const maxPrice = Math.max(...rooms.map((item) => item.price));
   const maxSize = Math.max(...rooms.map((item) => item.size));
 
@@ -71,6 +74,8 @@ const RoomsFilter = ({ rooms, filters }) => {
   useEffect(() => {
     dispatch(
       roomsActions.filterRooms(
+        checkInDate,
+        checkOutDate,
         formState.type,
         +formState.capacity,
         +formState.price,
@@ -81,12 +86,13 @@ const RoomsFilter = ({ rooms, filters }) => {
         formState.pets
       )
     );
-  }, [dispatch, formState]);
+  }, [dispatch, formState, checkInDate, checkOutDate]);
 
   const inputChangeHandler = (event) => {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
+    console.log(target);
 
     dispatchFormState({ type: FORM_FILTER_UPDATE, name: name, value: value });
   };
@@ -100,6 +106,22 @@ const RoomsFilter = ({ rooms, filters }) => {
     <section className='filter-container'>
       <Title title='filter rooms' />
       <form id='filter-form'>
+        <div className='form-group'>
+          <label htmlFor='date'>Check-in :</label>{' '}
+          <DatePicker
+            name='checkInDate'
+            selected={checkInDate}
+            onChange={(date) => setCheckInDate(date)}
+            className='date-input'
+          />
+          <label htmlFor='date'>Check-out :</label>{' '}
+          <DatePicker
+            name='checkOutDate'
+            selected={checkOutDate}
+            onChange={(date) => setCheckOutDate(date)}
+            className='date-input'
+          />
+        </div>
         {/* select type */}
         <div className='form-group'>
           <label htmlFor='type'>room type</label>
