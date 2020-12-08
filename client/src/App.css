@@ -31,6 +31,7 @@ h1 {
 h2 {
   font-size: 2em;
   margin-bottom: 0.75em;
+  letter-spacing: var(--mainSpacing);
 }
 h3 {
   font-size: 1.5em;
@@ -527,7 +528,9 @@ h6 {
   padding: 0.2rem;
   border: 1px solid var(--mainBlack);
   border-radius: 0.3rem;
+  max-width: 10rem;
 }
+
 #filter-form .size-input {
   width: 40%;
   margin-right: 0.3rem;
@@ -601,3 +604,30 @@ h6 {
   width: 8rem;
 }
 /* end of Login form */
+
+/* Cart Screen */
+.cart {
+  padding: 2rem;
+}
+.cart-item {
+  width: 60vw;
+  text-transform: capitalize;
+  margin: 4rem;
+  padding-bottom: 5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-row-gap: 2rem;
+  grid-column-gap: 40px;
+  /* border-bottom: solid 0.02em #444; */
+}
+
+.cart-image {
+  width: 30vw;
+  min-width: 250px;
+}
+.cart-image img {
+  width: 100%;
+  height: 100%;
+}
+
+/* end of Cart Screen */
