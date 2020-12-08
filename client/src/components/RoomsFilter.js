@@ -63,8 +63,13 @@ const RoomsFilter = ({ rooms, filters }) => {
     new Date().setDate(new Date().getDate() + 1)
   );
 
+  // change the value of mincheckoutdate whenever checkindate changes
   useEffect(() => {
     setMinCheckOutDate(addDays(checkInDate, 1));
+    if (checkOutDate && checkInDate >= checkOutDate) {
+      setCheckOutDate(addDays(checkInDate, 1));
+    }
+    // eslint-disable-next-line
   }, [checkInDate]);
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
@@ -139,9 +144,7 @@ const RoomsFilter = ({ rooms, filters }) => {
           <label htmlFor='date'>Check-out :</label>{' '}
           <DatePicker
             minDate={minCheckOutDate}
-            selected={
-              checkOutDate < minCheckOutDate ? minCheckOutDate : checkOutDate
-            }
+            selected={checkOutDate}
             onChange={(date) => setCheckOutDate(date)}
             className='date-input'
           />

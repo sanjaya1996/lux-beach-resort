@@ -96,41 +96,19 @@ export const roomListReducer = (state = roomsInitialState, action) => {
             return true;
           } else {
             const bookings = state.currentBookings;
-            console.log('......................');
+
             const bookingsOfCurrentRoom = bookings.filter(
               (item) => item.room_id === room.id
             );
-            console.log(bookingsOfCurrentRoom);
 
-            console.log('Log me boy...');
-            console.log(
-              new Date(bookingsOfCurrentRoom[0].checkin_date) >=
-                new Date(checkOutDate)
-            );
-
-            const returnValue = bookingsOfCurrentRoom.every((booking) => {
+            // returns true if condition for all array value is true and false if only one fails
+            return bookingsOfCurrentRoom.every((booking) => {
               return (
                 (new Date(checkInDate) < new Date(booking.checkin_date) &&
                   new Date(checkOutDate) <= new Date(booking.checkin_date)) ||
                 new Date(checkInDate) >= new Date(booking.checkout_date)
               );
-              // checkInDate = new Date(checkInDate);
-              // let bookingCheckinDate = new Date(booking.checkin_date);
-              // // if (
-              // //   (checkInDate < booking.checkin_date &&
-              // //     checkOutDate <= booking.checkin_date) ||
-              // //   checkInDate >= booking.checkout_date
-              // // ) {
-              // if (checkInDate < bookingCheckinDate) {
-              //   console.log('check date is true');
-              //   return true;
-              // } else {
-              //   console.log('checked date is false');
-              //   return false;
-              // }
             });
-            console.log(returnValue);
-            return returnValue;
           }
         });
       }
