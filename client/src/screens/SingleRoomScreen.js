@@ -62,6 +62,17 @@ const SingleRoomScreen = ({ match }) => {
             back to rooms
           </Link>
         </Banner>
+        <div
+          style={{
+            position: 'absolute',
+            bottom: 20,
+            right: 20,
+          }}
+        >
+          <Link to={`/cart/${room.id}`} className='btn-primary action-btn '>
+            Book now
+          </Link>
+        </div>
       </StyledHero>
       <section className='single-room'>
         <div className='single-room-images'>
@@ -95,6 +106,11 @@ const SingleRoomScreen = ({ match }) => {
           ))}
         </ul>
       </section>
+      <div className='align-bottom-right'>
+        <Link to={`/cart/${room.id}`} className='btn-primary action-btn '>
+          Book now
+        </Link>
+      </div>
     </>
   );
 };

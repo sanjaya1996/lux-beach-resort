@@ -8,6 +8,7 @@ import SingleRoomScreen from './screens/SingleRoomScreen';
 import ErrorScreen from './screens/ErrorScreen';
 import Navbar from './components/Navbar';
 import EditRoomScreen from './screens/EditRoomScreen';
+import CartScreen from './screens/CartScreen';
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
         <Route path='/rooms' component={RoomsScreen} exact />
         <Route path='/rooms/:id' component={SingleRoomScreen} />
         <Route path='/room/:id?/edit' component={EditRoomScreen} />
+        <Route path='/cart/:id?' component={CartScreen} />
         <Route path='/' component={HomeScreen} exact />
         <Route component={ErrorScreen} />
       </Switch>
