@@ -5,7 +5,6 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 import Title from './Title';
 import * as roomsActions from '../store/actions/rooms';
-import { ROOM_LIST_FILTER_RESET } from '../store/reducers/rooms';
 
 const FORM_FILTER_UPDATE = 'FORM_FILTER_UPDATE';
 const FORM_FILTER_RESET = 'FORM_FILTER_RESET';
@@ -103,8 +102,9 @@ const RoomsFilter = ({ rooms, filters }) => {
   };
 
   const resetFiltersHandler = () => {
-    dispatch({ type: ROOM_LIST_FILTER_RESET });
     dispatchFormState({ type: FORM_FILTER_RESET, maxSize, maxPrice });
+    setCheckInDate(null);
+    setCheckOutDate(null);
   };
 
   return (

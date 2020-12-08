@@ -19,9 +19,16 @@ export const listRooms = () => {
     try {
       dispatch({ type: ROOM_LIST_REQUEST });
 
-      const { data } = await axios.get('/api/rooms');
+      const { data: rooms } = await axios.get('/api/rooms');
 
-      dispatch({ type: ROOM_LIST_SUCCESS, payload: data });
+      const { data: currentBookings } = await axios.get(
+        '/api/bookings/current'
+      );
+
+      dispatch({
+        type: ROOM_LIST_SUCCESS,
+        payload: { rooms, currentBookings },
+      });
     } catch (err) {
       dispatch({
         type: ROOM_LIST_FAIL,

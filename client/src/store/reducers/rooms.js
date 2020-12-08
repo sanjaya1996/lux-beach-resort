@@ -18,6 +18,7 @@ const roomsInitialState = {
   featuredRooms: [],
   filteredRooms: [],
   filters: {},
+  currentBookings: [],
 };
 
 export const roomListReducer = (state = roomsInitialState, action) => {
@@ -28,9 +29,12 @@ export const roomListReducer = (state = roomsInitialState, action) => {
       return {
         ...state,
         loading: false,
-        rooms: action.payload,
-        featuredRooms: action.payload.filter((room) => room.featured === true),
-        filteredRooms: action.payload,
+        rooms: action.payload.rooms,
+        featuredRooms: action.payload.rooms.filter(
+          (room) => room.featured === true
+        ),
+        filteredRooms: action.payload.rooms,
+        currentBookings: action.payload.currentBookings,
       };
     case ROOM_LIST_FAIL:
       return { ...state, loading: false, error: action.payload };
@@ -38,7 +42,7 @@ export const roomListReducer = (state = roomsInitialState, action) => {
       // all the rooms
       let tempRooms = [...state.rooms];
 
-      const {
+      let {
         type,
         capacity,
         price,
@@ -81,32 +85,52 @@ export const roomListReducer = (state = roomsInitialState, action) => {
       }
 
       //filter by check In-Out date
-      if (checkInDate && checkOutDate) {
+      if (
+        checkInDate &&
+        checkOutDate &&
+        (checkInDate !== state.filters.checkInDate ||
+          checkOutDate !== state.filters.checkOutDate)
+      ) {
         tempRooms = tempRooms.filter((room) => {
           if (!room.is_booked) {
-            console.log('not is booked');
             return true;
           } else {
-            console.log('is booked');
-            const bookings = [];
+            const bookings = state.currentBookings;
+            console.log('......................');
             const bookingsOfCurrentRoom = bookings.filter(
               (item) => item.room_id === room.id
             );
+            console.log(bookingsOfCurrentRoom);
 
-            return bookingsOfCurrentRoom.every((booking) => {
-              if (
-                (checkInDate >= booking.checkin_date &&
-                  checkInDate < booking.checkout_date) ||
-                (checkOutDate > booking.checkin_date &&
-                  checkOutDate <= booking.checkout_date)
-              ) {
-                console.log('check date is true');
-                return true;
-              } else {
-                console.log('checked date is false');
-                return false;
-              }
+            console.log('Log me boy...');
+            console.log(
+              new Date(bookingsOfCurrentRoom[0].checkin_date) <
+                new Date(checkInDate)
+            );
+
+            const returnValue = bookingsOfCurrentRoom.every((booking) => {
+              return (
+                (new Date(checkInDate) < new Date(booking.checkin_date) &&
+                  new Date(checkOutDate) <= new Date(booking.checkout_date)) ||
+                new Date(checkInDate) >= new Date(booking.checkout_date)
+              );
+              // checkInDate = new Date(checkInDate);
+              // let bookingCheckinDate = new Date(booking.checkin_date);
+              // // if (
+              // //   (checkInDate < booking.checkin_date &&
+              // //     checkOutDate <= booking.checkin_date) ||
+              // //   checkInDate >= booking.checkout_date
+              // // ) {
+              // if (checkInDate < bookingCheckinDate) {
+              //   console.log('check date is true');
+              //   return true;
+              // } else {
+              //   console.log('checked date is false');
+              //   return false;
+              // }
             });
+            console.log(returnValue);
+            return returnValue;
           }
         });
       }

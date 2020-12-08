@@ -3,9 +3,23 @@ const db = require('../config/db.js');
 // @desc    Fetch all bookings
 // @route   GET /api/bookings
 // @access  Public
-const getBookings = async (req, res) => {
+const getBookings = async (req, res, next) => {
   try {
     const results = await db.query('SELECT * FROM bookings');
+    res.status(200).json(results.rows);
+  } catch (err) {
+    next(err);
+  }
+};
+
+// @desc    Fetch current bookings
+// @route   GET /api/bookings/current
+// @access  Public
+const getCurrentBookings = async (req, res, next) => {
+  try {
+    const results = await db.query(
+      'SELECT * FROM bookings WHERE vacated= false'
+    );
     res.status(200).json(results.rows);
   } catch (err) {
     next(err);
@@ -39,4 +53,4 @@ const createBooking = async (req, res, next) => {
   }
 };
 
-module.exports = { getBookings, createBooking };
+module.exports = { getBookings, getCurrentBookings, createBooking };
