@@ -104,14 +104,14 @@ export const roomListReducer = (state = roomsInitialState, action) => {
 
             console.log('Log me boy...');
             console.log(
-              new Date(bookingsOfCurrentRoom[0].checkin_date) <
-                new Date(checkInDate)
+              new Date(bookingsOfCurrentRoom[0].checkin_date) >=
+                new Date(checkOutDate)
             );
 
             const returnValue = bookingsOfCurrentRoom.every((booking) => {
               return (
                 (new Date(checkInDate) < new Date(booking.checkin_date) &&
-                  new Date(checkOutDate) <= new Date(booking.checkout_date)) ||
+                  new Date(checkOutDate) <= new Date(booking.checkin_date)) ||
                 new Date(checkInDate) >= new Date(booking.checkout_date)
               );
               // checkInDate = new Date(checkInDate);

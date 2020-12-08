@@ -48,9 +48,24 @@ const RoomsFilter = ({ rooms, filters }) => {
   const [checkInDate, setCheckInDate] = useState(
     filters.checkInDate ? filters.checkInDate : null
   );
+
   const [checkOutDate, setCheckOutDate] = useState(
     filters.checkOutDate ? filters.checkOutDate : null
   );
+
+  const addDays = (date, days) => {
+    const result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+  };
+
+  const [minCheckOutDate, setMinCheckOutDate] = useState(
+    new Date().setDate(new Date().getDate() + 1)
+  );
+
+  useEffect(() => {
+    setMinCheckOutDate(addDays(checkInDate, 1));
+  }, [checkInDate]);
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
     type: filters.type ? filters.type : 'all',
@@ -114,13 +129,19 @@ const RoomsFilter = ({ rooms, filters }) => {
         <div>
           <label htmlFor='date'>Check-in :</label>{' '}
           <DatePicker
+            minDate={new Date()}
             selected={checkInDate}
-            onChange={(date) => setCheckInDate(date)}
+            onChange={(date) => {
+              setCheckInDate(date);
+            }}
             className='date-input'
           />
           <label htmlFor='date'>Check-out :</label>{' '}
           <DatePicker
-            selected={checkOutDate}
+            minDate={minCheckOutDate}
+            selected={
+              checkOutDate < minCheckOutDate ? minCheckOutDate : checkOutDate
+            }
             onChange={(date) => setCheckOutDate(date)}
             className='date-input'
           />
