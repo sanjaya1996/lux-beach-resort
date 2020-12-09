@@ -6,14 +6,24 @@ import {
   roomDetailsReducer,
   roomListReducer,
 } from './reducers/rooms';
+import { cartReducer } from './reducers/cart';
+
+const cartItemsFromStorage = localStorage.getItem('cartItems')
+  ? JSON.parse(localStorage.getItem('cartItems'))
+  : [];
 
 const rootReducer = combineReducers({
   roomList: roomListReducer,
   roomDetails: roomDetailsReducer,
   roomCreate: roomCreateReducer,
+  cart: cartReducer,
 });
 
-const initialState = {};
+const initialState = {
+  cart: {
+    cartItems: cartItemsFromStorage,
+  },
+};
 const store = createStore(
   rootReducer,
   initialState,
