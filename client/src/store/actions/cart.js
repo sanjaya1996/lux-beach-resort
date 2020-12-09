@@ -17,7 +17,7 @@ export const addToCart = (id, checkInDate, checkOutDate, guests) => {
         price: data.price,
         checkInDate,
         checkOutDate,
-        guests,
+        guests: data.capacity,
       },
     });
 
