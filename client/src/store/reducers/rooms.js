@@ -9,6 +9,9 @@ import {
   ROOM_CREATE_REQUEST,
   ROOM_CREATE_SUCCESS,
   ROOM_CREATE_FAIL,
+  CHECK_AVAILABILITY_REQUEST,
+  CHECK_AVAILABILITY_SUCCESS,
+  CHECK_AVAILABILITY_FAIL,
 } from '../actions/rooms';
 
 export const ROOM_LIST_FILTER_RESET = 'ROOM_LIST_FILTER_RESET';
@@ -156,6 +159,49 @@ export const roomCreateReducer = (state = {}, action) => {
     case ROOM_CREATE_SUCCESS:
       return { loading: false, success: true, room: action.payload };
     case ROOM_CREATE_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const checkAvailabilityReducer = (state = {}, action) => {
+  switch (action.type) {
+    case CHECK_AVAILABILITY_REQUEST:
+      return { ...state, loading: true };
+    case CHECK_AVAILABILITY_SUCCESS:
+      const room = action.payload.room;
+      const { checkInDate, checkOutDate, guests } = action.formValues;
+      let available = false;
+
+      if (guests > room.capacity) {
+        return {
+          loading: false,
+          bookingAvailable: false,
+          error: `Maximum capacity is ${room.capacity}`,
+        };
+      }
+      if (room.is_booked) {
+        const bookings = action.payload.bookings;
+        available = bookings.every((booking) => {
+          return (
+            (new Date(checkInDate) < new Date(booking.checkin_date) &&
+              new Date(checkOutDate) <= new Date(booking.checkin_date)) ||
+            new Date(checkInDate) >= new Date(booking.checkout_date)
+          );
+        });
+        if (!available) {
+          return {
+            loading: false,
+            bookingAvailable: false,
+            error: 'Not available for these dates',
+          };
+        }
+        return { loading: false, bookingAvailable: true };
+      } else {
+        return { loading: false, bookingAvailable: true };
+      }
+    case CHECK_AVAILABILITY_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;

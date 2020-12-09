@@ -75,6 +75,11 @@ const CartScreen = ({ match }) => {
     }
   }, [dispatch, roomId, checkInDate, checkOutDate, capacity]);
 
+  const submitHandler = (e, id) => {
+    e.preventDefault();
+    console.log(id);
+  };
+
   const removeFromCartHandler = (id) => {
     dispatch(cartActions.removeFromCart(id));
   };
@@ -145,7 +150,10 @@ const CartScreen = ({ match }) => {
                 </div>
               </div>
               <div>
-                <form id='filter-form'>
+                <form
+                  onSubmit={(e) => submitHandler(e, room.id)}
+                  id='filter-form'
+                >
                   <div>
                     <label htmlFor='date'>Check-in :</label>{' '}
                     <DatePicker
@@ -188,18 +196,21 @@ const CartScreen = ({ match }) => {
                     />
                   </div>
                   <div>
-                    <button className='btn-primary action-btn'>Select</button>
+                    <button type='submit' className='btn-primary action-btn'>
+                      Select
+                    </button>
                   </div>
                   <div>
                     <p
                       style={{
                         textDecoration: 'underline',
+                        display: 'inline-block',
                         color: 'red',
                         cursor: 'pointer',
                       }}
                       onClick={() => removeFromCartHandler(room.id)}
                     >
-                      Remove
+                      <i>Remove</i>
                     </p>
                   </div>
                 </form>
