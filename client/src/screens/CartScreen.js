@@ -4,16 +4,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import DatePicker from 'react-datepicker';
 
 import * as cartActions from '../store/actions/cart';
+import * as roomActions from '../store/actions/rooms';
+import { CHECK_AVAILABILITY_RESET } from '../store/reducers/rooms';
 
-const CartScreen = ({ match }) => {
-  const roomId = match.params.id;
+const CartScreen = ({ history }) => {
   const dispatch = useDispatch();
-
-  const filters = useSelector((state) => state.roomList.filters);
-  const { capacity, checkInDate, checkOutDate } = filters;
 
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
+  console.log(cartItems.length);
+
+  const checkRoomAvailability = useSelector(
+    (state) => state.checkRoomAvailability
+  );
+  const { loading, bookingAvailable, error } = checkRoomAvailability;
 
   // add 1 day in checkin date for minimum checkout date
   const addDays = (date, days) => {
@@ -38,7 +42,7 @@ const CartScreen = ({ match }) => {
       id: item.id,
       date: addDays(item.checkInDate, 1),
     });
-    initialGuests.push({ id: item.id, guests: item.guests });
+    initialGuests.push({ id: item.id, guests: item.guests || 1 });
   });
 
   // State values
@@ -63,21 +67,16 @@ const CartScreen = ({ match }) => {
   }, [checkInDateState]);
 
   useEffect(() => {
-    if (roomId) {
-      dispatch(
-        cartActions.addToCart(
-          roomId,
-          checkInDate ? checkInDate : null,
-          checkOutDate ? checkOutDate : null,
-          capacity ? capacity : 1
-        )
-      );
+    if (bookingAvailable) {
+      history.push('/rooms');
+      dispatch({ type: CHECK_AVAILABILITY_RESET });
     }
-  }, [dispatch, roomId, checkInDate, checkOutDate, capacity]);
+  }, [bookingAvailable, history, dispatch]);
 
-  const submitHandler = (e, id) => {
+  const submitHandler = (e, id, checkIn, checkOut, guests) => {
     e.preventDefault();
-    console.log(id);
+    console.log(checkIn, '......' + checkOut);
+    dispatch(roomActions.checkAvailability(id, checkIn, checkOut, guests));
   };
 
   const removeFromCartHandler = (id) => {
@@ -88,13 +87,13 @@ const CartScreen = ({ match }) => {
     let newItem;
     let initialState;
     let newState;
-    if (identifier === 'checkin' || 'checkout') {
+    if (identifier === 'checkin' || identifier === 'checkout') {
       newItem = { id: inputRoomId, date: value };
       initialState =
         identifier === 'checkin'
           ? [...checkInDateState]
           : [...checkOutDateState];
-    } else {
+    } else if (identifier === 'guests') {
       newItem = { id: inputRoomId, guests: value };
       initialState = [...guestsState];
     }
@@ -118,19 +117,39 @@ const CartScreen = ({ match }) => {
         <h1>Your Cart is Empty</h1>
       ) : (
         cartItems.map((room) => {
-          const selectedCheckInDate =
-            checkInDateState.find((state) => state.id === room.id).date === null
-              ? null
-              : new Date(
-                  checkInDateState.find((state) => state.id === room.id).date
-                );
-          const selectedCheckOutDate =
-            checkOutDateState.find((state) => state.id === room.id).date ===
-            null
-              ? null
-              : new Date(
-                  checkOutDateState.find((state) => state.id === room.id).date
-                );
+          const findCheckInDate = checkInDateState.find(
+            (state) => state.id === room.id
+          );
+          const selectedCheckInDate = findCheckInDate
+            ? findCheckInDate.date
+              ? new Date(findCheckInDate.date)
+              : room.checkInDate
+            : room.checkInDate;
+
+          const findCheckOutDate = checkOutDateState.find(
+            (state) => state.id === room.id
+          );
+          const selectedCheckOutDate = findCheckOutDate
+            ? findCheckOutDate.date
+              ? new Date(findCheckOutDate.date)
+              : room.checkOutDate
+            : room.checkOutDate;
+
+          const findGuests = guestsState.find((state) => state.id === room.id);
+          const guestsValue = findGuests
+            ? findGuests.guests
+              ? findGuests.guests
+              : 1
+            : 1;
+
+          const findMinCheckOutDate = minCheckOutDateState.find(
+            (state) => state.id === room.id
+          );
+          const minCheckOutValue = findMinCheckOutDate
+            ? findMinCheckOutDate.date
+              ? findMinCheckOutDate.date
+              : new Date()
+            : new Date();
           return (
             <div className='cart-item' key={room.id}>
               <div className='cart-image'>
@@ -151,7 +170,15 @@ const CartScreen = ({ match }) => {
               </div>
               <div>
                 <form
-                  onSubmit={(e) => submitHandler(e, room.id)}
+                  onSubmit={(e) =>
+                    submitHandler(
+                      e,
+                      room.id,
+                      selectedCheckInDate,
+                      selectedCheckOutDate,
+                      guestsValue
+                    )
+                  }
                   id='filter-form'
                 >
                   <div>
@@ -166,13 +193,7 @@ const CartScreen = ({ match }) => {
                     />
                     <label htmlFor='date'>Check-out :</label>
                     <DatePicker
-                      minDate={
-                        new Date(
-                          minCheckOutDateState.find(
-                            (state) => state.id === room.id
-                          ).date
-                        )
-                      }
+                      minDate={new Date(minCheckOutValue)}
                       selected={selectedCheckOutDate}
                       onChange={(date) =>
                         inputChangeHandler('checkout', date, room.id)
@@ -186,9 +207,7 @@ const CartScreen = ({ match }) => {
                       type='number'
                       name='capacity'
                       id='capacity'
-                      value={
-                        guestsState.find((state) => state.id === room.id).guests
-                      }
+                      value={guestsValue}
                       onChange={(e) =>
                         inputChangeHandler('guests', e.target.value, room.id)
                       }
@@ -197,7 +216,7 @@ const CartScreen = ({ match }) => {
                   </div>
                   <div>
                     <button type='submit' className='btn-primary action-btn'>
-                      Select
+                      {loading ? 'Loading...' : 'Select'}
                     </button>
                   </div>
                   <div>
@@ -218,6 +237,16 @@ const CartScreen = ({ match }) => {
             </div>
           );
         })
+      )}
+      {error && (
+        <p
+          style={{
+            display: 'inline-block',
+            color: 'red',
+          }}
+        >
+          <i>{error}</i>
+        </p>
       )}
     </div>
   );

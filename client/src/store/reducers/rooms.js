@@ -15,6 +15,7 @@ import {
 } from '../actions/rooms';
 
 export const ROOM_LIST_FILTER_RESET = 'ROOM_LIST_FILTER_RESET';
+export const CHECK_AVAILABILITY_RESET = 'CHECK_AVAILABILITY_RESET';
 
 const roomsInitialState = {
   rooms: [],
@@ -170,39 +171,16 @@ export const checkAvailabilityReducer = (state = {}, action) => {
     case CHECK_AVAILABILITY_REQUEST:
       return { ...state, loading: true };
     case CHECK_AVAILABILITY_SUCCESS:
-      const room = action.payload.room;
-      const { checkInDate, checkOutDate, guests } = action.formValues;
-      let available = false;
-
-      if (guests > room.capacity) {
-        return {
-          loading: false,
-          bookingAvailable: false,
-          error: `Maximum capacity is ${room.capacity}`,
-        };
-      }
-      if (room.is_booked) {
-        const bookings = action.payload.bookings;
-        available = bookings.every((booking) => {
-          return (
-            (new Date(checkInDate) < new Date(booking.checkin_date) &&
-              new Date(checkOutDate) <= new Date(booking.checkin_date)) ||
-            new Date(checkInDate) >= new Date(booking.checkout_date)
-          );
-        });
-        if (!available) {
-          return {
-            loading: false,
-            bookingAvailable: false,
-            error: 'Not available for these days',
-          };
-        }
-        return { loading: false, bookingAvailable: true };
-      } else {
-        return { loading: false, bookingAvailable: true };
-      }
+      const { bookingAvailable, message } = action.payload;
+      return {
+        loading: false,
+        bookingAvailable: bookingAvailable,
+        error: bookingAvailable ? null : message,
+      };
     case CHECK_AVAILABILITY_FAIL:
       return { loading: false, error: action.payload };
+    case CHECK_AVAILABILITY_RESET:
+      return state;
     default:
       return state;
   }

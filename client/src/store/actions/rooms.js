@@ -121,3 +121,31 @@ export const createRoom = (room) => {
     }
   };
 };
+
+export const checkAvailability = (id, checkin, checkout, guests) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: CHECK_AVAILABILITY_REQUEST });
+
+      const { data } = await axios.get(
+        `/api/checkavailability/${id}?guests=${guests}&checkin=${checkin}&checkout=${checkout}`
+      );
+      console.log(data);
+      dispatch({
+        type: CHECK_AVAILABILITY_SUCCESS,
+        payload: {
+          bookingAvailable: data.bookingAvailable,
+          message: data.message ? data.message : null,
+        },
+      });
+    } catch (error) {
+      dispatch({
+        type: CHECK_AVAILABILITY_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
+};

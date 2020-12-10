@@ -2,6 +2,7 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import ReduxThunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import {
+  checkAvailabilityReducer,
   roomCreateReducer,
   roomDetailsReducer,
   roomListReducer,
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   roomDetails: roomDetailsReducer,
   roomCreate: roomCreateReducer,
   cart: cartReducer,
+  checkRoomAvailability: checkAvailabilityReducer,
 });
 
 const initialState = {

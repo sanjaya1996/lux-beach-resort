@@ -6,17 +6,33 @@ import Loading from '../components/Loading';
 import Banner from '../components/Banner';
 import StyledHero from '../components/StyledHero';
 import * as roomsActions from '../store/actions/rooms';
+import * as cartActions from '../store/actions/cart';
 import ErrorScreen from './ErrorScreen';
 
-const SingleRoomScreen = ({ match }) => {
+const SingleRoomScreen = ({ match, history }) => {
   const dispatch = useDispatch();
 
   const roomDetails = useSelector((state) => state.roomDetails);
   const { loading, room, error } = roomDetails;
 
+  const filters = useSelector((state) => state.roomList.filters);
+  const { capacity: filterCapacity, checkInDate, checkOutDate } = filters;
+
   useEffect(() => {
     dispatch(roomsActions.listRoomDetails(match.params.id));
   }, [dispatch, match]);
+
+  const addToCartHandler = () => {
+    dispatch(
+      cartActions.addToCart(
+        room.id,
+        checkInDate ? checkInDate : null,
+        checkOutDate ? checkOutDate : null,
+        room.capacity
+      )
+    );
+    history.push('/cart');
+  };
 
   if (loading) {
     return <Loading />;
@@ -69,9 +85,13 @@ const SingleRoomScreen = ({ match }) => {
             right: 20,
           }}
         >
-          <Link to={`/cart/${room.id}`} className='btn-primary action-btn '>
+          <button
+            type='button'
+            className='btn-primary action-btn '
+            onClick={addToCartHandler}
+          >
             Book now
-          </Link>
+          </button>
         </div>
       </StyledHero>
       <section className='single-room'>
@@ -107,9 +127,13 @@ const SingleRoomScreen = ({ match }) => {
         </ul>
       </section>
       <div className='align-bottom-right'>
-        <Link to={`/cart/${room.id}`} className='btn-primary action-btn '>
+        <button
+          type='button'
+          className='btn-primary action-btn '
+          onClick={addToCartHandler}
+        >
           Book now
-        </Link>
+        </button>
       </div>
     </>
   );
