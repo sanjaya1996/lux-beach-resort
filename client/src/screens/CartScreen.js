@@ -12,12 +12,18 @@ const CartScreen = ({ history }) => {
 
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
-  console.log(cartItems.length);
 
   const checkRoomAvailability = useSelector(
     (state) => state.checkRoomAvailability
   );
-  const { loading, bookingAvailable, error } = checkRoomAvailability;
+  const {
+    loading,
+    bookingAvailable,
+    error,
+    selectedRoomId,
+    selectedCheckIn,
+    selectedCheckOut,
+  } = checkRoomAvailability;
 
   // add 1 day in checkin date for minimum checkout date
   const addDays = (date, days) => {
@@ -42,7 +48,7 @@ const CartScreen = ({ history }) => {
       id: item.id,
       date: addDays(item.checkInDate, 1),
     });
-    initialGuests.push({ id: item.id, guests: item.guests || 1 });
+    initialGuests.push({ id: item.id, guests: item.guests });
   });
 
   // State values
@@ -57,6 +63,13 @@ const CartScreen = ({ history }) => {
 
   const [guestsState, setGuestsState] = useState(initialGuests);
 
+  const showAlert = (error) => {
+    const click = window.confirm(error);
+    if (click === true || click === false) {
+      dispatch({ type: CHECK_AVAILABILITY_RESET });
+    }
+  };
+
   // change minCheckout change whenever checkIn date changes
   useEffect(() => {
     let newState = [];
@@ -68,14 +81,22 @@ const CartScreen = ({ history }) => {
 
   useEffect(() => {
     if (bookingAvailable) {
-      history.push('/rooms');
+      history.push(
+        `/payment/${selectedRoomId}?checkin=${selectedCheckIn}&checkout=${selectedCheckOut}`
+      );
       dispatch({ type: CHECK_AVAILABILITY_RESET });
     }
-  }, [bookingAvailable, history, dispatch]);
+  }, [
+    bookingAvailable,
+    history,
+    dispatch,
+    selectedCheckIn,
+    selectedCheckOut,
+    selectedRoomId,
+  ]);
 
   const submitHandler = (e, id, checkIn, checkOut, guests) => {
     e.preventDefault();
-    console.log(checkIn, '......' + checkOut);
     dispatch(roomActions.checkAvailability(id, checkIn, checkOut, guests));
   };
 
@@ -113,6 +134,7 @@ const CartScreen = ({ history }) => {
   return (
     <div className='cart'>
       <h2>Your Rooms</h2>
+      {error && showAlert(error)}
       {cartItems.length === 0 ? (
         <h1>Your Cart is Empty</h1>
       ) : (
@@ -139,8 +161,8 @@ const CartScreen = ({ history }) => {
           const guestsValue = findGuests
             ? findGuests.guests
               ? findGuests.guests
-              : 1
-            : 1;
+              : room.guests
+            : room.guests;
 
           const findMinCheckOutDate = minCheckOutDateState.find(
             (state) => state.id === room.id
@@ -237,16 +259,6 @@ const CartScreen = ({ history }) => {
             </div>
           );
         })
-      )}
-      {error && (
-        <p
-          style={{
-            display: 'inline-block',
-            color: 'red',
-          }}
-        >
-          <i>{error}</i>
-        </p>
       )}
     </div>
   );

@@ -130,12 +130,15 @@ export const checkAvailability = (id, checkin, checkout, guests) => {
       const { data } = await axios.get(
         `/api/checkavailability/${id}?guests=${guests}&checkin=${checkin}&checkout=${checkout}`
       );
-      console.log(data);
+
       dispatch({
         type: CHECK_AVAILABILITY_SUCCESS,
         payload: {
           bookingAvailable: data.bookingAvailable,
           message: data.message ? data.message : null,
+          id,
+          checkin,
+          checkout,
         },
       });
     } catch (error) {

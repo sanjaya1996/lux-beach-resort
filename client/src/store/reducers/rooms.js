@@ -171,16 +171,25 @@ export const checkAvailabilityReducer = (state = {}, action) => {
     case CHECK_AVAILABILITY_REQUEST:
       return { ...state, loading: true };
     case CHECK_AVAILABILITY_SUCCESS:
-      const { bookingAvailable, message } = action.payload;
+      const {
+        bookingAvailable,
+        message,
+        id,
+        checkin,
+        checkout,
+      } = action.payload;
       return {
         loading: false,
+        selectedRoomId: id,
+        selectedCheckIn: checkin,
+        selectedCheckOut: checkout,
         bookingAvailable: bookingAvailable,
         error: bookingAvailable ? null : message,
       };
     case CHECK_AVAILABILITY_FAIL:
       return { loading: false, error: action.payload };
     case CHECK_AVAILABILITY_RESET:
-      return state;
+      return {};
     default:
       return state;
   }
