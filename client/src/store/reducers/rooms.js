@@ -194,7 +194,7 @@ export const checkAvailabilityReducer = (state = {}, action) => {
           return {
             loading: false,
             bookingAvailable: false,
-            error: 'Not available for these dates',
+            error: 'Not available for these days',
           };
         }
         return { loading: false, bookingAvailable: true };

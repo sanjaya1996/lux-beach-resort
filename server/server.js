@@ -7,6 +7,7 @@ const roomRoutes = require('./routes/roomRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
 const guestRoutes = require('./routes/guestRoutes');
+const checkAvailabilityRoutes = require('./routes/checkAvailabilityRoutes');
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
 // Load config
@@ -32,6 +33,9 @@ app.use('/api/bookings', bookingRoutes);
 
 // Guest routes
 app.use('/api/guests', guestRoutes);
+
+// Check room availability
+app.use('/api/checkavailability', checkAvailabilityRoutes);
 
 // File upload routes
 app.use('/api/upload', uploadRoutes);

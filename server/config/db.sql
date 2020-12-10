@@ -424,3 +424,19 @@ VALUES
    (20, 2, '2020-12-7', '2020-12-9'),
    (21, 3, '2020-12-7', '2020-12-9'),
    (22, 4, '2020-12-7', '2020-12-9');
+
+
+   -- Check room availability based on checkInDate and checkOUtDate 
+   SELECT * FROM bookings WHERE room_id = 5 AND ((@chekinDate >= checkin_date AND @checkinDate < checkout_date) OR (@checkoutDate > checkin_date AND @checkoutDate <= checkout_date ) );
+
+   SELECT * FROM bookings WHERE room_id = $1 
+      AND (
+            ($2 >= checkin_date AND $2 < checkout_date)
+             OR ($3 > checkin_date AND $3 <= checkout_date) 
+             OR ($2 <= checkin_date AND $3 >= checkout_date)
+         );
+
+CASE
+ WHEN rental_rate = 0.99 THEN true
+	ELSE 0
+END
