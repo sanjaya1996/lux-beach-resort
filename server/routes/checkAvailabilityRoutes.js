@@ -50,7 +50,7 @@ router.get('/:id', async (req, res, next) => {
           [req.params.id, checkin, checkout]
         );
         if (bookingsResponse.rowCount === 0) {
-          res.json({ bookingAvailable: true });
+          res.json({ bookingAvailable: true, room: room });
         } else {
           res.json({
             bookingAvailable: false,
@@ -58,7 +58,7 @@ router.get('/:id', async (req, res, next) => {
           });
         }
       } else {
-        res.json({ bookingAvailable: true });
+        res.json({ bookingAvailable: true, room: room });
       }
     }
   } catch (error) {

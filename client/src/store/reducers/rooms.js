@@ -174,6 +174,7 @@ export const checkAvailabilityReducer = (state = {}, action) => {
       const {
         bookingAvailable,
         message,
+        room,
         id,
         checkin,
         checkout,
@@ -181,6 +182,7 @@ export const checkAvailabilityReducer = (state = {}, action) => {
       } = action.payload;
       return {
         loading: false,
+        selectedRoom: room,
         selectedRoomId: id,
         selectedCheckIn: checkin,
         selectedCheckOut: checkout,

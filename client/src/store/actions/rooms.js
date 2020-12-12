@@ -136,7 +136,8 @@ export const checkAvailability = (id, checkin, checkout, guests) => {
         payload: {
           bookingAvailable: data.bookingAvailable,
           message: data.message ? data.message : null,
-          id,
+          room: data.room || null,
+          id: data.room.id,
           checkin,
           checkout,
           guests,

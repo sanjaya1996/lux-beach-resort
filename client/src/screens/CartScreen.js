@@ -71,6 +71,14 @@ const CartScreen = ({ history }) => {
     }
   };
 
+  useEffect(() => {
+    setCheckInDateState(initialCheckInDates);
+    setCheckOutDateState(initialCheckOutDates);
+    setMinCheckOutDateState(initialMinCheckOutDates);
+    setGuestsState(initialGuests);
+    // eslint-disable-next-line
+  }, [cartItems]);
+
   // change minCheckout change whenever checkIn date changes
   useEffect(() => {
     let newState = [];
@@ -144,6 +152,7 @@ const CartScreen = ({ history }) => {
           const findCheckInDate = checkInDateState.find(
             (state) => state.id === room.id
           );
+
           const selectedCheckInDate = findCheckInDate
             ? findCheckInDate.date
               ? new Date(findCheckInDate.date)

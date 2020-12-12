@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import * as roomActions from '../store/actions/rooms';
+import ErrorScreen from './ErrorScreen';
 
 const PaymentScreen = ({ match }) => {
   const { id, guests, chkin, chkout } = match.params;
@@ -15,6 +16,7 @@ const PaymentScreen = ({ match }) => {
     loading,
     bookingAvailable,
     error,
+    selectedRoom,
     selectedRoomId,
     selectedCheckIn,
     selectedCheckOut,
@@ -26,10 +28,23 @@ const PaymentScreen = ({ match }) => {
   }, [dispatch, id, chkin, chkout, guests]);
 
   if (!bookingAvailable) {
-    return <h1>This is error Screen</h1>;
+    return (
+      <ErrorScreen
+        title='Error Occurred!'
+        subtitle='Something wrong with your bookings parameters'
+      />
+    );
   }
 
-  return <h1>This is Payment screen </h1>;
+  return (
+    <ul>
+      <li>Name: {selectedRoom.name}</li>
+      <li>Guests: {selectedGuests}</li>
+      <li>Room Capacity: {selectedRoom.capacity}</li>
+      <li>Checkin: {selectedCheckIn}</li>
+      <li>Checkout: {selectedCheckOut}</li>
+    </ul>
+  );
 };
 
 export default PaymentScreen;
