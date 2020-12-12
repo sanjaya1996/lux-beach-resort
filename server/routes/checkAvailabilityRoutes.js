@@ -4,16 +4,28 @@ const db = require('../config/db.js');
 
 const router = express.Router();
 
+const validateDate = (date1, date2) => {
+  if (
+    new Date(date1) !== 'Invalid Date' &&
+    !isNaN(new Date(date1)) &&
+    new Date(date2) !== 'Invalid Date' &&
+    !isNaN(new Date(date2)) &&
+    new Date(date1) < new Date(date2)
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
 router.get('/:id', async (req, res, next) => {
   try {
     const { checkin, checkout, guests } = req.query;
-    console.log(checkin > checkout);
-    console.log(new Date(checkin) >= new Date(checkout));
 
-    if (new Date(checkin) >= new Date(checkout)) {
+    if (!validateDate(checkin, checkout)) {
       res.json({
         bookingAvailable: false,
-        message: 'Check-out date must be greater than Check-in date',
+        message: 'Invalid dates or checkout must be greater than checkin',
       });
     } else {
       const roomResponse = await db.query('SELECT * FROM rooms WHERE id= $1', [

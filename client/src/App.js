@@ -20,7 +20,10 @@ const App = () => {
         <Route path='/rooms/:id' component={SingleRoomScreen} />
         <Route path='/room/:id?/edit' component={EditRoomScreen} />
         <Route path='/cart/:id?' component={CartScreen} />
-        <Route path='/payment/:id' component={PaymentScreen} />
+        <Route
+          path='/payment/:id/:guests/:chkin/:chkout'
+          component={PaymentScreen}
+        />
         <Route path='/' component={HomeScreen} exact />
         <Route component={ErrorScreen} />
       </Switch>

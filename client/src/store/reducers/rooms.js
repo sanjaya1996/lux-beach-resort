@@ -177,12 +177,14 @@ export const checkAvailabilityReducer = (state = {}, action) => {
         id,
         checkin,
         checkout,
+        guests,
       } = action.payload;
       return {
         loading: false,
         selectedRoomId: id,
         selectedCheckIn: checkin,
         selectedCheckOut: checkout,
+        selectedGuests: guests,
         bookingAvailable: bookingAvailable,
         error: bookingAvailable ? null : message,
       };

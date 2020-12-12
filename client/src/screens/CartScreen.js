@@ -23,6 +23,7 @@ const CartScreen = ({ history }) => {
     selectedRoomId,
     selectedCheckIn,
     selectedCheckOut,
+    selectedGuests,
   } = checkRoomAvailability;
 
   // add 1 day in checkin date for minimum checkout date
@@ -82,7 +83,7 @@ const CartScreen = ({ history }) => {
   useEffect(() => {
     if (bookingAvailable) {
       history.push(
-        `/payment/${selectedRoomId}?checkin=${selectedCheckIn}&checkout=${selectedCheckOut}`
+        `/payment/${selectedRoomId}/${selectedGuests}/${selectedCheckIn}/${selectedCheckOut}`
       );
       dispatch({ type: CHECK_AVAILABILITY_RESET });
     }
@@ -93,6 +94,7 @@ const CartScreen = ({ history }) => {
     selectedCheckIn,
     selectedCheckOut,
     selectedRoomId,
+    selectedGuests,
   ]);
 
   const submitHandler = (e, id, checkIn, checkOut, guests) => {

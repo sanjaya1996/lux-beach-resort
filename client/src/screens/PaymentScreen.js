@@ -1,18 +1,35 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-const PaymentScreen = ({ match, location }) => {
-  // Room Id
-  const roomId = match.params.id;
+import * as roomActions from '../store/actions/rooms';
 
-  // Check-In Date
-  const checkInQuery = location.search.split('&')[0];
-  const checkIn = checkInQuery.split('=')[1];
+const PaymentScreen = ({ match }) => {
+  const { id, guests, chkin, chkout } = match.params;
 
-  // Check-Out Date
-  const checkoutQuery = location.search.split('&')[1];
-  const checkOut = checkoutQuery.split('=')[1];
+  const dispatch = useDispatch();
 
-  return <h1>This is payment Screen</h1>;
+  const checkRoomAvailability = useSelector(
+    (state) => state.checkRoomAvailability
+  );
+  const {
+    loading,
+    bookingAvailable,
+    error,
+    selectedRoomId,
+    selectedCheckIn,
+    selectedCheckOut,
+    selectedGuests,
+  } = checkRoomAvailability;
+
+  useEffect(() => {
+    dispatch(roomActions.checkAvailability(id, chkin, chkout, guests));
+  }, [dispatch, id, chkin, chkout, guests]);
+
+  if (!bookingAvailable) {
+    return <h1>This is error Screen</h1>;
+  }
+
+  return <h1>This is Payment screen </h1>;
 };
 
 export default PaymentScreen;

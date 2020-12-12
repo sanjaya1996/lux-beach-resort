@@ -139,6 +139,7 @@ export const checkAvailability = (id, checkin, checkout, guests) => {
           id,
           checkin,
           checkout,
+          guests,
         },
       });
     } catch (error) {
