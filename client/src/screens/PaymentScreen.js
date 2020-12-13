@@ -37,13 +37,51 @@ const PaymentScreen = ({ match }) => {
   }
 
   return (
-    <ul>
-      <li>Name: {selectedRoom.name}</li>
-      <li>Guests: {selectedGuests}</li>
-      <li>Room Capacity: {selectedRoom.capacity}</li>
-      <li>Checkin: {selectedCheckIn}</li>
-      <li>Checkout: {selectedCheckOut}</li>
-    </ul>
+    // <ul>
+    //   <li>Name: {selectedRoom.name}</li>
+    //   <li>Guests: {selectedGuests}</li>
+    //   <li>Room Capacity: {selectedRoom.capacity}</li>
+    //   <li>Checkin: {selectedCheckIn}</li>
+    //   <li>Checkout: {selectedCheckOut}</li>
+    // </ul>
+
+    <>
+      <div className='summary-container'>
+        <div className='one-half-responsive summary-heading'>Your Stay:</div>
+        <div className='one-half-responsive'>
+          <div className='one-half-responsive'>
+            <span className='summary-label'>Arrival Date:</span> Sun, 13 Dec
+            2020
+          </div>
+          <div className='one-half-responsive last'>
+            <span className='summary-label'>Departure Date:</span> Sun, 13 Dec
+            2020
+          </div>
+          <div className='one-half-responsive'>Checkin: After 2:00 PM</div>
+          <div className='one-half-responsive last'>
+            Checkout: Before 10:00 AM
+          </div>
+          <div className='one-half-responsive summary-label'>Total Guests:</div>
+          <div className='one-half-responsive last'>{selectedGuests}</div>
+          <div className='one-half-responsive summary-label'>
+            {selectedRoom.name}
+          </div>
+          <div className='one-half-responsive last'>Standard Rate</div>
+          <div className='one-half-responsive summary-label'>
+            Booking Subtotal:
+          </div>
+          <div className='one-half-responsive last'>129.00</div>
+          <div className='one-half-responsive summary-label'>
+            Booking Total:
+          </div>
+          <div className='one-half-responsive last'>129.00</div>
+          <div className='one-half-responsive summary-label'>
+            Deposit Required:
+          </div>
+          <div className='one-half-responsive last'>0.00</div>
+        </div>
+      </div>
+    </>
   );
 };
 

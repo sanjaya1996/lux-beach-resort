@@ -21,6 +21,7 @@ const validateDate = (date1, date2) => {
 router.get('/:id', async (req, res, next) => {
   try {
     const { checkin, checkout, guests } = req.query;
+    console.log(guests);
 
     if (!validateDate(checkin, checkout)) {
       res.json({
@@ -36,7 +37,7 @@ router.get('/:id', async (req, res, next) => {
       if (guests > room.capacity) {
         res.json({
           bookingAvailable: false,
-          message: `Room capacity is ${room.capacity} people`,
+          message: `Max capacity of selected room is ${room.capacity} people`,
         });
       } else if (room.is_booked) {
         // 'SELECT * FROM bookings WHERE room_id = $1 AND (($2 >= checkin_date AND $2 < checkout_date) OR ($3 > checkin_date AND $3 <= checkout_date ) OR ($2 < checkin_date AND $3 > checkout_date) )',

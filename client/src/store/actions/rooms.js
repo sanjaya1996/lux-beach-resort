@@ -137,7 +137,7 @@ export const checkAvailability = (id, checkin, checkout, guests) => {
           bookingAvailable: data.bookingAvailable,
           message: data.message ? data.message : null,
           room: data.room || null,
-          id: data.room.id,
+          id: id,
           checkin,
           checkout,
           guests,
