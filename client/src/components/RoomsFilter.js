@@ -160,7 +160,7 @@ const RoomsFilter = ({ rooms, filters }) => {
             className='form-control'
           >
             {types.map((item, idx) => (
-              <option key={idx} value={item}>
+              <option key={idx} value={idx + 1}>
                 {item}
               </option>
             ))}

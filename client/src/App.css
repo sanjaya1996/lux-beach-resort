@@ -633,9 +633,19 @@ h6 {
 /* end of Cart Screen */
 
 /* Payment Screen */
+.payment-screen {
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+}
+.centered {
+  padding-top: 40vh;
+  text-align: center;
+}
 .summary-container {
   margin: 20px 0;
   padding: 10px;
+  display: block;
 }
 
 .one-half-responsive {
@@ -643,7 +653,6 @@ h6 {
   float: left;
   margin: 2px;
   padding-left: 5px;
-  box-sizing: border-box;
   line-height: 3rem;
   text-transform: capitalize;
   font-size: 0.7rem;
@@ -664,6 +673,7 @@ h6 {
   padding-left: 0;
 }
 .summary-heading {
+  margin-bottom: -0.1rem;
   float: none;
   font-size: 14px;
   font-weight: 700;
@@ -674,10 +684,19 @@ h6 {
   font-weight: 600;
   color: var(--mainBlack);
 }
+.border-line {
+  border: 0.1px solid #ccc;
+}
 @media screen and (max-width: 700px) {
   .one-half-responsive {
     clear: both;
     width: 100%;
   }
 }
+
+.note-input {
+  width: 100%;
+  padding-right: 10px;
+}
+
 /* end of Payment Screen */
