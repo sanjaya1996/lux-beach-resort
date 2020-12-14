@@ -24,7 +24,9 @@
     "express": "^4.17.1",
     "morgan": "^1.10.0",
     "multer": "^1.4.2",
-    "pg": "^8.5.1"
+    "pg": "^8.5.1",
+    "stripe": "^8.128.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "concurrently": "^5.3.0",
