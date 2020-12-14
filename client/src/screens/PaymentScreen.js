@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
+import StripeCheckout from 'react-stripe-checkout';
+import axios from 'axios';
 
 import * as roomActions from '../store/actions/rooms';
 import ErrorScreen from './ErrorScreen';
@@ -40,6 +42,22 @@ const PaymentScreen = ({ match }) => {
   useEffect(() => {
     dispatch(roomActions.checkAvailability(id, chkin, chkout, guests));
   }, [dispatch, id, chkin, chkout, guests]);
+
+  const makePayment = async (token) => {
+    try {
+      const body = { token, room: selectedRoom, amount: total };
+      const config = { 'Content-Type': 'application/json' };
+
+      const { data } = await axios.post(
+        'http://localhost:5000/api/payment',
+        body,
+        config
+      );
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   if (loading) {
     return (
@@ -146,7 +164,7 @@ const PaymentScreen = ({ match }) => {
           <label htmlFor='Email' className='summary-label'>
             Title:
           </label>
-          <select name='title' id='title' value='' className='form-control'>
+          {/* <select name='title' id='title' value='' className='form-control'>
             {['Dr', 'Miss', 'Mr', 'Mr & Mrs', 'Mrs', 'Ms'].map(
               (item, index) => (
                 <option key={index} value={item}>
@@ -154,7 +172,7 @@ const PaymentScreen = ({ match }) => {
                 </option>
               )
             )}
-          </select>
+          </select> */}
         </div>
 
         <div className='form-group form-group one-half-responsive'>
@@ -169,7 +187,18 @@ const PaymentScreen = ({ match }) => {
         </div>
       </form>
       <div style={{ alignSelf: 'flex-start' }}>
-        <Title title='Payment Details' />
+        <Title title='Payment' />
+      </div>
+      <div style={{ display: 'inline-block' }}>
+        <StripeCheckout
+          stripeKey='pk_test_BbuVbJumpNKWuxCFdOAUYoix00ZZvbAiJk'
+          token={makePayment}
+          name={'lux-beach-resort'}
+          amount={total * 100}
+          description={'room: ' + selectedRoom.name}
+        >
+          <button className='btn-primary'>Pay for ${total}</button>
+        </StripeCheckout>
       </div>
     </div>
   );

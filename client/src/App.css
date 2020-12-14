@@ -634,9 +634,10 @@ h6 {
 
 /* Payment Screen */
 .payment-screen {
-  margin-left: 10px;
+  padding-left: 20px;
   display: flex;
   flex-direction: column;
+  padding-bottom: 20px;
 }
 .centered {
   padding-top: 40vh;

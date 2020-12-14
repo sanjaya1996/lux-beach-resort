@@ -1,7 +1,11 @@
 const express = require('express');
+const cors = require('cors');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const path = require('path');
+
+// Load config
+dotenv.config();
 
 const roomRoutes = require('./routes/roomRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
@@ -11,9 +15,6 @@ const checkAvailabilityRoutes = require('./routes/checkAvailabilityRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
-// Load config
-dotenv.config();
-
 const app = express();
 
 if (process.env.NODE_ENV === 'development') {
@@ -21,6 +22,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 app.use(express.json());
+app.use(cors());
 
 app.get('/', (req, res) => {
   res.send('API is running...');
@@ -39,7 +41,7 @@ app.use('/api/guests', guestRoutes);
 app.use('/api/checkavailability', checkAvailabilityRoutes);
 
 // Payment
-app.use('/api/payment/', paymentRoutes);
+app.use('/api/payment', paymentRoutes);
 
 // File upload routes
 app.use('/api/upload', uploadRoutes);
