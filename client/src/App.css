@@ -67,9 +67,17 @@ h6 {
   cursor: pointer;
 }
 .action-btn {
-  background: #222;
-  border: 3px solid #222;
+  /* text styles */
+  font-size: 20px;
   color: #fff;
+
+  /* box styles */
+  height: 40px;
+  background: #255796;
+  border: 1px solid #255796;
+  border-radius: 21px;
+  box-shadow: 0 1px 1px rgba(255, 255, 255, 0.2) inset,
+    0 1px 1px rgba(1, 4, 8, 0.2);
 }
 
 .btn-primary:hover {
@@ -79,7 +87,7 @@ h6 {
 
 .action-btn:hover {
   background: #fff;
-  color: #222;
+  color: #255796;
 }
 
 .btn-sm {
@@ -634,14 +642,22 @@ h6 {
 
 /* Payment Screen */
 .payment-screen {
-  padding-left: 20px;
+  padding: 1.2rem 0 2.5rem 1.2rem;
   display: flex;
   flex-direction: column;
-  padding-bottom: 20px;
 }
 .centered {
   padding-top: 40vh;
   text-align: center;
+}
+.payment-screen p {
+  line-height: 1.5;
+}
+.underlined-link {
+  /* color: #3090c7; */
+  color: #255796;
+  text-decoration: underline;
+  font-style: italic;
 }
 .summary-container {
   margin: 20px 0;

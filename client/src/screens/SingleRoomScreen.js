@@ -87,7 +87,7 @@ const SingleRoomScreen = ({ match, history }) => {
         >
           <button
             type='button'
-            className='btn-primary action-btn '
+            className='btn-primary action-btn'
             onClick={addToCartHandler}
           >
             Book now

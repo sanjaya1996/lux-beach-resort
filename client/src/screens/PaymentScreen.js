@@ -86,6 +86,11 @@ const PaymentScreen = ({ match }) => {
 
   return (
     <div className='payment-screen'>
+      <p>
+        Please <span className='underlined-link'>Sign In</span> /{' '}
+        <span className='underlined-link'>Create an account</span> for easy &
+        secure bookings.
+      </p>
       <div className='summary-container'>
         <div className='one-half-responsive summary-heading'>Your Stay:</div>
         <div className='one-half-responsive'>
@@ -186,8 +191,8 @@ const PaymentScreen = ({ match }) => {
           <input type='email' className='form-control' />
         </div>
       </form>
-      <div style={{ alignSelf: 'flex-start' }}>
-        <Title title='Payment' />
+      <div style={{ alignSelf: 'flex-start', marginTop: '2rem' }}>
+        <h3>Booking ?</h3>
       </div>
       <div style={{ display: 'inline-block' }}>
         <StripeCheckout
@@ -197,8 +202,20 @@ const PaymentScreen = ({ match }) => {
           amount={total * 100}
           description={'room: ' + selectedRoom.name}
         >
-          <button className='btn-primary'>Pay for ${total}</button>
+          <button className='btn-primary action-btn'>
+            {`Pay for $${total}`}
+          </button>
         </StripeCheckout>
+      </div>
+      <div style={{ alignSelf: 'flex-start', marginTop: '2rem' }}>
+        <h3>Reservation ?</h3>
+        <p>Email verification is required* for any reservation!</p>
+        <p style={{ paddingBottom: 20 }}>
+          <span className='underlined-link'>Verify now</span>
+        </p>
+        <button disabled={true} className='btn-primary action-btn btn-disabled'>
+          Reserve now
+        </button>
       </div>
     </div>
   );
