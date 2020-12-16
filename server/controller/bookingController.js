@@ -47,9 +47,14 @@ const createBooking = async (req, res, next) => {
       roomId,
     ]);
 
+    if (req.type === 'email-booking') {
+      res.redirect('http://localhost:3000/');
+      return;
+    }
     res.status(201).json(results.rows[0]);
   } catch (err) {
-    next(err);
+    const newError = new Error(err);
+    next(newError);
   }
 };
 

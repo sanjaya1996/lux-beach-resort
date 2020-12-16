@@ -8,7 +8,8 @@ const getGuests = async (req, res) => {
     const results = await db.query('SELECT * FROM guests');
     res.status(200).json(results.rows);
   } catch (err) {
-    next(err);
+    const newError = new Error(err);
+    next(newError);
   }
 };
 
@@ -26,7 +27,8 @@ const createGuest = async (req, res, next) => {
     req.guestId = results.rows[0].id;
     next();
   } catch (err) {
-    next(err);
+    const newError = new Error(err);
+    next(newError);
   }
 };
 

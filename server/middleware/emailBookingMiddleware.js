@@ -4,8 +4,8 @@ const jwt = require('jsonwebtoken');
 
 const generateToken = require('../utils/generateToken');
 
-// Verifybooking
-const verifyEmail = (req, res) => {
+// SEND EMAIL TO GUEST AND
+const emailBookingRequest = (req, res) => {
   let transporter = nodeMailer.createTransport(
     sgTransport({
       auth: {
@@ -14,20 +14,33 @@ const verifyEmail = (req, res) => {
     })
   );
 
-  // req.body should contain {name, phone, email, checkInDate, checkOutDate}
+  // req.body should contain {name, phone, email, roomId, checkInDate, checkOutDate}
   const emailToken = generateToken(req.body);
+  console.log(emailToken);
 
   // Set url LInk
-  const url = `http://${req.headers.host}/api/guests/auth/email-confirmation/${emailToken}`;
+  const url = `http://${req.headers.host}/api/bookings/email-booking/${emailToken}`;
 
   // setup email data with unicode symbols
   let mailOptions = {
-    to: email,
+    to: req.body.email,
     from: '11801709@students.koi.edu.au',
     subject: 'Confirm Email',
     html: `
-    <p>Please confirm your email by clicking in this link:</p>
-    <a href= ${url}>${url}</a>`,
+    <h1>Please confirm your booking:</h1>
+    <a href= ${url} style = "padding: 0.4rem 0.9rem;
+    display: inline-block;
+    font-size: 20px;
+    color: #fff;
+    height: 40px;
+    background: #255796;
+    border: 1px solid #255796;
+    border-radius: 21px;
+    letter-spacing: 3px;
+    text-decoration: none;
+    text-transform: uppercase;">
+    Confirm Booking
+  </a>`,
   };
 
   //Send Email
@@ -36,7 +49,7 @@ const verifyEmail = (req, res) => {
   res.json({ message: 'Email Sent!' });
 };
 
-const confirmEmailLink = async (req, res, next) => {
+const emailBookingConfirmed = async (req, res, next) => {
   try {
     const { bookingDetails } = jwt.verify(
       req.params.token,
@@ -46,6 +59,7 @@ const confirmEmailLink = async (req, res, next) => {
     // Setting up variables for other middlewares
     req.body = bookingDetails;
     req.params.roomId = bookingDetails.roomId;
+    req.type = 'email-booking';
 
     next();
   } catch (error) {
@@ -54,4 +68,4 @@ const confirmEmailLink = async (req, res, next) => {
   }
 };
 
-module.exports = { verifyEmail, confirmEmailLink };
+module.exports = { emailBookingRequest, emailBookingConfirmed };

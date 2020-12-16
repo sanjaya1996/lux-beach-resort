@@ -5,13 +5,21 @@ const {
   getCurrentBookings,
 } = require('../controller/bookingController');
 const { createGuest } = require('../controller/guestController');
-const { confirmEmailLink } = require('../middleware/authMiddleware');
+const {
+  emailBookingRequest,
+  emailBookingConfirmed,
+} = require('../middleware/emailBookingMiddleware');
 
 const router = express.Router();
 
-router.get('/', getBookings);
+router.route('/').get(getBookings).post(emailBookingRequest);
 router.get('/current', getCurrentBookings);
 router.post('/:roomId', createGuest, createBooking);
-router.get('/confirm', confirmEmailLink, createGuest, createBooking);
+router.get(
+  '/email-booking/:token',
+  emailBookingConfirmed,
+  createGuest,
+  createBooking
+);
 
 module.exports = router;
