@@ -48,7 +48,10 @@ const createBooking = async (req, res, next) => {
     ]);
 
     if (req.type === 'email-booking') {
-      res.redirect('http://localhost:3000/');
+      const title = 'Successfully booked!';
+      const message =
+        'We have reserved your room for you. Go ahead and complete your payment before someone takes.';
+      res.redirect(`http://localhost:3000/success/${title}/${message}`);
       return;
     }
     res.status(201).json(results.rows[0]);

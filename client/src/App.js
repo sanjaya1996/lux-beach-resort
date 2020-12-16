@@ -10,6 +10,7 @@ import Navbar from './components/Navbar';
 import EditRoomScreen from './screens/EditRoomScreen';
 import CartScreen from './screens/CartScreen';
 import PaymentScreen from './screens/PaymentScreen';
+import MessageScreen from './screens/MessageScreen';
 
 const App = () => {
   return (
@@ -24,6 +25,8 @@ const App = () => {
           path='/payment/:id/:guests/:chkin/:chkout'
           component={PaymentScreen}
         />
+        <Route path='/success/:title/:message' component={MessageScreen} />
+        <Route path='/error/:title/:message' component={MessageScreen} />
         <Route path='/' component={HomeScreen} exact />
         <Route component={ErrorScreen} />
       </Switch>

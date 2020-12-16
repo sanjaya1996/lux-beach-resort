@@ -8,7 +8,9 @@ const errorHandler = (err, req, res) => {
   const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
   res.status(statusCode);
   if (req.type === 'email-booking') {
-    res.redirect('http://localhost:3000/');
+    const title = 'Error occured!';
+    const message = err.message;
+    res.redirect(`http://localhost:3000/error/${title}/${message}`);
     return;
   }
   res.json({

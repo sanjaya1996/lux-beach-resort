@@ -25,7 +25,9 @@ const emailBookingRequest = (req, res) => {
   let mailOptions = {
     to: req.body.email,
     from: '11801709@students.koi.edu.au',
-    subject: 'Confirm Email',
+    subject: 'Room Booking Request',
+    text:
+      'Hi there, thanks for choosing lux-beach-resort for your accomodation.',
     html: `
     <h1>Please confirm your booking:</h1>
     <a href= ${url} style = "padding: 0.4rem 0.9rem;

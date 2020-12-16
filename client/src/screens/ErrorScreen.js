@@ -1,24 +1,13 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import BannerMessage from '../components/BannerMessage';
 
-import Banner from '../components/Banner';
-import Hero from '../components/Hero';
+const ErrorScreen = ({ title, subtitle }) => {
+  return <BannerMessage title={title} subtitle={subtitle} />;
+};
 
-const ErrorScreen = ({ children, title, subtitle }) => {
-  const history = useHistory();
-  return (
-    <Hero>
-      <Banner title={title || '404'} subtitle={subtitle || 'page not found'}>
-        <button
-          type='button'
-          onClick={() => (children ? history.goBack() : history.push('/'))}
-          className='btn-primary'
-        >
-          {children || 'return home'}
-        </button>
-      </Banner>
-    </Hero>
-  );
+ErrorScreen.defaultProps = {
+  title: '404',
+  subtitle: 'page not found',
 };
 
 export default ErrorScreen;
