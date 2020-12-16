@@ -1,13 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import StripeCheckout from 'react-stripe-checkout';
 import axios from 'axios';
 
-import * as roomActions from '../store/actions/rooms';
 import ErrorScreen from './ErrorScreen';
 import Loading from '../components/Loading';
 import Title from '../components/Title';
+import * as roomActions from '../store/actions/rooms';
+import * as bookingActions from '../store/actions/bookings';
 
 // Calculate Total Subtotal
 let subTotal = 0;
@@ -21,14 +22,42 @@ const calculateSubtotal = (chkin, chkout, rate) => {
   return subTotal;
 };
 
-const PaymentScreen = ({ match }) => {
+const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
+
+const formReducer = (state, action) => {
+  if (action.type === FORM_INPUT_UPDATE) {
+    const updatedValues = {
+      ...state,
+      [action.name]: action.value,
+    };
+    return updatedValues;
+  } else {
+    return state;
+  }
+};
+
+// MAIN SCREEN COMPONENT
+const PaymentScreen = ({ match, history }) => {
   const { id, guests, chkin, chkout } = match.params;
 
   const dispatch = useDispatch();
 
+  const [formState, dispatchFormState] = useReducer(formReducer, {
+    email: '',
+    fName: '',
+    lName: '',
+    title: '',
+    mobileNumber: '',
+    note: '',
+  });
+
   const checkRoomAvailability = useSelector(
     (state) => state.checkRoomAvailability
   );
+
+  const roomBooking = useSelector((state) => state.roomBooking);
+  const { loading: reserveLoading, success, error: reserveError } = roomBooking;
+
   const {
     loading,
     bookingAvailable,
@@ -42,6 +71,14 @@ const PaymentScreen = ({ match }) => {
   useEffect(() => {
     dispatch(roomActions.checkAvailability(id, chkin, chkout, guests));
   }, [dispatch, id, chkin, chkout, guests]);
+
+  useEffect(() => {
+    if (success) {
+      const title = 'Email has been Sent!';
+      const message = 'Please check your email, and confirm your booking.';
+      history.push(`/success/${title}/${message}`);
+    }
+  }, [success, history]);
 
   const makePayment = async (token) => {
     try {
@@ -57,6 +94,23 @@ const PaymentScreen = ({ match }) => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const reserveNowHandler = () => {
+    const bookingDetails = {
+      name: formState.fName + ' ' + formState.lName,
+      email: formState.email,
+      phone: formState.mobileNumber,
+      roomId: selectedRoom.id,
+      checkInDate: selectedCheckIn,
+      checkOutDate: selectedCheckOut,
+    };
+    dispatch(bookingActions.bookRoom(bookingDetails));
+  };
+
+  const inputChangeHandler = (event) => {
+    const { name, value } = event.target;
+    dispatchFormState({ type: FORM_INPUT_UPDATE, name, value });
   };
 
   if (loading) {
@@ -86,6 +140,7 @@ const PaymentScreen = ({ match }) => {
 
   return (
     <div className='payment-screen'>
+      {reserveError && <p>{reserveError}</p>}
       <p>
         Please <span className='underlined-link'>Sign In</span> /{' '}
         <span className='underlined-link'>Create an account</span> for easy &
@@ -148,28 +203,52 @@ const PaymentScreen = ({ match }) => {
           <label htmlFor='Email' className='summary-label'>
             Email:
           </label>
-          <input type='email' className='form-control' />
+          <input
+            type='email'
+            name='email'
+            value={formState.email}
+            onChange={inputChangeHandler}
+            className='form-control'
+          />
         </div>
 
         <div className='form-group one-half-responsive'>
-          <label htmlFor='Email' className='summary-label'>
+          <label htmlFor='fName' className='summary-label'>
             First Name:
           </label>
-          <input type='email' className='form-control' />
+          <input
+            type='text'
+            name='fName'
+            value={formState.fName}
+            onChange={inputChangeHandler}
+            className='form-control'
+          />
         </div>
 
         <div className='form-group form-group one-half-responsive'>
-          <label htmlFor='Email' className='summary-label'>
+          <label htmlFor='lName' className='summary-label'>
             Last Name:
           </label>
-          <input type='email' className='form-control' />
+          <input
+            type='text'
+            name='lName'
+            value={formState.lName}
+            onChange={inputChangeHandler}
+            className='form-control'
+          />
         </div>
 
         <div className='form-group form-group one-half-responsive'>
-          <label htmlFor='Email' className='summary-label'>
+          <label htmlFor='title' className='summary-label'>
             Title:
           </label>
-          {/* <select name='title' id='title' value='' className='form-control'>
+          <select
+            id='title'
+            name='title'
+            value={formState.title}
+            onChange={inputChangeHandler}
+            className='form-control'
+          >
             {['Dr', 'Miss', 'Mr', 'Mr & Mrs', 'Mrs', 'Ms'].map(
               (item, index) => (
                 <option key={index} value={item}>
@@ -177,18 +256,30 @@ const PaymentScreen = ({ match }) => {
                 </option>
               )
             )}
-          </select> */}
+          </select>
         </div>
 
         <div className='form-group form-group one-half-responsive'>
-          <label htmlFor='Email' className='summary-label'>
+          <label htmlFor='mobileNumber' className='summary-label'>
             Mobile Number:
           </label>
-          <input type='email' className='form-control' />
+          <input
+            type='text'
+            name='mobileNumber'
+            value={formState.mobileNumber}
+            onChange={inputChangeHandler}
+            className='form-control'
+          />
         </div>
         <div className='form-group form-group one-half-responsive note-input'>
-          <label htmlFor='Email'>Note:</label>
-          <input type='email' className='form-control' />
+          <label htmlFor='note'>Note:</label>
+          <input
+            type='text'
+            name='note'
+            value={formState.note}
+            onChange={inputChangeHandler}
+            className='form-control'
+          />
         </div>
       </form>
       <div style={{ alignSelf: 'flex-start', marginTop: '2rem' }}>
@@ -209,12 +300,11 @@ const PaymentScreen = ({ match }) => {
       </div>
       <div style={{ alignSelf: 'flex-start', marginTop: '2rem' }}>
         <h3>Reservation ?</h3>
-        <p>Email verification is required* for any reservation!</p>
-        <p style={{ paddingBottom: 20 }}>
-          <span className='underlined-link'>Verify now</span>
+        <p style={{ paddingBottom: 10 }}>
+          For our new guests, we will send an email to confirm your reservation.
         </p>
-        <button disabled={true} className='btn-primary action-btn btn-disabled'>
-          Reserve now
+        <button onClick={reserveNowHandler} className='btn-primary action-btn'>
+          {reserveLoading ? 'loading...' : 'Reserve now'}
         </button>
       </div>
     </div>
