@@ -30,6 +30,7 @@ const Input = (props) => {
     initialValue,
     initiallyValid,
     onInputChange,
+    errorText,
   } = props;
 
   const [inputState, dispatch] = useReducer(inputReducer, {
@@ -39,12 +40,13 @@ const Input = (props) => {
   });
 
   useEffect(() => {
-    onInputChange(name, inputState.value);
+    onInputChange(name, inputState.value, inputState.isValid);
   }, [name, inputState, onInputChange]);
 
   const textChangeHandler = (event) => {
     const inputText = event.target.value;
-    const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
     let isValid = true;
     if (props.required && inputText.trim().length === 0) {
       isValid = false;
@@ -61,9 +63,23 @@ const Input = (props) => {
 
   return (
     <>
-      <label htmlFor='Email' className='summary-label'>
-        {label}
+      <label htmlFor={name} className='summary-label'>
+        {label}{' '}
+        {inputState.touched && !inputState.isValid && (
+          <span
+            style={{
+              padding: 0,
+              fontWeight: 'normal',
+              fontStyle: 'italic',
+              fontSize: '0.6rem',
+              color: 'red',
+            }}
+          >
+            {errorText}
+          </span>
+        )}
       </label>
+
       <input
         type={type}
         name={name}

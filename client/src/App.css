@@ -96,6 +96,12 @@ h6 {
   width: fit-content;
   height: fit-content;
 }
+.btn-disable {
+  background: #ccc;
+  cursor: context-menu;
+  pointer-events: none;
+  border: none;
+}
 
 .align-bottom-right {
   text-align: end;
@@ -712,6 +718,39 @@ h6 {
     clear: both;
     width: 100%;
   }
+}
+
+.item-a {
+  grid-area: email;
+}
+.item-b {
+  grid-area: fName;
+}
+.item-c {
+  grid-area: lName;
+}
+.item-d {
+  grid-area: title;
+}
+.item-e {
+  grid-area: mobile;
+}
+.item-f {
+  grid-area: note;
+}
+
+.form-one-half-responsive {
+  padding: 0 5px;
+  max-width: 700px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: auto;
+  grid-template-areas:
+    'email email'
+    'fName lName'
+    'title mobile'
+    'note note';
+  grid-column-gap: 5px;
 }
 
 .note-input {
