@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import Styled from 'styled-components';
 
 // #4BB543 primary color
+// position: fixed;
+// top: 80px;
+// right: 20px;
+// left: 20px;
 const StyledAlert = Styled.div`
-position: fixed;
-top: 80px;
-right: 20px;
-left: 20px;
 margin: auto;
+margin-top: 20px;
 width: 80vw;
 max-width: 1000px;
 text-align: center;
@@ -20,20 +21,19 @@ margin-bottom: 15px;
 display: ${(props) => (props.clicked ? 'none' : null)}
 `;
 
+// position: fixed;
+// top: 5px;
+// right: 10px;
 const Closebtn = Styled.span`
-position: fixed;
-top: 5px;
-right: 10px;
+float: right;
 font-size: 1.2em;
 margin-left: 15px;
-float: right;
 line-height: 20px;
 cursor: pointer;
 transition: 0.3s;
 :hover {
   color: black;
 }
-
 `;
 
 const StyledParagraph = Styled.p`
@@ -46,8 +46,8 @@ const AlertBox = ({ message, type }) => {
   return (
     <StyledAlert type={type} clicked={alertClosed}>
       <StyledParagraph>
-        {message}
         <Closebtn onClick={() => setAlertClosed(true)}>x</Closebtn>
+        {message}
       </StyledParagraph>
     </StyledAlert>
   );

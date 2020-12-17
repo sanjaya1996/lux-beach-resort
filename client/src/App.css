@@ -584,6 +584,9 @@ h6 {
   margin-bottom: 16px;
   resize: vertical;
 }
+.input-error {
+  border-color: red;
+}
 
 .extras-input input {
   height: 5px;

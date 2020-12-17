@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useCallback, useEffect, useReducer } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import StripeCheckout from 'react-stripe-checkout';
@@ -7,6 +7,7 @@ import axios from 'axios';
 import ErrorScreen from './ErrorScreen';
 import Loading from '../components/Loading';
 import Title from '../components/Title';
+import Input from '../components/Input';
 import * as roomActions from '../store/actions/rooms';
 import * as bookingActions from '../store/actions/bookings';
 
@@ -27,10 +28,22 @@ const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
 const formReducer = (state, action) => {
   if (action.type === FORM_INPUT_UPDATE) {
     const updatedValues = {
-      ...state,
-      [action.name]: action.value,
+      ...state.inputValues,
+      [action.input]: action.value,
     };
-    return updatedValues;
+    const updatedValidities = {
+      ...state.inputValidities,
+      [action.input]: action.isValid,
+    };
+    let updatedFormIsValid = true;
+    for (const key in updatedValidities) {
+      updatedFormIsValid = updatedFormIsValid && updatedValidities[key];
+    }
+    return {
+      formIsValid: updatedFormIsValid,
+      inputValidities: updatedValidities,
+      inputValues: updatedValues,
+    };
   } else {
     return state;
   }
@@ -43,12 +56,23 @@ const PaymentScreen = ({ match, history }) => {
   const dispatch = useDispatch();
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
-    email: '',
-    fName: '',
-    lName: '',
-    title: '',
-    mobileNumber: '',
-    note: '',
+    inputValues: {
+      email: '',
+      fName: '',
+      lName: '',
+      title: '',
+      mobileNumber: '',
+      note: '',
+    },
+    inputValidities: {
+      email: false,
+      fName: false,
+      lName: false,
+      title: false,
+      mobileNumber: false,
+      note: false,
+    },
+    formIsValid: false,
   });
 
   const checkRoomAvailability = useSelector(
@@ -108,10 +132,17 @@ const PaymentScreen = ({ match, history }) => {
     dispatch(bookingActions.bookRoom(bookingDetails));
   };
 
-  const inputChangeHandler = (event) => {
-    const { name, value } = event.target;
-    dispatchFormState({ type: FORM_INPUT_UPDATE, name, value });
-  };
+  const inputChangeHandler = useCallback(
+    (inputIdentifier, inputValue, inputValidity) => {
+      dispatchFormState({
+        type: FORM_INPUT_UPDATE,
+        input: inputIdentifier,
+        isValid: inputValidity,
+        value: inputValue,
+      });
+    },
+    [dispatchFormState]
+  );
 
   if (loading) {
     return (
@@ -200,15 +231,16 @@ const PaymentScreen = ({ match, history }) => {
       </div>
       <form className='guest-form one-half-responsive'>
         <div className='form-group one-half-responsive'>
-          <label htmlFor='Email' className='summary-label'>
-            Email:
-          </label>
-          <input
+          <Input
+            label='Email: '
             type='email'
             name='email'
+            errorText='Email not valid!'
             value={formState.email}
-            onChange={inputChangeHandler}
-            className='form-control'
+            onInputChange={inputChangeHandler}
+            initiallyValid={false}
+            required
+            email
           />
         </div>
 

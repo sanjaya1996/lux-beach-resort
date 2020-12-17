@@ -10,10 +10,6 @@ import AlertBox from '../components/AlertBox';
 const HomeScreen = () => {
   return (
     <>
-      <AlertBox
-        type='primary'
-        message='Error While loading rooms Error While loading rooms Error While loading rooms Error While loading rooms'
-      />
       <Hero>
         <Banner
           title='luxurious rooms'
@@ -25,6 +21,10 @@ const HomeScreen = () => {
         </Banner>
       </Hero>
       <Services />
+      <AlertBox
+        type='primary'
+        message='Error While loading rooms Error While loading rooms Error While loading rooms Error While loading rooms'
+      />
       <FeaturedRooms />
     </>
   );
