@@ -30,7 +30,6 @@ router.post('/', (req, res, next) => {
       })
     )
     .then((result) => {
-      console.log(result);
       res.status(200).json(result);
     })
     .catch((err) => {

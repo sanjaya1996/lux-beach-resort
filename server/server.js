@@ -40,7 +40,7 @@ app.use('/api/guests', guestRoutes);
 // Check room availability
 app.use('/api/checkavailability', checkAvailabilityRoutes);
 
-// Payment
+// Payment Routes
 app.use('/api/payment', paymentRoutes);
 
 // File upload routes

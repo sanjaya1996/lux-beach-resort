@@ -79,17 +79,31 @@ const Input = (props) => {
           </span>
         )}
       </label>
-
-      <input
-        type={type}
-        name={name}
-        value={inputState.value}
-        onChange={textChangeHandler}
-        onBlur={lostFocusHandler}
-        className={`form-control ${
-          inputState.touched && !inputState.isValid && 'input-error'
-        }`}
-      />
+      {type === 'select' ? (
+        <select
+          name={name}
+          value={inputState.value}
+          onChange={textChangeHandler}
+          className='form-control'
+        >
+          {props.options.map((item, index) => (
+            <option key={index} value={item}>
+              {item}
+            </option>
+          ))}
+        </select>
+      ) : (
+        <input
+          type={type}
+          name={name}
+          value={inputState.value}
+          onChange={textChangeHandler}
+          onBlur={lostFocusHandler}
+          className={`form-control ${
+            inputState.touched && !inputState.isValid && 'input-error'
+          }`}
+        />
+      )}
     </>
   );
 };

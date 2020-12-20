@@ -16,7 +16,6 @@ const emailBookingRequest = (req, res) => {
 
   // req.body should contain {name, phone, email, roomId, checkInDate, checkOutDate}
   const emailToken = generateToken(req.body);
-  console.log(emailToken);
 
   // Set url LInk
   const url = `http://${req.headers.host}/api/bookings/email-booking/${emailToken}`;

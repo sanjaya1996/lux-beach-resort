@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useReducer } from 'react';
+import React, { useCallback, useEffect, useReducer, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import StripeCheckout from 'react-stripe-checkout';
@@ -52,6 +52,7 @@ const formReducer = (state, action) => {
 // MAIN SCREEN COMPONENT
 const PaymentScreen = ({ match, history }) => {
   const { id, guests, chkin, chkout } = match.params;
+  const [isPaid, setIsPaid] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -60,7 +61,7 @@ const PaymentScreen = ({ match, history }) => {
       email: '',
       fName: '',
       lName: '',
-      title: '',
+      title: 'Mr',
       mobileNumber: '',
       note: '',
     },
@@ -80,7 +81,12 @@ const PaymentScreen = ({ match, history }) => {
   );
 
   const roomBooking = useSelector((state) => state.roomBooking);
-  const { loading: reserveLoading, success, error: reserveError } = roomBooking;
+  const {
+    loading: bookingLoading,
+    success,
+    error: reserveError,
+    successMessage,
+  } = roomBooking;
 
   const {
     loading,
@@ -92,17 +98,20 @@ const PaymentScreen = ({ match, history }) => {
     selectedGuests,
   } = checkRoomAvailability;
 
+  // Validate url parameters and validate in backend
   useEffect(() => {
     dispatch(roomActions.checkAvailability(id, chkin, chkout, guests));
   }, [dispatch, id, chkin, chkout, guests]);
 
+  // Redirect to
   useEffect(() => {
     if (success) {
-      const title = 'Email has been Sent!';
-      const message = 'Please check your email, and confirm your reservation.';
+      const title = successMessage.title;
+      const message = successMessage.message;
       history.push(`/success/${title}/${message}`);
+      dispatch({ type: bookingActions.ROOM_BOOKING_RESET });
     }
-  }, [success, history]);
+  }, [success, successMessage, history]);
 
   const makePayment = async (token) => {
     try {
@@ -115,25 +124,51 @@ const PaymentScreen = ({ match, history }) => {
         config
       );
       console.log(data);
+      setIsPaid(true);
     } catch (error) {
       console.log(error);
     }
   };
+  console.log(formState.inputValues.mobileNumber);
+  // Book room after payment
+  useEffect(() => {
+    if (isPaid) {
+      const bookingDetails = {
+        name: formState.inputValues.fName + ' ' + formState.inputValues.lName,
+        email: formState.inputValues.email,
+        phone: formState.inputValues.mobileNumber,
+        roomId: selectedRoom.id,
+        checkInDate: selectedCheckIn,
+        checkOutDate: selectedCheckOut,
+      };
+      dispatch(bookingActions.bookRoom(bookingDetails, 'paid'));
+      setIsPaid(false);
+    }
+  }, [
+    isPaid,
+    dispatch,
+    formState,
+    selectedRoom,
+    selectedCheckIn,
+    selectedCheckOut,
+  ]);
 
   const reserveNowHandler = () => {
     if (!formState.formIsValid) {
       alert('Your Details are not valid!');
       return;
     }
+
     const bookingDetails = {
-      name: formState.fName + ' ' + formState.lName,
-      email: formState.email,
-      phone: formState.mobileNumber,
+      name: formState.inputValues.fName + ' ' + formState.inputValues.lName,
+      email: formState.inputValues.email,
+      phone: formState.inputValues.mobileNumber,
       roomId: selectedRoom.id,
       checkInDate: selectedCheckIn,
       checkOutDate: selectedCheckOut,
     };
-    dispatch(bookingActions.bookRoom(bookingDetails));
+
+    dispatch(bookingActions.bookRoom(bookingDetails, 'email'));
   };
 
   const inputChangeHandler = useCallback(
@@ -148,7 +183,7 @@ const PaymentScreen = ({ match, history }) => {
     [dispatchFormState]
   );
 
-  if (loading) {
+  if (loading || bookingLoading) {
     return (
       <div className='centered'>
         <Loading />
@@ -172,6 +207,7 @@ const PaymentScreen = ({ match, history }) => {
       </div>
     );
   }
+
   return (
     <div className='payment-screen'>
       {reserveError && <p>{reserveError}</p>}
@@ -239,7 +275,7 @@ const PaymentScreen = ({ match, history }) => {
             type='email'
             name='email'
             errorText='Email not valid!'
-            value={formState.email}
+            value={formState.inputValues.email}
             onInputChange={inputChangeHandler}
             initiallyValid={false}
             required
@@ -253,7 +289,7 @@ const PaymentScreen = ({ match, history }) => {
             type='text'
             name='fName'
             errorText='name not valid!'
-            value={formState.fName}
+            value={formState.inputValues.fName}
             onInputChange={inputChangeHandler}
             initiallyValid={false}
             required
@@ -265,31 +301,23 @@ const PaymentScreen = ({ match, history }) => {
             label='Last Name: '
             type='text'
             name='lName'
-            value={formState.lName}
+            value={formState.inputValues.lName}
             onInputChange={inputChangeHandler}
             initiallyValid={true}
           />
         </div>
 
         <div className='form-group item-d'>
-          <label htmlFor='title' className='summary-label'>
-            Title:
-          </label>
-          <select
-            id='title'
+          <Input
+            label='Title: '
+            type='select'
             name='title'
-            value={formState.title}
-            onChange={inputChangeHandler}
-            className='form-control'
-          >
-            {['Mr', 'Dr', 'Miss', 'Mr & Mrs', 'Mrs', 'Ms'].map(
-              (item, index) => (
-                <option key={index} value={item}>
-                  {item}
-                </option>
-              )
-            )}
-          </select>
+            value={formState.inputValues.title}
+            options={['Mr', 'Dr', 'Miss', 'Mr & Mrs', 'Mrs', 'Ms']}
+            onInputChange={inputChangeHandler}
+            initiallyValid={true}
+            required
+          />
         </div>
 
         <div className='form-group item-e'>
@@ -298,7 +326,7 @@ const PaymentScreen = ({ match, history }) => {
             type='text'
             name='mobileNumber'
             errorText='mobile not valid!'
-            value={formState.mobileNumber}
+            value={formState.inputValues.mobileNumber}
             onInputChange={inputChangeHandler}
             initiallyValid={false}
             required
@@ -309,7 +337,7 @@ const PaymentScreen = ({ match, history }) => {
             label='note: '
             type='text'
             name='note'
-            value={formState.mobileNumber}
+            value={formState.inputValues.note}
             onInputChange={inputChangeHandler}
             initiallyValid={true}
           />
@@ -347,7 +375,7 @@ const PaymentScreen = ({ match, history }) => {
           For our new guests, we will send an email to confirm your reservation.
         </p>
         <button onClick={reserveNowHandler} className='btn-primary action-btn'>
-          {reserveLoading ? 'loading...' : 'Reserve now'}
+          Reserve now
         </button>
       </div>
     </div>
