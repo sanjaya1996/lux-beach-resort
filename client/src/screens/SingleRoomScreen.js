@@ -8,6 +8,7 @@ import StyledHero from '../components/StyledHero';
 import * as roomsActions from '../store/actions/rooms';
 import * as cartActions from '../store/actions/cart';
 import ErrorScreen from './ErrorScreen';
+import { CHECK_AVAILABILITY_RESET } from '../store/reducers/rooms';
 
 const SingleRoomScreen = ({ match, history }) => {
   const dispatch = useDispatch();
@@ -23,6 +24,7 @@ const SingleRoomScreen = ({ match, history }) => {
   }, [dispatch, match]);
 
   const addToCartHandler = () => {
+    dispatch({ type: CHECK_AVAILABILITY_RESET });
     dispatch(
       cartActions.addToCart(
         room.id,

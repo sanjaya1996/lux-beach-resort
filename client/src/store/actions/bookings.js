@@ -3,7 +3,6 @@ import axios from 'axios';
 export const ROOM_BOOKING_REQUEST = 'ROOM_BOOKING_REQUEST';
 export const ROOM_BOOKING_SUCCESS = 'ROOM_BOOKING_SUCCESS';
 export const ROOM_BOOKING_FAIL = 'ROOM_BOOKING_FAIL';
-export const ROOM_BOOKING_RESET = 'ROOM_BOOKING_RESET';
 
 export const bookRoom = (bookingDetails, type) => {
   return async (dispatch) => {

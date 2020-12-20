@@ -1,9 +1,10 @@
 import {
   ROOM_BOOKING_FAIL,
   ROOM_BOOKING_REQUEST,
-  ROOM_BOOKING_RESET,
   ROOM_BOOKING_SUCCESS,
 } from '../actions/bookings';
+
+export const ROOM_BOOKING_RESET = 'ROOM_BOOKING_RESET';
 
 export const roomBookingReducer = (state = {}, action) => {
   switch (action.type) {

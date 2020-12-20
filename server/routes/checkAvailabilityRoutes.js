@@ -6,11 +6,11 @@ const router = express.Router();
 
 const validateDate = (date1, date2) => {
   if (
-    new Date(date1) !== 'Invalid Date' &&
-    !isNaN(new Date(date1)) &&
-    new Date(date2) !== 'Invalid Date' &&
-    !isNaN(new Date(date2)) &&
-    new Date(date1) < new Date(date2)
+    date1 !== 'Invalid Date' &&
+    !isNaN(date1) &&
+    date2 !== 'Invalid Date' &&
+    !isNaN(date2) &&
+    date1 < date2
   ) {
     return true;
   } else {
@@ -20,8 +20,9 @@ const validateDate = (date1, date2) => {
 
 router.get('/:id', async (req, res, next) => {
   try {
-    const { checkin, checkout, guests } = req.query;
-    console.log(guests);
+    let { checkin, checkout, guests } = req.query;
+    checkin = new Date(checkin);
+    checkout = new Date(checkout);
 
     if (!validateDate(checkin, checkout)) {
       res.json({

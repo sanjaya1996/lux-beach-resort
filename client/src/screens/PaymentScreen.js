@@ -10,6 +10,8 @@ import Title from '../components/Title';
 import Input from '../components/Input';
 import * as roomActions from '../store/actions/rooms';
 import * as bookingActions from '../store/actions/bookings';
+import { CHECK_AVAILABILITY_RESET } from '../store/reducers/rooms';
+import { ROOM_BOOKING_RESET } from '../store/reducers/bookings';
 
 // Calculate Total Subtotal
 let subTotal = 0;
@@ -109,9 +111,10 @@ const PaymentScreen = ({ match, history }) => {
       const title = successMessage.title;
       const message = successMessage.message;
       history.push(`/success/${title}/${message}`);
-      dispatch({ type: bookingActions.ROOM_BOOKING_RESET });
+      dispatch({ type: ROOM_BOOKING_RESET });
+      dispatch({ type: CHECK_AVAILABILITY_RESET });
     }
-  }, [success, successMessage, history]);
+  }, [success, successMessage, history, dispatch]);
 
   const makePayment = async (token) => {
     try {
