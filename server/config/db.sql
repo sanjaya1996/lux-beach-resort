@@ -440,3 +440,8 @@ CASE
  WHEN rental_rate = 0.99 THEN true
 	ELSE 0
 END
+
+-- Alter Table guests and add auth_provider_id and auth_provider_name columns
+ALTER TABLE guests
+ADD column auth_provider_id VARCHAR(50) NOT NULL,
+ADD column auth_provider_name VARCHAR(50) NOT NULL;
