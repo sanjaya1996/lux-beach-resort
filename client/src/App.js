@@ -12,6 +12,7 @@ import EditRoomScreen from './screens/EditRoomScreen';
 import CartScreen from './screens/CartScreen';
 import PaymentScreen from './screens/PaymentScreen';
 import MessageScreen from './screens/MessageScreen';
+import LoginScreen from './screens/LoginScreen';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -34,6 +35,7 @@ const App = () => {
         />
         <Route path='/success/:title/:message' component={MessageScreen} />
         <Route path='/error/:title/:message' component={MessageScreen} />
+        <Route path='/login' component={LoginScreen} />
         <Route path='/' component={HomeScreen} exact />
         <Route component={ErrorScreen} />
       </Switch>
