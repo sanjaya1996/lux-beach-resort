@@ -45,7 +45,45 @@ module.exports = function (passport) {
         callbackURL: 'http://localhost:5000/api/auth/google/callback',
       },
       async (accessToken, refreshToken, profile, done) => {
-        console.log(profile);
+        const { displayName, emails, id, provider } = profile;
+        const email = emails[0].value;
+
+        try {
+          const results = await db.query(
+            'SELECT * FROM guests WHERE auth_id = $1 AND auth_provider_name= $2',
+            [id, provider]
+          );
+
+          if (!results.rows.length) {
+            const { rows } = await db.query(
+              `INSERT INTO guests (name, email, auth_id, auth_provider_name) 
+              VALUES($1, $2, $3, $4) RETURNING *`,
+              [displayName, email, id, provider]
+            );
+
+            done(null, rows[0]);
+          } else {
+            const guest = results.rows[0];
+
+            if (guest.name !== displayName) {
+              const {
+                rows: [updatedGuest],
+              } = await db.query(
+                `UPDATE guests
+              SET name = $1 
+              WHERE id = $2`,
+                [displayName, guest.id]
+              );
+
+              done(null, updatedGuest);
+            } else {
+              done(null, guest);
+            }
+          }
+        } catch (err) {
+          console.log(err);
+          throw new Error(err);
+        }
       }
     )
   );

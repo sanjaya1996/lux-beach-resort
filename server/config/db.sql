@@ -35,6 +35,8 @@ CREATE TABLE guests (
    email VARCHAR(50) NOT NULL,
    PRIMARY KEY(id)
 );
+ALTER TABLE guests 
+ALTER COLUMN phone DROP NOT NULL;
 
 -- Create table Bookings
 CREATE TABLE bookings (

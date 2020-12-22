@@ -5,4 +5,8 @@ const router = express.Router();
 
 router.get('/', getGuests);
 
+router.get('/current', (req, res) => {
+  console.log(req.isAuthenticated());
+});
+
 module.exports = router;

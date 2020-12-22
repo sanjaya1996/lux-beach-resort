@@ -19,7 +19,10 @@ router.get(
 router.get(
   '/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
-  (req, res) => res.redirect('/')
+  (req, res) => {
+    // res.redirect('/');
+    res.redirect('/');
+  }
 );
 
 module.exports = router;

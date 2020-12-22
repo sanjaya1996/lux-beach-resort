@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import './App.css';
 
 import HomeScreen from './screens/HomeScreen';
@@ -13,6 +14,12 @@ import PaymentScreen from './screens/PaymentScreen';
 import MessageScreen from './screens/MessageScreen';
 
 const App = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log('I am called');
+  }, [dispatch]);
+
   return (
     <>
       <Navbar />

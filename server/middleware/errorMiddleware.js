@@ -10,7 +10,7 @@ const errorHandler = (err, req, res) => {
   if (req.type === 'email-booking') {
     const title = 'Error occured!';
     const message = err.message;
-    res.redirect(`http://localhost:3000/error/${title}/${message}`);
+    res.redirect(`/error/${title}/${message}`);
     return;
   }
   res.json({

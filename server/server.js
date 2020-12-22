@@ -4,7 +4,7 @@ const dotenv = require('dotenv');
 const morgan = require('morgan');
 const path = require('path');
 const passport = require('passport');
-const session = require('express-session');
+const cookieSession = require('cookie-session');
 
 // Load config
 dotenv.config();
@@ -29,12 +29,12 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-// Sessions
+// Cookie Session
 app.use(
-  session({
-    secret: 'keyboard cat',
-    resave: false,
-    saveUninitialized: false,
+  cookieSession({
+    name: 'session', // default is also session
+    keys: [process.env.COOKIE_SECRET_KEY],
+    maxAge: 24 * 60 * 60 * 1000,
   })
 );
 
