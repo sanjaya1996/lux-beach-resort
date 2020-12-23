@@ -184,8 +184,18 @@ h6 {
 }
 
 .show-nav {
-  height: 100px;
+  height: 150px;
 }
+
+/* .dropdown-arrow {
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+} */
+
 @media screen and (min-width: 768px) {
   .nav-btn {
     display: none;
@@ -775,6 +785,7 @@ h6 {
   font-size: 20px;
   letter-spacing: var(--mainSpacing);
   cursor: pointer;
+  text-decoration: none;
 }
 .login-btn-google {
   background: #dd4b39;

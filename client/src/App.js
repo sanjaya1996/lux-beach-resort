@@ -13,13 +13,19 @@ import CartScreen from './screens/CartScreen';
 import PaymentScreen from './screens/PaymentScreen';
 import MessageScreen from './screens/MessageScreen';
 import LoginScreen from './screens/LoginScreen';
+import * as guestActions from './store/actions/guests';
+// import Loading from './components/Loading';
 
 const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log('I am called');
+    dispatch(guestActions.getCurrentUser());
   }, [dispatch]);
+
+  // if (loading) {
+  //   return <Loading />;
+  // }
 
   return (
     <>
