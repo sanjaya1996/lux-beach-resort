@@ -1,6 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
-const LoginScreen = () => {
+const LoginScreen = ({ history }) => {
+  const currentUser = useSelector((state) => state.currentUser);
+  const { isAuthenticated } = currentUser;
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      history.push('/');
+    }
+  }, [isAuthenticated, history]);
+
   return (
     <div className='centered'>
       <div className='login-btns-container'>
