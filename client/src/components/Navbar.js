@@ -1,9 +1,19 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
 import { FaAlignRight } from 'react-icons/fa';
 
 const Navbar = () => {
+  const history = useHistory();
+
   const [isOpen, setIsOpen] = useState(false);
+
+  const currentUser = useSelector((state) => state.currentUser);
+  const { user, isAuthenticated } = currentUser;
+
+  const loginHandler = () => {
+    history.push('/login');
+  };
 
   return (
     <nav className='navbar'>
@@ -27,6 +37,20 @@ const Navbar = () => {
           <li>
             <Link to='/rooms'>Rooms</Link>
           </li>
+          {isAuthenticated && user ? (
+            <li className='profile-dropdown'>
+              {user.name.split(' ')[0]}{' '}
+              <i className='fas fa-caret-down fa-lg'></i>
+              <div className='dropdown-content'>
+                <Link to='/'>Profile</Link>
+                <a href='/api/auth/logout'>Logout</a>
+              </div>
+            </li>
+          ) : (
+            <li onClick={loginHandler} className='profile-dropdown'>
+              Login
+            </li>
+          )}
         </ul>
       </div>
     </nav>

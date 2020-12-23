@@ -34,4 +34,9 @@ router.get('/currentuser', (req, res) => {
   res.json({ user, isAuthenticated });
 });
 
+router.get('/logout', (req, res) => {
+  req.logout();
+  res.redirect('/login');
+});
+
 module.exports = router;
