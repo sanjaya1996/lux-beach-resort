@@ -1,17 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Loading from '../components/Loading';
 import * as roomActions from '../store/actions/rooms';
 
-const EditRoomScreen = () => {
+const EditRoomScreen = ({ match }) => {
+  const roomId = match.params.id;
+  console.log(roomId);
+
   const [uploading, setUploading] = useState(false);
   const [name, setName] = useState('');
   const [type, setType] = useState('');
-  const [price, setPrice] = useState(0);
-  const [size, setSize] = useState(0);
-  const [capacity, setCapacity] = useState(0);
+  const [price, setPrice] = useState('');
+  const [size, setSize] = useState('');
+  const [capacity, setCapacity] = useState(null);
   const [images, setImages] = useState([]);
   const [description, setDescription] = useState('');
   const [extra, setExtra] = useState('');
@@ -21,6 +24,31 @@ const EditRoomScreen = () => {
   const [featured, setFeatured] = useState(false);
 
   const dispatch = useDispatch();
+
+  const roomDetails = useSelector((state) => state.roomDetails);
+  const { loading, room, error } = roomDetails;
+
+  useEffect(() => {
+    if (roomId) {
+      dispatch(roomActions.listRoomDetails(roomId));
+    }
+  }, [dispatch, roomId]);
+
+  useEffect(() => {
+    if (room) {
+      setName(room.name);
+      setType(room.type);
+      setPrice(room.price);
+      setSize(room.size);
+      setCapacity(room.capacity);
+      setImages(room.images);
+      setExtras(room.extras);
+      setDescription(room.description);
+      setPets(room.setPets);
+      setBreakfast(room.breakfast);
+      setFeatured(room.featured);
+    }
+  }, [room]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -69,6 +97,10 @@ const EditRoomScreen = () => {
   const deleteExtraHandler = (index) => {
     setExtras(extras.filter((item, i) => i !== index));
   };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <div className='edit-room'>
@@ -139,6 +171,11 @@ const EditRoomScreen = () => {
             onChange={uploadFileHandler}
             className='form-control'
           />
+          <ul className='extra-list'>
+            {images.map((item, index) => (
+              <li key={index}>- {item}</li>
+            ))}
+          </ul>
         </div>
         <div className='form-group'>
           <label htmlFor='extra'>Extras:</label>

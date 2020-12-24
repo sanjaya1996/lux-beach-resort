@@ -16,6 +16,7 @@ import {
 
 export const ROOM_LIST_FILTER_RESET = 'ROOM_LIST_FILTER_RESET';
 export const CHECK_AVAILABILITY_RESET = 'CHECK_AVAILABILITY_RESET';
+export const ROOM_DETAILS_RESET = 'ROOM_DETAILS_RESET';
 
 const roomsInitialState = {
   rooms: [],
@@ -148,6 +149,8 @@ export const roomDetailsReducer = (state = {}, action) => {
       };
     case ROOM_DETAILS_FAIL:
       return { loading: false, error: action.payload };
+    case ROOM_DETAILS_RESET:
+      return {};
     default:
       return state;
   }
