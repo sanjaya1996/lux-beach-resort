@@ -38,6 +38,12 @@ CREATE TABLE guests (
 ALTER TABLE guests 
 ALTER COLUMN phone DROP NOT NULL;
 
+ALTER TABLE guests
+ADD COLUMN isAdmin BOOLEAN DEFAULT false;
+
+ALTER TABLE guests
+RENAME COLUMN isAdmin TO is_admin;
+
 -- Create table Bookings
 CREATE TABLE bookings (
    id SERIAL NOT NULL,

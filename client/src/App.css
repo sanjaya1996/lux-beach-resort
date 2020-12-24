@@ -245,6 +245,9 @@ h6 {
     right: 5rem;
     top: 1.3rem;
   }
+  .admin-dropdown {
+    right: 2rem;
+  }
 }
 /* end of navbar */
 
@@ -305,7 +308,7 @@ h6 {
 /* Title */
 .section-title {
   text-align: center;
-  margin-bottom: 4rem;
+  margin-bottom: 2rem;
 }
 .section-title h4 {
   font-size: 2rem;
@@ -834,3 +837,29 @@ h6 {
   background-image: linear-gradient(#5b7bd5, #4864b1);
 }
 /* end of Login Screen */
+
+/* Admin Room List Screen */
+.admin-roomlist {
+  padding: 1rem;
+}
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td,
+th {
+  border: 1px solid var(--mainGrey);
+  text-align: left;
+  padding: 8px;
+}
+td {
+  text-transform: capitalize;
+}
+
+tr:nth-child(even) {
+  background-color: var(--mainGrey);
+}
+/* end of Admin Room List Screen */

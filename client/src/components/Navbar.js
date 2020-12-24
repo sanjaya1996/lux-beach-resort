@@ -43,6 +43,7 @@ const Navbar = () => {
               <i className='fas fa-caret-down fa-lg'></i>
               <div className='dropdown-content'>
                 <Link to='/'>Profile</Link>
+                {user.is_admin && <Link to='/admin/roomlist'>Rooms</Link>}
                 <a href='/api/auth/logout'>Logout</a>
               </div>
             </li>
