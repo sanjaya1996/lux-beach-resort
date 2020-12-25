@@ -4,6 +4,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import {
   checkAvailabilityReducer,
   roomCreateReducer,
+  roomDeleteReducer,
   roomDetailsReducer,
   roomListReducer,
 } from './reducers/rooms';
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   roomList: roomListReducer,
   roomDetails: roomDetailsReducer,
   roomCreate: roomCreateReducer,
+  roomDelete: roomDeleteReducer,
   cart: cartReducer,
   checkRoomAvailability: checkAvailabilityReducer,
   roomBooking: roomBookingReducer,

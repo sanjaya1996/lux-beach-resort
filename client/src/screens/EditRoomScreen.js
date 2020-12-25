@@ -14,7 +14,7 @@ const EditRoomScreen = ({ match }) => {
   const [type, setType] = useState('');
   const [price, setPrice] = useState('');
   const [size, setSize] = useState('');
-  const [capacity, setCapacity] = useState(null);
+  const [capacity, setCapacity] = useState(1);
   const [images, setImages] = useState([]);
   const [description, setDescription] = useState('');
   const [extra, setExtra] = useState('');
@@ -44,7 +44,7 @@ const EditRoomScreen = ({ match }) => {
       setImages(room.images);
       setExtras(room.extras);
       setDescription(room.description);
-      setPets(room.setPets);
+      setPets(room.pets);
       setBreakfast(room.breakfast);
       setFeatured(room.featured);
     }
@@ -130,7 +130,7 @@ const EditRoomScreen = ({ match }) => {
         <div className='form-group'>
           <label htmlFor='price'>Price:</label>
           <input
-            type='number'
+            type='text'
             name='price'
             id='price'
             value={price}
@@ -141,7 +141,7 @@ const EditRoomScreen = ({ match }) => {
         <div className='form-group'>
           <label htmlFor='size'>Size:</label>
           <input
-            type='number'
+            type='text'
             name='size'
             id='size'
             value={size}

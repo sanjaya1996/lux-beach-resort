@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import AlertBox from '../components/AlertBox';
 
 import Loading from '../components/Loading';
 import Title from '../components/Title';
 import * as roomActions from '../store/actions/rooms';
+import { ROOM_DELETE_RESET } from '../store/reducers/rooms';
 
 const AdminRoomListScreen = ({ history }) => {
   const dispatch = useDispatch();
@@ -13,6 +15,9 @@ const AdminRoomListScreen = ({ history }) => {
 
   const roomList = useSelector((state) => state.roomList);
   const { loading, rooms, error } = roomList;
+
+  const roomDelete = useSelector((state) => state.roomDelete);
+  const { loading: deleteLoading, success, error: deleteError } = roomDelete;
 
   useEffect(() => {
     if (!isAuthenticated || !user.is_admin) {
@@ -30,11 +35,34 @@ const AdminRoomListScreen = ({ history }) => {
     history.push('/admin/room/edit');
   };
 
-  if (loading) {
+  const deleteRoomHandler = (id) => {
+    if (
+      window.confirm('Are you Sure? Do you really want to delete this room?')
+    ) {
+      dispatch(roomActions.deleteRoom(id));
+    } else {
+      return;
+    }
+  };
+
+  const closeAlertHandler = () => {
+    dispatch({ type: ROOM_DELETE_RESET });
+  };
+
+  if (loading || deleteLoading) {
     return <Loading />;
   }
+
   return (
     <div className='admin-roomlist'>
+      {(error || deleteError || success) && (
+        <AlertBox
+          message={error || deleteError || success}
+          type='error'
+          onClose={error ? null : closeAlertHandler}
+        />
+      )}
+
       <div
         style={{
           display: 'flex',
@@ -96,6 +124,7 @@ const AdminRoomListScreen = ({ history }) => {
                         className='fas fa-edit'
                       ></i>
                       <i
+                        onClick={() => deleteRoomHandler(room.id)}
                         style={{ color: 'red', cursor: 'pointer' }}
                         className='fas fa-trash'
                       ></i>

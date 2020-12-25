@@ -41,12 +41,19 @@ margin: auto;
 letter-spacing: 3px;
 `;
 
-const AlertBox = ({ message, type }) => {
+const AlertBox = ({ message, type, onClose }) => {
   const [alertClosed, setAlertClosed] = useState(false);
   return (
     <StyledAlert type={type} clicked={alertClosed}>
       <StyledParagraph>
-        <Closebtn onClick={() => setAlertClosed(true)}>x</Closebtn>
+        <Closebtn
+          onClick={() => {
+            setAlertClosed(true);
+            onClose && onClose();
+          }}
+        >
+          x
+        </Closebtn>
         {message}
       </StyledParagraph>
     </StyledAlert>

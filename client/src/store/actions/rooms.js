@@ -14,6 +14,10 @@ export const ROOM_CREATE_REQUEST = 'ROOM_CREATE_REQUEST';
 export const ROOM_CREATE_SUCCESS = 'ROOM_CREATE_SUCCESS';
 export const ROOM_CREATE_FAIL = 'ROOM_CREATE_FAIL';
 
+export const ROOM_DELETE_REQUEST = 'ROOM_DELETE_REQUEST';
+export const ROOM_DELETE_SUCCESS = 'ROOM_DELETE_SUCCESS';
+export const ROOM_DELETE_FAIL = 'ROOM_DELETE_FAIL';
+
 export const CHECK_AVAILABILITY_REQUEST = 'CHECK_AVAILABILITY_REQUEST';
 export const CHECK_AVAILABILITY_SUCCESS = 'CHECK_AVAILABILITY_SUCCESS';
 export const CHECK_AVAILABILITY_FAIL = 'CHECK_AVAILABILITY_FAIL';
@@ -113,6 +117,26 @@ export const createRoom = (room) => {
     } catch (error) {
       dispatch({
         type: ROOM_CREATE_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
+};
+
+export const deleteRoom = (id) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: ROOM_DELETE_REQUEST });
+
+      await axios.delete(`api/ros/${id}`);
+
+      dispatch({ type: ROOM_DELETE_SUCCESS });
+    } catch (error) {
+      dispatch({
+        type: ROOM_DELETE_FAIL,
         payload:
           error.response && error.response.data.message
             ? error.response.data.message
