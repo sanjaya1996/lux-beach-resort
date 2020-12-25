@@ -131,7 +131,7 @@ export const deleteRoom = (id) => {
     try {
       dispatch({ type: ROOM_DELETE_REQUEST });
 
-      await axios.delete(`api/ros/${id}`);
+      await axios.delete(`/api/rooms/${id}`);
 
       dispatch({ type: ROOM_DELETE_SUCCESS });
     } catch (error) {

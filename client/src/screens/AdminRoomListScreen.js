@@ -25,7 +25,7 @@ const AdminRoomListScreen = ({ history }) => {
     } else {
       dispatch(roomActions.listRooms());
     }
-  }, [dispatch, isAuthenticated, user, history]);
+  }, [dispatch, isAuthenticated, user, history, success]);
 
   const editRoomHandler = (id) => {
     history.push(`/admin/room/${id}/edit`);
@@ -57,8 +57,8 @@ const AdminRoomListScreen = ({ history }) => {
     <div className='admin-roomlist'>
       {(error || deleteError || success) && (
         <AlertBox
-          message={error || deleteError || success}
-          type='error'
+          message={error || deleteError || 'Room was successfully deleted!'}
+          type={success ? 'success' : 'error'}
           onClose={error ? null : closeAlertHandler}
         />
       )}
