@@ -45,7 +45,7 @@ const AdminRoomListScreen = ({ history }) => {
     }
   };
 
-  const closeAlertHandler = () => {
+  const alertCloseHandler = () => {
     dispatch({ type: ROOM_DELETE_RESET });
   };
 
@@ -59,7 +59,7 @@ const AdminRoomListScreen = ({ history }) => {
         <AlertBox
           message={error || deleteError || 'Room was successfully deleted!'}
           type={success ? 'success' : 'error'}
-          onClose={error ? null : closeAlertHandler}
+          onClose={error ? null : alertCloseHandler}
         />
       )}
 

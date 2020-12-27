@@ -15,12 +15,17 @@ import {
   ROOM_DELETE_REQUEST,
   ROOM_DELETE_SUCCESS,
   ROOM_DELETE_FAIL,
+  ROOM_UPDATE_REQUEST,
+  ROOM_UPDATE_SUCCESS,
+  ROOM_UPDATE_FAIL,
 } from '../actions/rooms';
 
 export const ROOM_LIST_FILTER_RESET = 'ROOM_LIST_FILTER_RESET';
 export const CHECK_AVAILABILITY_RESET = 'CHECK_AVAILABILITY_RESET';
 export const ROOM_DETAILS_RESET = 'ROOM_DETAILS_RESET';
 export const ROOM_DELETE_RESET = 'ROOM_DELETE_RESET';
+export const ROOM_CREATE_RESET = 'ROOM_CREATE_RESET';
+export const ROOM_UPDATE_RESET = 'ROOM_UPDATE_RESET';
 
 const roomsInitialState = {
   rooms: [],
@@ -168,6 +173,23 @@ export const roomCreateReducer = (state = {}, action) => {
       return { loading: false, success: true, room: action.payload };
     case ROOM_CREATE_FAIL:
       return { loading: false, error: action.payload };
+    case ROOM_CREATE_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const roomUpdateReducer = (state = {}, action) => {
+  switch (action.type) {
+    case ROOM_UPDATE_REQUEST:
+      return { loading: true };
+    case ROOM_UPDATE_SUCCESS:
+      return { loading: false, success: true, room: action.payload };
+    case ROOM_UPDATE_FAIL:
+      return { loading: false, error: action.payload };
+    case ROOM_UPDATE_RESET:
+      return {};
     default:
       return state;
   }

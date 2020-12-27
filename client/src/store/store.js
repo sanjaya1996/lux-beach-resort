@@ -7,6 +7,7 @@ import {
   roomDeleteReducer,
   roomDetailsReducer,
   roomListReducer,
+  roomUpdateReducer,
 } from './reducers/rooms';
 import { cartReducer } from './reducers/cart';
 import { roomBookingReducer } from './reducers/bookings';
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   roomList: roomListReducer,
   roomDetails: roomDetailsReducer,
   roomCreate: roomCreateReducer,
+  roomUpdate: roomUpdateReducer,
   roomDelete: roomDeleteReducer,
   cart: cartReducer,
   checkRoomAvailability: checkAvailabilityReducer,

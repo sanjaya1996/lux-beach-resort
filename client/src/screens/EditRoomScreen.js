@@ -4,8 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import Loading from '../components/Loading';
 import * as roomActions from '../store/actions/rooms';
+import { ROOM_CREATE_RESET, ROOM_UPDATE_RESET } from '../store/reducers/rooms';
+import AlertBox from '../components/AlertBox';
 
-const EditRoomScreen = ({ match }) => {
+const EditRoomScreen = ({ match, history }) => {
   const roomId = match.params.id;
   console.log(roomId);
 
@@ -28,14 +30,31 @@ const EditRoomScreen = ({ match }) => {
   const roomDetails = useSelector((state) => state.roomDetails);
   const { loading, room, error } = roomDetails;
 
-  useEffect(() => {
-    if (roomId) {
-      dispatch(roomActions.listRoomDetails(roomId));
-    }
-  }, [dispatch, roomId]);
+  const roomCreate = useSelector((state) => state.roomCreate);
+  const {
+    loading: loadingCreate,
+    success: successCreate,
+    error: errorCreate,
+  } = roomCreate;
+
+  const roomUpdate = useSelector((state) => state.roomUpdate);
+  const {
+    loading: loadingUpdate,
+    success: successUpdate,
+    error: errorUpdate,
+  } = roomUpdate;
 
   useEffect(() => {
-    if (room) {
+    if (successCreate || successUpdate) {
+      dispatch({ type: roomId ? ROOM_UPDATE_RESET : ROOM_CREATE_RESET });
+      history.push('/admin/roomlist');
+    } else if (roomId) {
+      dispatch(roomActions.listRoomDetails(roomId));
+    }
+  }, [dispatch, roomId, history, successUpdate, successCreate]);
+
+  useEffect(() => {
+    if (room && roomId) {
       setName(room.name);
       setType(room.type);
       setPrice(room.price);
@@ -48,25 +67,44 @@ const EditRoomScreen = ({ match }) => {
       setBreakfast(room.breakfast);
       setFeatured(room.featured);
     }
-  }, [room]);
+  }, [room, roomId]);
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(
-      roomActions.createRoom({
-        name,
-        type,
-        price,
-        size,
-        capacity,
-        images,
-        description,
-        extras,
-        pets,
-        breakfast,
-        featured,
-      })
-    );
+    if (roomId) {
+      dispatch(
+        roomActions.updateRoom({
+          id: roomId,
+          name,
+          type,
+          price,
+          size,
+          capacity,
+          images,
+          description,
+          extras,
+          pets,
+          breakfast,
+          featured,
+        })
+      );
+    } else {
+      dispatch(
+        roomActions.createRoom({
+          name,
+          type,
+          price,
+          size,
+          capacity,
+          images,
+          description,
+          extras,
+          pets,
+          breakfast,
+          featured,
+        })
+      );
+    }
   };
 
   const uploadFileHandler = async (e) => {
@@ -98,12 +136,23 @@ const EditRoomScreen = ({ match }) => {
     setExtras(extras.filter((item, i) => i !== index));
   };
 
-  if (loading) {
+  const alertCloseHandler = () => {
+    dispatch({ type: roomId ? ROOM_UPDATE_RESET : ROOM_CREATE_RESET });
+  };
+
+  if (loading || loadingCreate || loadingUpdate) {
     return <Loading />;
   }
 
   return (
     <div className='edit-room'>
+      {((roomId && errorUpdate) || (!roomId && errorCreate)) && (
+        <AlertBox
+          message={roomId ? errorUpdate : errorCreate}
+          onClose={alertCloseHandler}
+        />
+      )}
+
       <form onSubmit={submitHandler} className='form-container'>
         <div className='form-group'>
           <label htmlFor='name'>Room Name:</label>

@@ -18,6 +18,10 @@ export const ROOM_DELETE_REQUEST = 'ROOM_DELETE_REQUEST';
 export const ROOM_DELETE_SUCCESS = 'ROOM_DELETE_SUCCESS';
 export const ROOM_DELETE_FAIL = 'ROOM_DELETE_FAIL';
 
+export const ROOM_UPDATE_REQUEST = 'ROOM_UPDATE_REQUEST';
+export const ROOM_UPDATE_SUCCESS = 'ROOM_UPDATE_SUCCESS';
+export const ROOM_UPDATE_FAIL = 'ROOM_UPDATE_FAIL';
+
 export const CHECK_AVAILABILITY_REQUEST = 'CHECK_AVAILABILITY_REQUEST';
 export const CHECK_AVAILABILITY_SUCCESS = 'CHECK_AVAILABILITY_SUCCESS';
 export const CHECK_AVAILABILITY_FAIL = 'CHECK_AVAILABILITY_FAIL';
@@ -137,6 +141,32 @@ export const deleteRoom = (id) => {
     } catch (error) {
       dispatch({
         type: ROOM_DELETE_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
+};
+
+export const updateRoom = (room) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: ROOM_UPDATE_REQUEST });
+
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+
+      const { data } = await axios.put(`/api/rooms/${room.id}`, room, config);
+
+      dispatch({ type: ROOM_UPDATE_SUCCESS, payload: data });
+    } catch (error) {
+      dispatch({
+        type: ROOM_UPDATE_FAIL,
         payload:
           error.response && error.response.data.message
             ? error.response.data.message
