@@ -4,7 +4,7 @@ const notFound = (req, res, next) => {
   next(error);
 };
 
-const errorHandler = (err, req, res) => {
+const errorHandler = (err, req, res, next) => {
   const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
   res.status(statusCode);
   if (req.type === 'email-booking') {
@@ -13,6 +13,7 @@ const errorHandler = (err, req, res) => {
     res.redirect(`/error/${title}/${message}`);
     return;
   }
+
   res.json({
     message: err.message,
     stack: process.env.NODE_ENV === 'production' ? null : err.stack,

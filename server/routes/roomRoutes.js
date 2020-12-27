@@ -8,10 +8,16 @@ const {
   updateRoom,
 } = require('../controller/roomController');
 
+const { checkAdmin, checkAuth } = require('../middleware/authMiddleware');
+
 const router = express.Router();
 
-router.route('/').get(getRooms).post(createRoom);
+router.route('/').get(getRooms).post(checkAdmin, createRoom);
 
-router.route('/:id').get(getRoomById).delete(deleteRoom).put(updateRoom);
+router
+  .route('/:id')
+  .get(getRoomById)
+  .delete(checkAdmin, deleteRoom)
+  .put(checkAdmin, updateRoom);
 
 module.exports = router;
