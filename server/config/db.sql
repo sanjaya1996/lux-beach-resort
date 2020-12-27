@@ -1,6 +1,7 @@
 -- Create database
 CREATE DATABASE lux_beach_resort;
 
+-- ROOMS -----------------------------------------------
 -- Create table room
 CREATE TABLE rooms (
    id SERIAL NOT NULL,
@@ -26,38 +27,6 @@ ALTER COLUMN isBooked SET NOT NULL ;
 
 ALTER TABLE rooms 
 RENAME COLUMN isBooked TO is_booked;
-
--- Create table Guests
-CREATE TABLE guests (
-   id SERIAL NOT NULL,
-   name VARCHAR(100) NOT NULL,
-   phone VARCHAR(15) NOT NULL,
-   email VARCHAR(50) NOT NULL,
-   PRIMARY KEY(id)
-);
-ALTER TABLE guests 
-ALTER COLUMN phone DROP NOT NULL;
-
-ALTER TABLE guests
-ADD COLUMN isAdmin BOOLEAN DEFAULT false;
-
-ALTER TABLE guests
-RENAME COLUMN isAdmin TO is_admin;
-
--- Create table Bookings
-CREATE TABLE bookings (
-   id SERIAL NOT NULL,
-   room_id INT,
-   guest_id INT,
-   checkin_date DATE NOT NULL,
-   checkout_date DATE NOT NULL,
-   booked_date DATE NOT NULL DEFAULT CURRENT_DATE, 
-   vacated BOOLEAN NOT NULL DEFAULT FALSE,
-   PRIMARY KEY (id),
-   CONSTRAINT room_id FOREIGN KEY(room_id) REFERENCES rooms(id),
-   CONSTRAINT guest_id FOREIGN KEY(guest_id) REFERENCES guests(id)
-);
-
 
 -- Insert first Value into rooms
 
@@ -394,6 +363,8 @@ values (
 );
 
 
+-- GUESTS ..............................................
+
 -- Create table Guests
 CREATE TABLE guests (
    id SERIAL NOT NULL,
@@ -403,6 +374,23 @@ CREATE TABLE guests (
    PRIMARY KEY(id)
 );
 
+ALTER TABLE guests 
+ALTER COLUMN phone DROP NOT NULL;
+
+ALTER TABLE guests
+ADD COLUMN isAdmin BOOLEAN DEFAULT false;
+
+-- Alter Table guests and add auth_provider_id and auth_provider_name columns
+ALTER TABLE guests
+ADD column auth_provider_id VARCHAR(50) NOT NULL,
+ADD column auth_provider_name VARCHAR(50) NOT NULL;
+
+ALTER TABLE guests
+RENAME COLUMN isAdmin TO is_admin;
+
+ALTER TABLE guests
+ADD COLUMN title VARCHAR(10);
+
 INSERT INTO guests
   ( name, phone, email )
 VALUES
@@ -411,6 +399,11 @@ VALUES
   ('Billy', '0459584949', 'billy@yahoo.com'),
   ('Miranda', '0459584949', 'miranda@yahoo.com');
 
+  UPDATE guests SET (name, phone, email, title) = ($1, $2, $3, $4)
+  WHERE id = $5, [name, phone, email, title, id]
+
+
+-- BOOKINGS -----------------------------------------------------
 -- Create table Bookings
 CREATE TABLE bookings (
    id SERIAL NOT NULL,
@@ -449,7 +442,3 @@ CASE
 	ELSE 0
 END
 
--- Alter Table guests and add auth_provider_id and auth_provider_name columns
-ALTER TABLE guests
-ADD column auth_provider_id VARCHAR(50) NOT NULL,
-ADD column auth_provider_name VARCHAR(50) NOT NULL;

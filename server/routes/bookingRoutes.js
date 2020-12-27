@@ -15,6 +15,7 @@ const router = express.Router();
 router.route('/').get(getBookings).post(emailBookingRequest);
 router.get('/current', getCurrentBookings);
 router.post('/:roomId', createGuest, createBooking);
+router.post('/:roomId/:guestId', createGuest, createBooking);
 router.get(
   '/email-booking/:token',
   emailBookingConfirmed,
