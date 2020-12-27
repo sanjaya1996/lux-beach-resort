@@ -23,8 +23,8 @@ const RoomsContainer = () => {
 
   if (error) {
     return (
-      <div style={{ margin: 50 }}>
-        <AlertBox />
+      <div>
+        <AlertBox message={'Error! ' + error} />
       </div>
     );
   }

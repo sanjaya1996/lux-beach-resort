@@ -863,3 +863,26 @@ tr:nth-child(even) {
   background-color: var(--mainGrey);
 }
 /* end of Admin Room List Screen */
+
+/* Profile Screen*/
+.profile-screen {
+  display: flex;
+}
+.user-profile {
+  padding: 2em;
+  width: 50%;
+}
+.bookings {
+  padding: 2em;
+  width: 100%;
+}
+
+@media screen and (max-width: 800px) {
+  .profile-screen {
+    flex-direction: column;
+  }
+  .user-profile {
+    width: 100%;
+  }
+}
+/* end of Profile Screen*/

@@ -23,7 +23,7 @@ const FeaturedRooms = () => {
         {loading ? (
           <Loading />
         ) : error ? (
-          <AlertBox />
+          <AlertBox message={'Error! ' + error} />
         ) : (
           featuredRooms.map((room) => <Room key={room.id} room={room} />)
         )}
