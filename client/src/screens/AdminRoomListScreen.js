@@ -20,7 +20,7 @@ const AdminRoomListScreen = ({ history }) => {
   const { loading: deleteLoading, success, error: deleteError } = roomDelete;
 
   useEffect(() => {
-    if (!isAuthenticated || !user.is_admin) {
+    if (isAuthenticated === false || (user && !user.is_admin)) {
       history.push('/login');
     } else {
       dispatch(roomActions.listRooms());
