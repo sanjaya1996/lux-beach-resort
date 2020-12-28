@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 
@@ -172,7 +173,9 @@ const ProfileScreen = ({ history }) => {
                         )}
                       </td>
                       <td>
-                        <button className='btn-primary'>Details</button>
+                        <Link to={`/booking/${item.id}`}>
+                          <button className='btn-primary'>Details</button>
+                        </Link>
                       </td>
                     </tr>
                   ))}

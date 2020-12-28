@@ -16,6 +16,7 @@ import LoginScreen from './screens/LoginScreen';
 import * as guestActions from './store/actions/guests';
 import AdminRoomListScreen from './screens/AdminRoomListScreen';
 import ProfileScreen from './screens/ProfileScreen';
+import BookingDetailsScreen from './screens/BookingDetailsScreen';
 // import Loading from './components/Loading';
 
 const App = () => {
@@ -44,6 +45,7 @@ const App = () => {
         <Route path='/error/:title/:message' component={MessageScreen} />
         <Route path='/login' component={LoginScreen} />
         <Route path='/profile' component={ProfileScreen} />
+        <Route path='/booking/:id' component={BookingDetailsScreen} />
         <Route path='/admin/roomlist' component={AdminRoomListScreen} />
         <Route path='/admin/room/:id?/edit' component={EditRoomScreen} />
         <Route path='/' component={HomeScreen} exact />

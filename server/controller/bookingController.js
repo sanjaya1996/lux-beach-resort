@@ -43,6 +43,28 @@ const getMyBookings = async (req, res, next) => {
   }
 };
 
+// @desc    Get booking by id
+// @route   GET /api/bookings/:id
+// @access  Private
+const getBookingById = async (req, res, next) => {
+  try {
+    const user = req.user;
+    const results = await db.query('SELECT * FROM bookings WHERE id = $1', [
+      req.params.id,
+    ]);
+
+    if (results.rows.length === 0 || results.rows[0].guest_id !== user.id) {
+      const error = new Error('Booking not found');
+      res.status(404);
+      next(error);
+    } else {
+      res.json(results.rows);
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
 // @desc    Create a booking
 // @route   POST /api/bookings
 // @access  Public
@@ -92,5 +114,6 @@ module.exports = {
   getBookings,
   getCurrentBookings,
   getMyBookings,
+  getBookingById,
   createBooking,
 };
