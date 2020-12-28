@@ -48,20 +48,25 @@ const getMyBookings = async (req, res, next) => {
 // @access  Public
 const createBooking = async (req, res, next) => {
   try {
-    const guestId = req.guestId;
+    const guestId = req.guestId || req.user.id;
     const roomId = req.params.roomId;
-    let { checkInDate, checkOutDate } = req.body;
+    const isPaid = req.is_paid || false;
+    let {
+      bookingDetails: { checkInDate, checkOutDate },
+    } = req.body;
+
     checkInDate = new Date(checkInDate);
     checkOutDate = new Date(checkOutDate);
+
     const query = {
       text:
-        'INSERT INTO bookings (room_id, guest_id, checkin_date, checkout_date) VALUES($1, $2, $3, $4) RETURNING *',
-      values: [roomId, guestId, checkInDate, checkOutDate],
+        'INSERT INTO bookings (room_id, guest_id, checkin_date, checkout_date, is_paid) VALUES($1, $2, $3, $4, $5) RETURNING *',
+      values: [roomId, guestId, checkInDate, checkOutDate, isPaid],
     };
 
     const results = await db.query(query);
 
-    if (req.query.paid) {
+    if (isPaid) {
       await db.query('UPDATE rooms SET is_booked= true  WHERE id = $1;', [
         roomId,
       ]);

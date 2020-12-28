@@ -74,3 +74,62 @@ export const bookRoom = (bookingDetails, type) => {
     }
   };
 };
+
+export const payAndBookRoom = (
+  token,
+  total,
+  name,
+  email,
+  phone,
+  title,
+  roomId,
+  checkInDate,
+  checkOutDate
+) => {
+  return async (dispatch) => {
+    try {
+      console.log(token);
+      dispatch({ type: ROOM_BOOKING_REQUEST });
+
+      const body = {
+        token,
+        bookingDetails: {
+          guestDetails: { name, email, phone, title },
+          roomId,
+          checkInDate,
+          checkOutDate,
+        },
+        amount: total,
+      };
+
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+
+      const messageTitle = 'Successfully booked!';
+      const message =
+        'You have successfully booked your room, We will contact you soon. Thanks !';
+
+      const { data } = await axios.post(
+        `/api/bookings/pay/${roomId}`,
+        body,
+        config
+      );
+      console.log(data);
+      dispatch({
+        type: ROOM_BOOKING_SUCCESS,
+        payload: { title: messageTitle, message },
+      });
+    } catch (error) {
+      dispatch({
+        type: ROOM_BOOKING_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
+};

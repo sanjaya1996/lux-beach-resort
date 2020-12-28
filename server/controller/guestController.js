@@ -27,7 +27,26 @@ const getProfile = async (req, res, next) => {
 
 const createGuest = async (req, res, next) => {
   try {
-    const { name, phone, email, title } = req.body;
+    console.log('CREATING GUEST....');
+    let name;
+    let phone;
+    let email;
+    let title;
+
+    if (req.params.roomId) {
+      const {
+        bookingDetails: { guestDetails },
+      } = req.body;
+      name = guestDetails.name;
+      phone = guestDetails.phone;
+      email = guestDetails.email;
+      title = guestDetails.title;
+    } else {
+      name = req.body.name;
+      phone = req.body.phone;
+      email = req.body.email;
+      title = req.body.title;
+    }
 
     const query = {
       text:
@@ -36,8 +55,14 @@ const createGuest = async (req, res, next) => {
     };
 
     const results = await db.query(query);
-    req.guestId = results.rows[0].id;
-    next();
+
+    if (req.params.roomId) {
+      req.guestId = results.rows[0].id;
+      next();
+      return;
+    }
+
+    res.json(results.rows[0]);
   } catch (err) {
     const newError = new Error(err);
     next(newError);
@@ -46,7 +71,24 @@ const createGuest = async (req, res, next) => {
 
 const updateProfile = async (req, res, next) => {
   try {
-    const { phone, email, title } = req.body;
+    console.log('UPDATING GUEST....');
+
+    let phone;
+    let email;
+    let title;
+
+    if (req.params.roomId) {
+      const {
+        bookingDetails: { guestDetails },
+      } = req.body;
+      phone = guestDetails.phone;
+      email = guestDetails.email;
+      title = guestDetails.title;
+    } else {
+      phone = req.body.phone;
+      email = req.body.email;
+      title = req.body.title;
+    }
 
     const user = req.user;
 
@@ -64,6 +106,8 @@ const updateProfile = async (req, res, next) => {
 
     if (req.params.roomId) {
       req.guestId = results.rows[0].id;
+      console.log('SUCCESS UPDATING GUEST....');
+
       next();
       return;
     }

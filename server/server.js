@@ -15,7 +15,6 @@ const uploadRoutes = require('./routes/uploadRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
 const guestRoutes = require('./routes/guestRoutes');
 const checkAvailabilityRoutes = require('./routes/checkAvailabilityRoutes');
-const paymentRoutes = require('./routes/paymentRoutes');
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 // Passport config
 require('./config/passport')(passport);
@@ -55,9 +54,6 @@ app.use('/api/guests', guestRoutes);
 
 // Check room availability
 app.use('/api/checkavailability', checkAvailabilityRoutes);
-
-// Payment Routes
-app.use('/api/payment', paymentRoutes);
 
 // File upload routes
 app.use('/api/upload', uploadRoutes);

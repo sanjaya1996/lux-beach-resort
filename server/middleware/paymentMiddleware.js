@@ -1,12 +1,11 @@
-const express = require('express');
-const router = express.Router();
-
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 // const { v4: uuid } = require('uuid');
 
-router.post('/', (req, res, next) => {
-  const { room, token, amount } = req.body;
+const makePayment = (req, res, next) => {
+  const { bookingDetails, token, amount } = req.body;
   // const idempontentencyKey = uuid();
+  console.log('STRIPE MIDDLEWARE BOOKING DETAILS: ' + bookingDetails);
+  console.log('Authenticated in Stripe: ' + req.isAuthenticated());
 
   return stripe.customers
     .create({
@@ -19,7 +18,7 @@ router.post('/', (req, res, next) => {
         currency: 'usd',
         customer: customer.id,
         receipt_email: token.email,
-        description: `purchase of ${room.name}`,
+        description: `booking of room, Id= ${bookingDetails.roomId}`,
         // shipping: {
         //   name: token.card.name,
         //   address: {
@@ -30,12 +29,15 @@ router.post('/', (req, res, next) => {
       })
     )
     .then((result) => {
-      res.status(200).json(result);
+      req.is_paid = true;
+      console.log('PAYMENT RESULT: ' + result);
+      console.log('Authenticated in stripe result: ' + req.isAuthenticated());
+      next();
     })
     .catch((err) => {
       console.log(err);
       next(err);
     });
-});
+};
 
-module.exports = router;
+module.exports = makePayment;
