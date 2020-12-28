@@ -27,12 +27,12 @@ const getProfile = async (req, res, next) => {
 
 const createGuest = async (req, res, next) => {
   try {
-    const { name, phone, email } = req.body;
+    const { name, phone, email, title } = req.body;
 
     const query = {
       text:
-        'INSERT INTO guests (name, phone, email) VALUES($1, $2, $3) RETURNING id',
-      values: [name, phone, email],
+        'INSERT INTO guests (name, phone, email, title) VALUES($1, $2, $3, $4) RETURNING id',
+      values: [name, phone, email, title],
     };
 
     const results = await db.query(query);

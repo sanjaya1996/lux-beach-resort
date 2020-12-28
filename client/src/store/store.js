@@ -11,7 +11,7 @@ import {
 } from './reducers/rooms';
 import { cartReducer } from './reducers/cart';
 import { roomBookingReducer } from './reducers/bookings';
-import { currentUserReducer } from './reducers/guests';
+import { currentUserReducer, userUpdateReducer } from './reducers/guests';
 
 const cartItemsFromStorage = localStorage.getItem('cartItems')
   ? JSON.parse(localStorage.getItem('cartItems'))
@@ -27,6 +27,7 @@ const rootReducer = combineReducers({
   checkRoomAvailability: checkAvailabilityReducer,
   roomBooking: roomBookingReducer,
   currentUser: currentUserReducer,
+  userUpdate: userUpdateReducer,
 });
 
 const initialState = {

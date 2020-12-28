@@ -8,6 +8,7 @@ import ErrorScreen from './ErrorScreen';
 import Loading from '../components/Loading';
 import Title from '../components/Title';
 import Input from '../components/Input';
+import AlertBox from '../components/AlertBox';
 import * as roomActions from '../store/actions/rooms';
 import * as bookingActions from '../store/actions/bookings';
 import { CHECK_AVAILABILITY_RESET } from '../store/reducers/rooms';
@@ -213,7 +214,7 @@ const PaymentScreen = ({ match, history }) => {
 
   return (
     <div className='payment-screen'>
-      {reserveError && <p>{reserveError}</p>}
+      {reserveError && <AlertBox message={reserveError} />}
       <p>
         Please <span className='underlined-link'>Sign In</span> /{' '}
         <span className='underlined-link'>Create an account</span> for easy &
