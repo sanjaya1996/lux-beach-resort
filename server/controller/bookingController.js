@@ -26,6 +26,23 @@ const getCurrentBookings = async (req, res, next) => {
   }
 };
 
+// @desc    Get logged in user bookings
+// @route   GET /api/bookings/mybookings
+// @access  Private
+const getMyBookings = async (req, res, next) => {
+  try {
+    const user = req.user;
+    const results = await db.query(
+      'SELECT * FROM bookings WHERE guest_id = $1',
+      [user.id]
+    );
+
+    res.json(results.rows);
+  } catch (err) {
+    next(err);
+  }
+};
+
 // @desc    Create a booking
 // @route   POST /api/bookings
 // @access  Public
@@ -66,4 +83,9 @@ const createBooking = async (req, res, next) => {
   }
 };
 
-module.exports = { getBookings, getCurrentBookings, createBooking };
+module.exports = {
+  getBookings,
+  getCurrentBookings,
+  getMyBookings,
+  createBooking,
+};

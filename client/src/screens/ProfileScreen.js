@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment';
 
 import Title from '../components/Title';
 import Loading from '../components/Loading';
 import AlertBox from '../components/AlertBox';
 import * as guestActions from '../store/actions/guests';
+import * as bookingActions from '../store/actions/bookings';
 import { USER_UPDATE_PROFILE_RESET } from '../store/reducers/guests';
 
 const ProfileScreen = ({ history }) => {
@@ -17,6 +19,13 @@ const ProfileScreen = ({ history }) => {
   const currentUser = useSelector((state) => state.currentUser);
   const { user, isAuthenticated } = currentUser;
 
+  const bookingListMy = useSelector((state) => state.bookingListMy);
+  const {
+    loading: loadingBooking,
+    error: errorBooking,
+    bookings,
+  } = bookingListMy;
+
   const userUpdate = useSelector((state) => state.userUpdate);
   const { loading, success, error } = userUpdate;
 
@@ -28,7 +37,9 @@ const ProfileScreen = ({ history }) => {
       setTitle(user.title || 'Mr');
       setPhone(user.phone);
     }
-  }, [isAuthenticated, history, user]);
+
+    dispatch(bookingActions.listMyBookings());
+  }, [isAuthenticated, history, user, dispatch]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -38,10 +49,6 @@ const ProfileScreen = ({ history }) => {
   const alertCloseHandler = () => {
     dispatch({ type: USER_UPDATE_PROFILE_RESET });
   };
-
-  if (!user) {
-    return <Loading />;
-  }
 
   return (
     <>
@@ -56,14 +63,13 @@ const ProfileScreen = ({ history }) => {
         <AlertBox message={'Error! ' + error} onClose={alertCloseHandler} />
       )}
       <div className='profile-screen'>
-        {loading ? (
-          <Loading />
-        ) : (
-          <div className='user-profile'>
-            <div style={{ display: 'inline-block' }}>
-              <Title title='Profile' />
-            </div>
-
+        <div className='user-profile'>
+          <div style={{ display: 'inline-block' }}>
+            <Title title='Profile' />
+          </div>
+          {loading || !user ? (
+            <Loading />
+          ) : (
             <form onSubmit={submitHandler} className='form-container'>
               <div className='form-group'>
                 <label htmlFor='name'>Name:</label>
@@ -124,35 +130,56 @@ const ProfileScreen = ({ history }) => {
                 </button>
               </div>
             </form>
-          </div>
-        )}
+          )}
+        </div>
 
         <div className='bookings'>
           <div style={{ display: 'inline-block' }}>
             <Title title='Bookings' />
           </div>
-          <div style={{ overflowX: 'auto' }}>
-            <table>
-              <tbody>
-                <tr>
-                  <th>ID</th>
-                  <th>BOOKED DATE</th>
-                  <th>CHECKIN</th>
-                  <th>CHECKOUT</th>
-                  <th>PAID</th>
-                  <th></th>
-                </tr>
-                <tr>
-                  <td>454549893</td>
-                  <td>2020-05-20</td>
-                  <td>2020-07-20</td>
-                  <td>2020-07-22</td>
-                  <td>x</td>
-                  <td> Details</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          {loadingBooking ? (
+            <Loading />
+          ) : bookings.length === 0 ? (
+            <h3>No bookings</h3>
+          ) : (
+            <div style={{ overflowX: 'auto' }}>
+              <table>
+                <tbody>
+                  <tr>
+                    <th>ID</th>
+                    <th>BOOKED DATE</th>
+                    <th>CHECKIN</th>
+                    <th>CHECKOUT</th>
+                    <th>PAID</th>
+                    <th></th>
+                  </tr>
+                  {bookings.map((item) => (
+                    <tr key={item.id}>
+                      <td>{item.id}</td>
+                      <td>{moment(item.booked_date).format('YYYY-MM-DD')}</td>
+                      <td>{moment(item.checkin_date).format('YYYY-MM-DD')}</td>
+                      <td>{moment(item.checkout_date).format('YYYY-MM-DD')}</td>
+                      <td>
+                        {item.is_paid ? (
+                          <i
+                            style={{ color: '#4BB543' }}
+                            className='fas fa-check'
+                          ></i>
+                        ) : (
+                          <span style={{ color: 'red', fontWeight: 'bold' }}>
+                            x
+                          </span>
+                        )}
+                      </td>
+                      <td>
+                        <button className='btn-primary'>Details</button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </div>
     </>

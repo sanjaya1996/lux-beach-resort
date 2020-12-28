@@ -418,6 +418,9 @@ CREATE TABLE bookings (
    CONSTRAINT guest_id FOREIGN KEY(guest_id) REFERENCES guests(id)
 );
 
+ALTER TABLE bookings
+ADD COLUMN is_paid BOOLEAN NOT NULL DEFAULT false;
+
 INSERT INTO bookings 
    (room_id, guest_id, checkin_date, checkout_date)
 VALUES
