@@ -421,6 +421,12 @@ CREATE TABLE bookings (
 ALTER TABLE bookings
 ADD COLUMN is_paid BOOLEAN NOT NULL DEFAULT false;
 
+ALTER TABLE bookings
+ADD COLUMN total_guest INT NOT NULL DEFAULT 1;
+
+ALTER TABLE bookings
+RENAME COLUMN total_guest TO total_guests;
+
 INSERT INTO bookings 
    (room_id, guest_id, checkin_date, checkout_date)
 VALUES
@@ -428,6 +434,11 @@ VALUES
    (20, 2, '2020-12-7', '2020-12-9'),
    (21, 3, '2020-12-7', '2020-12-9'),
    (22, 4, '2020-12-7', '2020-12-9');
+
+   SELECT bookings.* , rooms.name as room_name, rooms.type as room_type, rooms.price as room_price
+   FROM bookings
+   JOIN rooms ON bookings.room_id = rooms.id
+   WHERE bookings.id = 20;
 
 
    -- Check room availability based on checkInDate and checkOUtDate 

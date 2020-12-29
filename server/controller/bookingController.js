@@ -49,16 +49,20 @@ const getMyBookings = async (req, res, next) => {
 const getBookingById = async (req, res, next) => {
   try {
     const user = req.user;
-    const results = await db.query('SELECT * FROM bookings WHERE id = $1', [
-      req.params.id,
-    ]);
+    const results = await db.query(
+      `SELECT bookings.* , rooms.name as room_name, rooms.type as room_type, rooms.price as room_price
+        FROM bookings
+        JOIN rooms ON bookings.room_id = rooms.id
+        WHERE bookings.id = $1;`,
+      [req.params.id]
+    );
 
     if (results.rows.length === 0 || results.rows[0].guest_id !== user.id) {
       const error = new Error('Booking not found');
       res.status(404);
       next(error);
     } else {
-      res.json(results.rows);
+      res.json(results.rows[0]);
     }
   } catch (err) {
     next(err);

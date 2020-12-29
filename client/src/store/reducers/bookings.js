@@ -1,4 +1,7 @@
 import {
+  BOOKING_DETAILS_FAIL,
+  BOOKING_DETAILS_REQUEST,
+  BOOKING_DETAILS_SUCCESS,
   BOOKING_LIST_MY_FAIL,
   BOOKING_LIST_MY_REQUEST,
   BOOKING_LIST_MY_SUCCESS,
@@ -16,6 +19,19 @@ export const bookingListMyReducer = (state = { bookings: [] }, action) => {
     case BOOKING_LIST_MY_SUCCESS:
       return { loading: false, bookings: action.payload };
     case BOOKING_LIST_MY_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const bookingDetailsReducer = (state = {}, action) => {
+  switch (action.type) {
+    case BOOKING_DETAILS_REQUEST:
+      return { loading: true };
+    case BOOKING_DETAILS_SUCCESS:
+      return { loading: false, booking: action.payload };
+    case BOOKING_DETAILS_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;

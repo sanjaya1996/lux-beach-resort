@@ -173,7 +173,13 @@ const ProfileScreen = ({ history }) => {
                         )}
                       </td>
                       <td>
-                        <Link to={`/booking/${item.id}`}>
+                        <Link
+                          to={
+                            item.is_paid
+                              ? `/booking/${item.id}?bookingId=${item.id}`
+                              : `/payment/${item.room_id}/${item.total_guests}/${item.checkin_date}/${item.checkout_date}`
+                          }
+                        >
                           <button className='btn-primary'>Details</button>
                         </Link>
                       </td>

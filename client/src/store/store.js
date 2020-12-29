@@ -10,7 +10,11 @@ import {
   roomUpdateReducer,
 } from './reducers/rooms';
 import { cartReducer } from './reducers/cart';
-import { bookingListMyReducer, roomBookingReducer } from './reducers/bookings';
+import {
+  bookingDetailsReducer,
+  bookingListMyReducer,
+  roomBookingReducer,
+} from './reducers/bookings';
 import { currentUserReducer, userUpdateReducer } from './reducers/guests';
 
 const cartItemsFromStorage = localStorage.getItem('cartItems')
@@ -27,6 +31,7 @@ const rootReducer = combineReducers({
   checkRoomAvailability: checkAvailabilityReducer,
   roomBooking: roomBookingReducer,
   bookingListMy: bookingListMyReducer,
+  bookingDetails: bookingDetailsReducer,
   currentUser: currentUserReducer,
   userUpdate: userUpdateReducer,
 });

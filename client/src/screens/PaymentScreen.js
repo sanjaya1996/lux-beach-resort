@@ -185,12 +185,7 @@ const PaymentScreen = ({ match, history }) => {
   }
 
   if (bookingAvailable === false || error) {
-    return (
-      <ErrorScreen
-        title='Error Occurred!'
-        subtitle='Something wrong with your bookings parameters'
-      />
-    );
+    return <ErrorScreen title='Error Occurred!' subtitle={error} />;
   }
 
   if (!selectedRoom) {

@@ -8,6 +8,10 @@ export const BOOKING_LIST_MY_REQUEST = 'BOOKING_LIST_MY_REQUEST';
 export const BOOKING_LIST_MY_SUCCESS = 'BOOKING_LIST_MY_SUCCESS';
 export const BOOKING_LIST_MY_FAIL = 'BOOKING_LIST_MY_FAIL';
 
+export const BOOKING_DETAILS_REQUEST = 'BOOKING_DETAILS_REQUEST';
+export const BOOKING_DETAILS_SUCCESS = 'BOOKING_DETAILS_SUCCESS';
+export const BOOKING_DETAILS_FAIL = 'BOOKING_DETAILS_FAIL';
+
 export const listMyBookings = () => {
   return async (dispatch) => {
     try {
@@ -19,6 +23,26 @@ export const listMyBookings = () => {
     } catch (error) {
       dispatch({
         type: BOOKING_LIST_MY_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
+};
+
+export const getBookingDetails = (id) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: BOOKING_DETAILS_REQUEST });
+
+      const { data } = await axios.get(`/api/bookings/${id}`);
+
+      dispatch({ type: BOOKING_DETAILS_SUCCESS, payload: data });
+    } catch (error) {
+      dispatch({
+        type: BOOKING_DETAILS_FAIL,
         payload:
           error.response && error.response.data.message
             ? error.response.data.message

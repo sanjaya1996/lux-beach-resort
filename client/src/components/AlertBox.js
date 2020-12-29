@@ -15,8 +15,8 @@ text-align: center;
 border-radius: 10px;
 padding: 20px;
 background-color: ${(props) =>
-  props.type === 'error' ? '#cd472b' : '#4BB543'} ; 
-color: white;
+  props.type === 'error' ? '#FFD2D2' : '#DFF2BF'} ; 
+color: ${(props) => (props.type === 'error' ? '#D8000C' : '#4F8A10')} ; 
 margin-bottom: 15px;
 display: ${(props) => (props.clicked ? 'none' : null)}
 `;
@@ -41,19 +41,22 @@ margin: auto;
 letter-spacing: 3px;
 `;
 
-const AlertBox = ({ message, type, onClose }) => {
+const AlertBox = ({ message, type, onClose, noBtn }) => {
   const [alertClosed, setAlertClosed] = useState(false);
   return (
     <StyledAlert type={type} clicked={alertClosed}>
       <StyledParagraph>
-        <Closebtn
-          onClick={() => {
-            setAlertClosed(true);
-            onClose && onClose();
-          }}
-        >
-          x
-        </Closebtn>
+        {!noBtn && (
+          <Closebtn
+            onClick={() => {
+              setAlertClosed(true);
+              onClose && onClose();
+            }}
+          >
+            x
+          </Closebtn>
+        )}
+
         {message}
       </StyledParagraph>
     </StyledAlert>

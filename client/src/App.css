@@ -723,7 +723,7 @@ h6 {
   float: left;
   margin: 2px;
   padding-left: 5px;
-  line-height: 3rem;
+  line-height: 2.8rem;
   text-transform: capitalize;
   font-size: 0.7rem;
   font-weight: 500;
@@ -884,3 +884,21 @@ tr:nth-child(even) {
   }
 }
 /* end of Profile Screen*/
+
+/* booking Details Screen */
+.bookingDetails-screen {
+  padding-bottom: 4em;
+}
+.bookingDetails-summaries {
+  display: flex;
+  justify-content: space-between;
+}
+.on-half-responsive-full-width {
+  width: 100%;
+}
+@media screen and (max-width: 800px) {
+  .bookingDetails-summaries {
+    flex-direction: column;
+  }
+}
+/* end of booking Details Screen */
