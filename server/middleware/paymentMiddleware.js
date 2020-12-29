@@ -2,10 +2,16 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 // const { v4: uuid } = require('uuid');
 
 const makePayment = (req, res, next) => {
-  const { bookingDetails, token, amount } = req.body;
+  const { token, amount } = req.body;
+  console.log('Amount: ' + amount);
+
+  const bookingId = req.params.bookingId;
+  let bookingDetails;
+
+  if (!bookingId) {
+    bookingDetails = req.body.bookingDetails;
+  }
   // const idempontentencyKey = uuid();
-  console.log('STRIPE MIDDLEWARE BOOKING DETAILS: ' + bookingDetails);
-  console.log('Authenticated in Stripe: ' + req.isAuthenticated());
 
   return stripe.customers
     .create({
@@ -15,10 +21,12 @@ const makePayment = (req, res, next) => {
     .then((customer) =>
       stripe.charges.create({
         amount: Number(amount) * 100,
-        currency: 'usd',
+        currency: 'aud',
         customer: customer.id,
         receipt_email: token.email,
-        description: `booking of room, Id= ${bookingDetails.roomId}`,
+        description: bookingId
+          ? `Payment of booking. bookingId= ${bookingId}`
+          : `Pay and book Room, roomId= ${bookingDetails.roomId}`,
         // shipping: {
         //   name: token.card.name,
         //   address: {
@@ -29,9 +37,7 @@ const makePayment = (req, res, next) => {
       })
     )
     .then((result) => {
-      req.is_paid = true;
-      console.log('PAYMENT RESULT: ' + result);
-      console.log('Authenticated in stripe result: ' + req.isAuthenticated());
+      req.is_paid = result.paid;
       next();
     })
     .catch((err) => {

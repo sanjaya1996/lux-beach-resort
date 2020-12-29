@@ -427,6 +427,9 @@ ADD COLUMN total_guest INT NOT NULL DEFAULT 1;
 ALTER TABLE bookings
 RENAME COLUMN total_guest TO total_guests;
 
+ALTER TABLE bookings
+ADD COLUMN paid_at TIMESTAMP;
+
 INSERT INTO bookings 
    (room_id, guest_id, checkin_date, checkout_date)
 VALUES

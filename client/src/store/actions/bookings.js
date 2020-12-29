@@ -12,6 +12,10 @@ export const BOOKING_DETAILS_REQUEST = 'BOOKING_DETAILS_REQUEST';
 export const BOOKING_DETAILS_SUCCESS = 'BOOKING_DETAILS_SUCCESS';
 export const BOOKING_DETAILS_FAIL = 'BOOKING_DETAILS_FAIL';
 
+export const MAKE_PAYMENT_REQUEST = 'MAKE_PAYMENT_REQUEST';
+export const MAKE_PAYMENT_SUCCESS = 'MAKE_PAYMENT_SUCCESS';
+export const MAKE_PAYMENT_FAIL = 'MAKE_PAYMENT_FAIL';
+
 export const listMyBookings = () => {
   return async (dispatch) => {
     try {
@@ -149,6 +153,36 @@ export const payAndBookRoom = (
     } catch (error) {
       dispatch({
         type: ROOM_BOOKING_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
+};
+
+export const payBooking = (token, total, bookingId) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: MAKE_PAYMENT_REQUEST });
+
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+
+      await axios.put(
+        `/api/bookings/${bookingId}/payment`,
+        { token, amount: total },
+        config
+      );
+
+      dispatch({ type: MAKE_PAYMENT_SUCCESS });
+    } catch (error) {
+      dispatch({
+        type: MAKE_PAYMENT_FAIL,
         payload:
           error.response && error.response.data.message
             ? error.response.data.message

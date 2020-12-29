@@ -7,6 +7,7 @@ import Loading from '../components/Loading';
 import * as bookingActions from '../store/actions/bookings';
 import Title from '../components/Title';
 import AlertBox from '../components/AlertBox';
+import { MAKE_PAYMENT_RESET } from '../store/reducers/bookings';
 
 // Calculate Total Subtotal
 let subTotal = 0;
@@ -31,15 +32,26 @@ const BookingDetailsScreen = ({ history, match }) => {
   const bookingDetails = useSelector((state) => state.bookingDetails);
   const { loading, error, booking } = bookingDetails;
 
+  const bookingPay = useSelector((state) => state.bookingPay);
+  const { loading: loadingPay, error: errorPay, success } = bookingPay;
+
   useEffect(() => {
     if (isAuthenticated === false) {
       history.push('/login');
     } else if (isAuthenticated) {
       dispatch(bookingActions.getBookingDetails(bookingId));
     }
-  }, [isAuthenticated, history, dispatch, bookingId]);
+  }, [isAuthenticated, history, dispatch, bookingId, success]);
 
-  if (loading) {
+  const makePaymentHandler = (token) => {
+    dispatch(bookingActions.payBooking(token, total, bookingId));
+  };
+
+  const alertCloseHandler = () => {
+    dispatch({ type: MAKE_PAYMENT_RESET });
+  };
+
+  if (loading || loadingPay) {
     return <Loading />;
   }
 
@@ -53,6 +65,14 @@ const BookingDetailsScreen = ({ history, match }) => {
 
   return (
     <div className='bookingDetails-screen'>
+      {errorPay && <AlertBox message={errorPay} onClose={alertCloseHandler} />}
+      {success && (
+        <AlertBox
+          message='Successfully Paid! Your booking is completed.'
+          type='success'
+          onClose={alertCloseHandler}
+        />
+      )}
       <div className='bookingDetails-summaries'>
         <div className='summary-container'>
           <div className='one-half-responsive on-half-responsive-full-width'>
@@ -153,16 +173,17 @@ const BookingDetailsScreen = ({ history, match }) => {
       </div>
       <Title title='Payment Status' />
       {booking.is_paid ? (
-        <AlertBox message='Paid on 2020-05-23 ! ' type='success' noBtn />
+        <AlertBox message={`Paid on ${booking.paid_at}`} type='success' noBtn />
       ) : (
         <>
           <AlertBox message='Not Paid!' noBtn />
           <div style={{ textAlign: 'center', paddingTop: '2em' }}>
             <StripeCheckout
               stripeKey='pk_test_BbuVbJumpNKWuxCFdOAUYoix00ZZvbAiJk'
+              token={makePaymentHandler}
               name={'lux-beach-resort'}
-              amount={5 * 100}
-              description={'room: '}
+              amount={total * 100}
+              description={'room: ' + booking.room_name}
             >
               <button type='button' className='btn-primary action-btn'>
                 {`Pay for $${total}`}

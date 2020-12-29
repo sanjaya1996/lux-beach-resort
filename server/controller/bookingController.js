@@ -69,6 +69,31 @@ const getBookingById = async (req, res, next) => {
   }
 };
 
+// @desc    Update booking to Paid
+// @route   PUT /api/bookings/:bookingId/payment
+// @access  Private
+const updateBookingToPaid = async (req, res, next) => {
+  try {
+    const results = await db.query(
+      'UPDATE bookings SET is_paid = true, paid_at = CURRENT_TIMESTAMP WHERE id = $1 RETURNING *',
+      [req.params.bookingId]
+    );
+
+    const roomId = results.rows[0].room_id;
+
+    console.log(results.rows[0]);
+    console.log(roomId);
+
+    await db.query('UPDATE rooms SET is_booked= true  WHERE id = $1;', [
+      roomId,
+    ]);
+
+    res.json({ message: 'Booking Updated to paid' });
+  } catch (err) {
+    next(err);
+  }
+};
+
 // @desc    Create a booking
 // @route   POST /api/bookings
 // @access  Public
@@ -119,5 +144,6 @@ module.exports = {
   getCurrentBookings,
   getMyBookings,
   getBookingById,
+  updateBookingToPaid,
   createBooking,
 };

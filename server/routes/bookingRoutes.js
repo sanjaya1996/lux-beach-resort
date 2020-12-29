@@ -5,6 +5,7 @@ const {
   getCurrentBookings,
   getMyBookings,
   getBookingById,
+  updateBookingToPaid,
 } = require('../controller/bookingController');
 const { createGuest, updateProfile } = require('../controller/guestController');
 const { checkAuth } = require('../middleware/authMiddleware');
@@ -17,12 +18,9 @@ const makePayment = require('../middleware/paymentMiddleware');
 const router = express.Router();
 
 const createOrUpdateGuest = (req, res, next) => {
-  console.log(req.isAuthenticated());
   if (req.isAuthenticated()) {
-    console.log('updateProfile function');
     updateProfile(req, res, next);
   } else {
-    console.log('createGuest function');
     createGuest(req, res, next);
   }
 };
@@ -32,6 +30,7 @@ router.get('/current', getCurrentBookings);
 router.get('/mybookings', checkAuth, getMyBookings);
 router.get('/:id', checkAuth, getBookingById);
 router.post('/pay/:roomId', makePayment, createOrUpdateGuest, createBooking);
+router.put('/:bookingId/payment', checkAuth, makePayment, updateBookingToPaid);
 // router.post('/:roomId', createGuest, createBooking);
 // router.post('/:roomId/:guestId', checkAuth, updateProfile, createBooking);
 router.get(

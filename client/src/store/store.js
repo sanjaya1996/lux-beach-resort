@@ -13,6 +13,7 @@ import { cartReducer } from './reducers/cart';
 import {
   bookingDetailsReducer,
   bookingListMyReducer,
+  bookingPayReducer,
   roomBookingReducer,
 } from './reducers/bookings';
 import { currentUserReducer, userUpdateReducer } from './reducers/guests';
@@ -32,6 +33,7 @@ const rootReducer = combineReducers({
   roomBooking: roomBookingReducer,
   bookingListMy: bookingListMyReducer,
   bookingDetails: bookingDetailsReducer,
+  bookingPay: bookingPayReducer,
   currentUser: currentUserReducer,
   userUpdate: userUpdateReducer,
 });
