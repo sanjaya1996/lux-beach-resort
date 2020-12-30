@@ -49,7 +49,7 @@ const BookingListScreen = ({ history }) => {
               <th>CHECKOUT</th>
               <th>TOTAL AMOUNT</th>
               <th>PAID</th>
-              <th>COMPLETE</th>
+              <th>COMPLETED</th>
               <th></th>
             </tr>
             {bookings.map((item) => (

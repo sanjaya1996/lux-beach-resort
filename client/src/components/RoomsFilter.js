@@ -160,7 +160,7 @@ const RoomsFilter = ({ rooms, filters }) => {
             className='form-control'
           >
             {types.map((item, idx) => (
-              <option key={idx} value={idx + 1}>
+              <option key={idx} value={item}>
                 {item}
               </option>
             ))}
@@ -169,7 +169,7 @@ const RoomsFilter = ({ rooms, filters }) => {
         {/* end of select type */}
         {/* guests */}
         <div className='form-group'>
-          <label htmlFor='type'>Guests</label>
+          <label htmlFor='capacity'>Guests</label>
           <select
             name='capacity'
             id='capacity'
