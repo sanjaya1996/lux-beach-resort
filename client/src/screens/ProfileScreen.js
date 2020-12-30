@@ -36,7 +36,7 @@ const ProfileScreen = ({ history }) => {
     } else if (user) {
       setEmail(user.email);
       setTitle(user.title || 'Mr');
-      setPhone(user.phone);
+      setPhone(user.phone || '');
     }
 
     dispatch(bookingActions.listMyBookings());
@@ -141,7 +141,8 @@ const ProfileScreen = ({ history }) => {
           {loadingBooking ? (
             <Loading />
           ) : bookings.length === 0 ? (
-            <h3>No bookings</h3>
+            /* <h3>You have no bookings</h3> */
+            <AlertBox message='You have no bookings!' type='success' noBtn />
           ) : (
             <div style={{ overflowX: 'auto' }}>
               <table>

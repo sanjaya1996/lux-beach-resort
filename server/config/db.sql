@@ -430,6 +430,12 @@ RENAME COLUMN total_guest TO total_guests;
 ALTER TABLE bookings
 ADD COLUMN paid_at TIMESTAMP;
 
+ALTER TABLE bookings
+ADD COLUMN total_amount DECIMAL(20,2);
+
+ALTER TABLE bookings
+ADD COLUMN notes VARCHAR(250);
+
 INSERT INTO bookings 
    (room_id, guest_id, checkin_date, checkout_date)
 VALUES

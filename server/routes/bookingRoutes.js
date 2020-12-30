@@ -6,9 +6,10 @@ const {
   getMyBookings,
   getBookingById,
   updateBookingToPaid,
+  getAdminBookingList,
 } = require('../controller/bookingController');
 const { createGuest, updateProfile } = require('../controller/guestController');
-const { checkAuth } = require('../middleware/authMiddleware');
+const { checkAuth, checkAdmin } = require('../middleware/authMiddleware');
 const {
   emailBookingRequest,
   emailBookingConfirmed,
@@ -27,6 +28,7 @@ const createOrUpdateGuest = (req, res, next) => {
 
 router.route('/').get(getBookings).post(emailBookingRequest);
 router.get('/current', getCurrentBookings);
+router.get('/adminbookinglist', checkAdmin, getAdminBookingList);
 router.get('/mybookings', checkAuth, getMyBookings);
 router.get('/:id', checkAuth, getBookingById);
 router.post('/pay/:roomId', makePayment, createOrUpdateGuest, createBooking);

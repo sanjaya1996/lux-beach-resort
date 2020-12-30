@@ -12,6 +12,23 @@ const getBookings = async (req, res, next) => {
   }
 };
 
+// @desc    Get bookings by joining Guest
+// @route   GET /api/bookings/:id
+// @access  Private / Admin
+const getAdminBookingList = async (req, res, next) => {
+  try {
+    const results = await db.query(
+      `SELECT bookings.id , bookings.checkin_date, bookings.checkout_date, bookings.total_amount, bookings.is_paid, bookings.paid_at, bookings.vacated, guests.name AS guest_name
+        FROM bookings
+        JOIN guests ON bookings.guest_id = guests.id;`
+    );
+
+    res.json(results.rows);
+  } catch (err) {
+    next(err);
+  }
+};
+
 // @desc    Fetch current bookings
 // @route   GET /api/bookings/current
 // @access  Public
@@ -141,6 +158,7 @@ const createBooking = async (req, res, next) => {
 
 module.exports = {
   getBookings,
+  getAdminBookingList,
   getCurrentBookings,
   getMyBookings,
   getBookingById,

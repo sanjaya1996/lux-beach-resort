@@ -9,8 +9,7 @@ import Styled from 'styled-components';
 const StyledAlert = Styled.div`
 margin: auto;
 margin-top: 20px;
-width: 80vw;
-max-width: 1000px;
+max-width: 80vw;
 text-align: center;
 border-radius: 10px;
 padding: 20px;

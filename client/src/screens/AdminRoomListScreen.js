@@ -89,7 +89,7 @@ const AdminRoomListScreen = ({ history }) => {
               <th>CAPACITY / SIZE</th>
               <th>RATE (per night)</th>
               <th>BOOKED</th>
-              <th>ACTION</th>
+              <th style={{ minWidth: '4em' }}></th>
             </tr>
             {rooms.length > 0 &&
               rooms.map((room) => (
@@ -115,7 +115,7 @@ const AdminRoomListScreen = ({ history }) => {
                     <div
                       style={{
                         display: 'flex',
-                        justifyContent: 'space-around',
+                        justifyContent: 'space-between',
                       }}
                     >
                       <i
