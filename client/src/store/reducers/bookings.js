@@ -5,6 +5,9 @@ import {
   BOOKING_LIST_MY_FAIL,
   BOOKING_LIST_MY_REQUEST,
   BOOKING_LIST_MY_SUCCESS,
+  BOOKING_LIST_REQUEST,
+  BOOKING_LIST_SUCCESS,
+  BOOKING_LIST_FAIL,
   MAKE_PAYMENT_FAIL,
   MAKE_PAYMENT_REQUEST,
   MAKE_PAYMENT_SUCCESS,
@@ -23,6 +26,19 @@ export const bookingListMyReducer = (state = { bookings: [] }, action) => {
     case BOOKING_LIST_MY_SUCCESS:
       return { loading: false, bookings: action.payload };
     case BOOKING_LIST_MY_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const bookingListReducer = (state = { bookings: [] }, action) => {
+  switch (action.type) {
+    case BOOKING_LIST_REQUEST:
+      return { loading: true };
+    case BOOKING_LIST_SUCCESS:
+      return { loading: false, bookings: action.payload };
+    case BOOKING_LIST_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;

@@ -177,7 +177,7 @@ const ProfileScreen = ({ history }) => {
                         <Link
                           to={
                             item.is_paid
-                              ? `/booking/${item.id}?bookingId=${item.id}`
+                              ? `/bookings/${item.id}`
                               : `/payment/${item.room_id}/${item.total_guests}/${item.checkin_date}/${item.checkout_date}`
                           }
                         >

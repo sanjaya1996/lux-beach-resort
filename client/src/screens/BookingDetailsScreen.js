@@ -56,7 +56,7 @@ const BookingDetailsScreen = ({ history, match }) => {
   }
 
   if (error) {
-    return <h1>{error}</h1>;
+    return <AlertBox message={'Error! ' + error} noBtn />;
   }
 
   if (!booking) {
@@ -77,7 +77,7 @@ const BookingDetailsScreen = ({ history, match }) => {
         <div className='summary-container'>
           <div className='one-half-responsive on-half-responsive-full-width'>
             <div className='one-half-responsive summary-heading'>
-              Your Stay:
+              Hotel Stay:
             </div>
             <div className='one-half-responsive'>
               <span className='summary-label'>Arrival Date:</span>{' '}
@@ -137,7 +137,7 @@ const BookingDetailsScreen = ({ history, match }) => {
         <div className='summary-container'>
           <div className='one-half-responsive on-half-responsive-full-width'>
             <div className='one-half-responsive summary-heading'>
-              Personal Details:
+              Guest Details:
             </div>
             <div className='one-half-responsive'>
               <span className='summary-label'>FirstName:</span>{' '}

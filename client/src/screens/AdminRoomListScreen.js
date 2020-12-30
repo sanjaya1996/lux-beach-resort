@@ -54,7 +54,7 @@ const AdminRoomListScreen = ({ history }) => {
   }
 
   return (
-    <div className='admin-roomlist'>
+    <div className='screen'>
       {(error || deleteError || success) && (
         <AlertBox
           message={error || deleteError || 'Room was successfully deleted!'}
