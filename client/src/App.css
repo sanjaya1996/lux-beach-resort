@@ -192,6 +192,21 @@ h6 {
   height: 150px;
 }
 
+#cart {
+  font-size: 24px;
+  position: relative;
+}
+.cart-count {
+  background: var(--primaryColor);
+  font-size: 0.8em;
+  color: var(--mainWhite);
+  border-radius: 50%;
+  padding: 0 4px;
+  position: absolute;
+  bottom: 10px;
+  right: -10px;
+}
+
 .profile-dropdown {
   margin: auto;
   text-align: center;
@@ -227,7 +242,7 @@ h6 {
   display: block;
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 850px) {
   .nav-btn {
     display: none;
   }
@@ -905,3 +920,25 @@ tr:nth-child(even) {
   }
 }
 /* end of booking Details Screen */
+
+/* .badge {
+  padding-left: 9px;
+  padding-right: 9px;
+  -webkit-border-radius: 9px;
+  -moz-border-radius: 9px;
+  border-radius: 9px;
+} */
+
+.label-warning[href],
+.badge-warning[href] {
+  background-color: #c67605;
+}
+#lblCartCount {
+  font-size: 14px;
+  padding: 0 2px;
+  background: #ff0000;
+  border-radius: 9px;
+  color: #fff;
+  vertical-align: top;
+  margin-left: -10px;
+}

@@ -11,6 +11,9 @@ const Navbar = () => {
   const currentUser = useSelector((state) => state.currentUser);
   const { user, isAuthenticated } = currentUser;
 
+  const cart = useSelector((state) => state.cart);
+  const { cartItems } = cart;
+
   const loginHandler = () => {
     history.push('/login');
   };
@@ -34,9 +37,20 @@ const Navbar = () => {
           <li>
             <Link to='/'>Home</Link>
           </li>
+
           <li>
             <Link to='/rooms'>Rooms</Link>
           </li>
+          {cartItems.length > 0 && (
+            <li>
+              <Link to='/cart'>
+                <span>Cart</span>
+                <i className='fas fa-shopping-cart' id='cart'>
+                  <span className='cart-count'>{cartItems.length}</span>
+                </i>
+              </Link>
+            </li>
+          )}
           {isAuthenticated && user ? (
             <li className='profile-dropdown'>
               {user.name.split(' ')[0]}{' '}

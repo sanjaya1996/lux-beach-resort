@@ -22,8 +22,8 @@ const ProfileScreen = ({ history }) => {
 
   const bookingListMy = useSelector((state) => state.bookingListMy);
   const {
-    loading: loadingBooking,
-    error: errorBooking,
+    loading: loadingBookingList,
+    error: errorBookingList,
     bookings,
   } = bookingListMy;
 
@@ -138,10 +138,11 @@ const ProfileScreen = ({ history }) => {
           <div style={{ display: 'inline-block' }}>
             <Title title='Bookings' />
           </div>
-          {loadingBooking ? (
+          {loadingBookingList ? (
             <Loading />
+          ) : errorBookingList ? (
+            <AlertBox message={'Error! ' + errorBookingList} />
           ) : bookings.length === 0 ? (
-            /* <h3>You have no bookings</h3> */
             <AlertBox message='You have no bookings!' type='success' noBtn />
           ) : (
             <div style={{ overflowX: 'auto' }}>

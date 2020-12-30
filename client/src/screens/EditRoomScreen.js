@@ -144,6 +144,10 @@ const EditRoomScreen = ({ match, history }) => {
     return <Loading />;
   }
 
+  if (error) {
+    return <AlertBox message={'Error! ' + error} noBtn />;
+  }
+
   return (
     <div className='edit-room'>
       {((roomId && errorUpdate) || (!roomId && errorCreate)) && (

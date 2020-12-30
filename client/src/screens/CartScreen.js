@@ -6,6 +6,7 @@ import DatePicker from 'react-datepicker';
 import * as cartActions from '../store/actions/cart';
 import * as roomActions from '../store/actions/rooms';
 import { CHECK_AVAILABILITY_RESET } from '../store/reducers/rooms';
+import AlertBox from '../components/AlertBox';
 
 const CartScreen = ({ history }) => {
   const dispatch = useDispatch();
@@ -146,7 +147,7 @@ const CartScreen = ({ history }) => {
       <h2>Your Rooms</h2>
       {error && showAlert(error)}
       {cartItems.length === 0 ? (
-        <h1>Your Cart is Empty</h1>
+        <AlertBox message='Your cart is empty!' type='message' noBtn />
       ) : (
         cartItems.map((room) => {
           const findCheckInDate = checkInDateState.find(
