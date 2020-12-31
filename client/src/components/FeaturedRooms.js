@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Loading from './Loading';
-import Room from './Room';
+import ItemCard from './ItemCard';
 import Title from './Title';
 import * as roomActions from '../store/actions/rooms';
 import AlertBox from './AlertBox';
@@ -25,7 +25,15 @@ const FeaturedRooms = () => {
         ) : error ? (
           <AlertBox message={'Error! ' + error} />
         ) : (
-          featuredRooms.map((room) => <Room key={room.id} room={room} />)
+          featuredRooms.map((room) => (
+            <ItemCard
+              key={room.id}
+              id={room.id}
+              title={room.name}
+              price={room.price}
+              imageUrl={room.images[0]}
+            />
+          ))
         )}
       </div>
     </section>

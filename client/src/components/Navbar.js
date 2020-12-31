@@ -35,11 +35,11 @@ const Navbar = () => {
         </div>
         <ul className={isOpen ? 'nav-links show-nav' : 'nav-links'}>
           <li>
-            <Link to='/'>Home</Link>
+            <Link to='/rooms'>Rooms</Link>
           </li>
 
           <li>
-            <Link to='/rooms'>Rooms</Link>
+            <Link to='/menu'>Menu</Link>
           </li>
           {cartItems.length > 0 && (
             <li>

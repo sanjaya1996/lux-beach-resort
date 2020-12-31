@@ -8,7 +8,7 @@ import RoomsScreen from './screens/RoomsScreen';
 import SingleRoomScreen from './screens/SingleRoomScreen';
 import ErrorScreen from './screens/ErrorScreen';
 import Navbar from './components/Navbar';
-import EditRoomScreen from './screens/EditRoomScreen';
+import EditRoomScreen from './screens/room/EditRoomScreen';
 import CartScreen from './screens/CartScreen';
 import PaymentScreen from './screens/PaymentScreen';
 import MessageScreen from './screens/MessageScreen';
@@ -18,6 +18,7 @@ import AdminRoomListScreen from './screens/AdminRoomListScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import BookingDetailsScreen from './screens/BookingDetailsScreen';
 import BookingListScreen from './screens/BookingListScreen';
+import MenuScreen from './screens/meal/MenuScreen';
 // import Loading from './components/Loading';
 
 const App = () => {
@@ -37,6 +38,7 @@ const App = () => {
       <Switch>
         <Route path='/rooms' component={RoomsScreen} exact />
         <Route path='/rooms/:id' component={SingleRoomScreen} />
+        <Route path='/menu' component={MenuScreen} />
         <Route path='/cart/:id?' component={CartScreen} />
         <Route
           path='/payment/:id/:guests/:chkin/:chkout'

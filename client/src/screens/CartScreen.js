@@ -7,6 +7,7 @@ import * as cartActions from '../store/actions/cart';
 import * as roomActions from '../store/actions/rooms';
 import { CHECK_AVAILABILITY_RESET } from '../store/reducers/rooms';
 import AlertBox from '../components/AlertBox';
+import Title from '../components/Title';
 
 const CartScreen = ({ history }) => {
   const dispatch = useDispatch();
@@ -144,10 +145,10 @@ const CartScreen = ({ history }) => {
 
   return (
     <div className='cart'>
-      <h2>Your Rooms</h2>
+      <Title title='Your rooms' />
       {error && showAlert(error)}
       {cartItems.length === 0 ? (
-        <AlertBox message='Your cart is empty!' type='message' noBtn />
+        <AlertBox message='No room found in you cart!' type='message' noBtn />
       ) : (
         cartItems.map((room) => {
           const findCheckInDate = checkInDateState.find(

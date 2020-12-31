@@ -2,10 +2,13 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 
-import Loading from '../components/Loading';
-import * as roomActions from '../store/actions/rooms';
-import { ROOM_CREATE_RESET, ROOM_UPDATE_RESET } from '../store/reducers/rooms';
-import AlertBox from '../components/AlertBox';
+import Loading from '../../components/Loading';
+import * as roomActions from '../../store/actions/rooms';
+import {
+  ROOM_CREATE_RESET,
+  ROOM_UPDATE_RESET,
+} from '../../store/reducers/rooms';
+import AlertBox from '../../components/AlertBox';
 
 const EditRoomScreen = ({ match, history }) => {
   const roomId = match.params.id;
