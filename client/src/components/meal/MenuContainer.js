@@ -11,7 +11,7 @@ const MenuContainer = () => {
   const dispatch = useDispatch();
 
   const mealList = useSelector((state) => state.mealList);
-  const { loading, error, meals } = mealList;
+  const { loading, error, meals, filteredMeals } = mealList;
 
   useEffect(() => {
     dispatch(menuActions.listMeal());
@@ -27,8 +27,8 @@ const MenuContainer = () => {
 
   return (
     <>
-      <MealsFilter />
-      <MealList meals={meals} />
+      <MealsFilter meals={meals} />
+      <MealList meals={filteredMeals} />
     </>
   );
 };

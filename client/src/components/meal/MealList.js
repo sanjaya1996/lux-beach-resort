@@ -20,7 +20,7 @@ const MealList = ({ meals }) => {
             id={item.id}
             title={item.name}
             price={item.price}
-            imageUrl={item.imageUrl}
+            imageUrl={item.imageurl}
             cardFor='meal'
             link
           />
