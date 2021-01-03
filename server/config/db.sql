@@ -465,3 +465,28 @@ CASE
 	ELSE 0
 END
 
+-- MEALS ................................................
+-- Create Table Meals
+
+CREATE TABLE meals (
+   id SERIAL NOT NULL,
+   category VARCHAR(50) NOT NULL,
+   name VARCHAR(50) NOT NULL,
+   price DECIMAL(20,2) NOT NULL,
+   imageUrl VARCHAR(1000) NOT NULL,
+   duration INT NOT NULL,
+   ingredients VARCHAR(150),
+   is_gluten_free BOOLEAN NOT NULL DEFAULT FALSE,
+   is_vegan BOOLEAN NOT NULL DEFAULT FALSE,
+   is_vegeterian BOOLEAN NOT NULL DEFAULT FALSE,
+   is_lactose_free BOOLEAN NOT NULL DEFAULT FALSE,
+   PRIMARY KEY (id)
+);
+
+INSERT INTO meals 
+   (category, name, price, imageUrl, duration, ingredients, is_gluten_free, is_vegan, is_vegeterian, is_lactose_free)
+VALUES
+   ('Italian', 'Spaghetti with Tomato Sauce', 20.0, 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Spaghetti_Bolognese_mit_Parmesan_oder_Grana_Padano.jpg/800px-Spaghetti_Bolognese_mit_Parmesan_oder_Grana_Padano.jpg', 20, 'Napoletana sauce, garlic, cherry tomato, basil and parmesan.', false, true, true, true),
+   ('Quick & Easy', 'Classic Hawaii', 15.0, 'https://cdn.pixabay.com/photo/2018/07/11/21/51/toast-3532016_1280.jpg', 10, '1 Slice White Bread, 1 Slice Ham, Pinapple Slice, Slice of Cheese and Butter', false, false, false, false),
+   ('Hamburgers', 'Classic Hamburger', 14.5, 'https://cdn.pixabay.com/photo/2014/10/23/18/05/burger-500054_1280.jpg', 45, '300g Cattle Hack, Tomato, Cucumber, Pickel, Onion and Ketchup', false, false, false, true);
+

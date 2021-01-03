@@ -11,6 +11,7 @@ dotenv.config();
 
 const authRoutes = require('./routes/authRoutes');
 const roomRoutes = require('./routes/roomRoutes');
+const menuRoutes = require('./routes/menuRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
 const guestRoutes = require('./routes/guestRoutes');
@@ -51,6 +52,9 @@ app.use('/api/bookings', bookingRoutes);
 
 // Guest routes
 app.use('/api/guests', guestRoutes);
+
+// Food-meny routes
+app.use('/api/menu', menuRoutes);
 
 // Check room availability
 app.use('/api/checkavailability', checkAvailabilityRoutes);
