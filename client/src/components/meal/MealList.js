@@ -22,6 +22,7 @@ const MealList = ({ meals }) => {
             price={item.price}
             imageUrl={item.imageUrl}
             cardFor='meal'
+            link
           />
         ))}
       </div>

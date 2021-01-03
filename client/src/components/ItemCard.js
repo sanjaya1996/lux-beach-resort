@@ -4,35 +4,20 @@ import { Link } from 'react-router-dom';
 
 const defaultImage = '/images/room-1.jpeg';
 
-const ItemCard = ({ id, title, price, imageUrl, cardFor }) => {
+const ItemCard = ({ id, title, price, imageUrl, cardFor, link }) => {
   return (
-    // <article className='room'>
-    //   <div className='img-container'>
-    //     <img src={imageUrl || defaultImage} alt='single room' />
-    //     <div className='price-top'>
-    //       <h6>${price}</h6>
-    //       {cardFor === 'room' && <p>per night</p>}
-    //     </div>
-    //     {
-    //       (cardFor = 'room' && (
-    //         <Link to={`/rooms/${id}`} className='btn-primary room-link'>
-    //           Features
-    //         </Link>
-    //       ))
-    //     }
-    //     <p className='room-info'>{title}</p>
-    //   </div>
-    // </article>
-    <article className='room'>
+    <article style={{ cursor: link ? 'pointer' : '' }} className='room'>
       <div className='img-container'>
         <img src={imageUrl || defaultImage} alt='single room' />
         <div className='price-top'>
           <h6>${price}</h6>
-          <p>per night</p>
+          {cardFor === 'room' && <p>per night</p>}
         </div>
-        <Link to={`/rooms/${id}`} className='btn-primary room-link'>
-          Features
-        </Link>
+        {cardFor === 'room' && (
+          <Link to={`/rooms/${id}`} className='btn-primary room-link'>
+            Features
+          </Link>
+        )}
       </div>
       <div className='room-info'>
         <p>{title}</p>

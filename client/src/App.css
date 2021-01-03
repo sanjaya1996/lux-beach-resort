@@ -273,17 +273,27 @@ h6 {
 /* end of navbar */
 
 /* Hero */
+
 .defaultHero,
+.menuHero,
 .roomsHero {
-  min-height: calc(100vh - 66px);
-  /* background: url('/images/defaultBcg.jpeg') center/cover no-repeat; */
+  width: 100vw;
+  height: calc(100vh - 66px);
+  background: url('./images/defaultBcg.jpeg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .roomsHero {
-  /* background-image: url('/images/room-2.jpeg'); */
+  background-image: url('./images/rooms/room-2.jpeg');
   min-height: 60vh;
+}
+.menuHero {
+  background-image: url('./images/meals/hero-image.jpg');
+  height: 60vh;
 }
 /* End of Hero */
 /* Banner */
