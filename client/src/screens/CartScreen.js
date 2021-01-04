@@ -13,7 +13,7 @@ const CartScreen = ({ history }) => {
   const dispatch = useDispatch();
 
   const cart = useSelector((state) => state.cart);
-  const { cartItems } = cart;
+  const { rooms, meals } = cart;
 
   const checkRoomAvailability = useSelector(
     (state) => state.checkRoomAvailability
@@ -44,7 +44,7 @@ const CartScreen = ({ history }) => {
   let initialGuests = [];
   let initialMinCheckOutDates = [];
 
-  cartItems.forEach((item) => {
+  rooms.forEach((item) => {
     initialCheckInDates.push({ id: item.id, date: item.checkInDate });
     initialCheckOutDates.push({ id: item.id, date: item.checkOutDate });
     initialMinCheckOutDates.push({
@@ -79,7 +79,7 @@ const CartScreen = ({ history }) => {
     setMinCheckOutDateState(initialMinCheckOutDates);
     setGuestsState(initialGuests);
     // eslint-disable-next-line
-  }, [cartItems]);
+  }, [rooms]);
 
   // change minCheckout change whenever checkIn date changes
   useEffect(() => {
@@ -113,7 +113,7 @@ const CartScreen = ({ history }) => {
   };
 
   const removeFromCartHandler = (id) => {
-    dispatch(cartActions.removeFromCart(id));
+    dispatch(cartActions.removeFromCartRoom(id));
   };
 
   const inputChangeHandler = (identifier, value, inputRoomId) => {
@@ -147,10 +147,10 @@ const CartScreen = ({ history }) => {
     <div className='cart'>
       <Title title='Your rooms' />
       {error && showAlert(error)}
-      {cartItems.length === 0 ? (
+      {rooms.length === 0 ? (
         <AlertBox message='No room found in you cart!' type='message' noBtn />
       ) : (
-        cartItems.map((room) => {
+        rooms.map((room) => {
           const findCheckInDate = checkInDateState.find(
             (state) => state.id === room.id
           );

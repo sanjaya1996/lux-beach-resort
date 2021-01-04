@@ -20,8 +20,12 @@ import {
 import { currentUserReducer, userUpdateReducer } from './reducers/guests';
 import { mealListReducer } from './reducers/menu';
 
-const cartItemsFromStorage = localStorage.getItem('cartItems')
-  ? JSON.parse(localStorage.getItem('cartItems'))
+const cartRoomsFromStorage = localStorage.getItem('cartRooms')
+  ? JSON.parse(localStorage.getItem('cartRooms'))
+  : [];
+
+const cartMealsFromStorage = localStorage.getItem('cartMeals')
+  ? JSON.parse(localStorage.getItem('cartMeals'))
   : [];
 
 const rootReducer = combineReducers({
@@ -44,7 +48,8 @@ const rootReducer = combineReducers({
 
 const initialState = {
   cart: {
-    cartItems: cartItemsFromStorage,
+    rooms: cartRoomsFromStorage,
+    meals: cartMealsFromStorage,
   },
 };
 const store = createStore(

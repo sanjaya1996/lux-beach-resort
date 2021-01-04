@@ -1,23 +1,34 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import ItemCard from '../ItemCard';
 import AlertBox from '../AlertBox';
+import * as cartActions from '../../store/actions/cart';
 
 const MealList = ({ meals }) => {
   const [showModal, setShowModal] = useState(false);
   const [clickedMeal, setClickedMeal] = useState({});
-  console.log(clickedMeal);
+  const [orderCount, setOrderCount] = useState(1);
+
+  const dispatch = useDispatch();
+  let meal = {};
 
   const showModalHandler = (id) => {
-    const meal = meals.find((meal) => meal.id === id);
+    meal = meals.find((meal) => meal.id === id);
     setClickedMeal(meal);
-
     setShowModal(true);
   };
 
   const closeModalHandler = () => {
     setShowModal(false);
     setClickedMeal({});
+    setOrderCount(1);
+  };
+
+  const addToOrderHandler = () => {
+    clickedMeal.qty = orderCount;
+    console.log(clickedMeal);
+    dispatch(cartActions.addToCartMeal(clickedMeal));
   };
 
   if (meals.length === 0) {
@@ -60,24 +71,62 @@ const MealList = ({ meals }) => {
               <img src={clickedMeal.imageurl} alt={clickedMeal.name} />
             </div>
             <div className='screen'>
-              <h3>{clickedMeal.name}</h3>
+              <h3>
+                {clickedMeal.name} (${Number(clickedMeal.price).toFixed(2)})
+              </h3>
               <p>{clickedMeal.ingredients}</p>
+              <p>
+                {clickedMeal.is_vegan && (
+                  <span>
+                    <i className='fas fa-check'>vegan </i>{' '}
+                  </span>
+                )}
+                {clickedMeal.is_vegeterian && (
+                  <span>
+                    <i className='fas fa-check'>vegeterian </i>{' '}
+                  </span>
+                )}
+                {clickedMeal.is_gluten_free && (
+                  <span>
+                    <i className='fas fa-check'>gluten-free </i>{' '}
+                  </span>
+                )}
+                {clickedMeal.is_lactose_free && (
+                  <span>
+                    <i className='fas fa-check'>lactose-free </i>{' '}
+                  </span>
+                )}
+              </p>
               <div className='modal-row modal-button-container'>
                 <div className='modal-row'>
-                  <div className='order-count-item order-count-btn'>
-                    <span>-</span>
-                  </div>
+                  <button
+                    disabled={orderCount <= 1}
+                    onClick={() => setOrderCount(orderCount - 1)}
+                    className='order-count-item order-count-btn'
+                  >
+                    <span>
+                      <i className='fas fa-minus fa-xs'></i>
+                    </span>
+                  </button>
                   <div className='order-count-item'>
-                    <span>1</span>
+                    <span>{orderCount}</span>
                   </div>
-                  <div className='order-count-item order-count-btn'>
-                    <span>+</span>
-                  </div>
+                  <button
+                    onClick={() => setOrderCount(orderCount + 1)}
+                    className='order-count-item order-count-btn'
+                  >
+                    <span>
+                      <i className='fas fa-plus fa-xs'></i>
+                    </span>
+                  </button>
                 </div>
 
                 <div>
-                  <button className='btn-primary action-btn btn-sm'>
-                    Add to order
+                  <button
+                    onClick={addToOrderHandler}
+                    className='btn-primary action-btn btn-sm'
+                  >
+                    Add {orderCount} to order
                   </button>
                 </div>
               </div>

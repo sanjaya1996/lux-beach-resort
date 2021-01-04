@@ -997,6 +997,10 @@ tr:nth-child(even) {
   height: 2.5em;
 }
 
+.modal-row button {
+  border: none;
+}
+
 .order-count-btn {
   background: #eeeeee;
   border-radius: 50%;

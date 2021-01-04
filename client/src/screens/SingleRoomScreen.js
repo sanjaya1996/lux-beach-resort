@@ -26,7 +26,7 @@ const SingleRoomScreen = ({ match, history }) => {
   const addToCartHandler = () => {
     dispatch({ type: CHECK_AVAILABILITY_RESET });
     dispatch(
-      cartActions.addToCart(
+      cartActions.addToCartRoom(
         room.id,
         checkInDate ? checkInDate : null,
         checkOutDate ? checkOutDate : null,

@@ -12,7 +12,7 @@ const Navbar = () => {
   const { user, isAuthenticated } = currentUser;
 
   const cart = useSelector((state) => state.cart);
-  const { cartItems } = cart;
+  const { rooms, meals } = cart;
 
   const loginHandler = () => {
     history.push('/login');
@@ -41,12 +41,14 @@ const Navbar = () => {
           <li>
             <Link to='/menu'>Menu</Link>
           </li>
-          {cartItems.length > 0 && (
+          {rooms.length + meals.length > 0 && (
             <li>
               <Link to='/cart'>
                 <span>Cart</span>
                 <i className='fas fa-shopping-cart' id='cart'>
-                  <span className='cart-count'>{cartItems.length}</span>
+                  <span className='cart-count'>
+                    {rooms.length + meals.length}
+                  </span>
                 </i>
               </Link>
             </li>

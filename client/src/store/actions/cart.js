@@ -1,15 +1,16 @@
 import axios from 'axios';
 
-export const CART_ADD_ITEM = 'CART_ADD_ITEM';
-export const CART_REMOVE_ITEM = 'CART_REMOVE_ITEM';
+export const CART_ADD_ROOM = 'CART_ADD_ROOM';
+export const CART_ADD_MEAL = 'CART_ADD_MEAL';
+export const CART_REMOVE_ROOM = 'CART_REMOVE_ROOM';
 export const CART_ADD_GUEST_DETAILS = 'CART_ADD_GUEST_DETAILS';
 
-export const addToCart = (id, checkInDate, checkOutDate, guests) => {
+export const addToCartRoom = (id, checkInDate, checkOutDate, guests) => {
   return async (dispatch, getState) => {
     const { data } = await axios.get(`/api/rooms/${id}`);
 
     dispatch({
-      type: CART_ADD_ITEM,
+      type: CART_ADD_ROOM,
       payload: {
         id: data.id,
         name: data.name,
@@ -21,20 +22,25 @@ export const addToCart = (id, checkInDate, checkOutDate, guests) => {
       },
     });
 
-    localStorage.setItem(
-      'cartItems',
-      JSON.stringify(getState().cart.cartItems)
-    );
+    localStorage.setItem('cartRooms', JSON.stringify(getState().cart.rooms));
   };
 };
 
-export const removeFromCart = (id) => {
-  return (dispatch, getState) => {
-    dispatch({ type: CART_REMOVE_ITEM, payload: id });
+export const addToCartMeal = (meal) => {
+  return async (dispatch, getState) => {
+    dispatch({
+      type: CART_ADD_MEAL,
+      payload: meal,
+    });
 
-    localStorage.setItem(
-      'cartItems',
-      JSON.stringify(getState().cart.cartItems)
-    );
+    localStorage.setItem('cartMeals', JSON.stringify(getState().cart.meals));
+  };
+};
+
+export const removeFromCartRoom = (id) => {
+  return (dispatch, getState) => {
+    dispatch({ type: CART_REMOVE_ROOM, payload: id });
+
+    localStorage.setItem('cartRooms', JSON.stringify(getState().cart.rooms));
   };
 };
