@@ -96,6 +96,7 @@ h6 {
 
 .btn-sm {
   letter-spacing: var(--mainSpacing);
+  font-size: 14px;
   display: inline-block;
   width: fit-content;
   height: fit-content;
@@ -277,8 +278,7 @@ h6 {
 .defaultHero,
 .menuHero,
 .roomsHero {
-  width: 100vw;
-  height: calc(100vh - 66px);
+  min-height: calc(100vh - 66px);
   background: url('./images/defaultBcg.jpeg');
   background-position: center;
   background-size: cover;
@@ -293,7 +293,7 @@ h6 {
 }
 .menuHero {
   background-image: url('./images/meals/hero-image.jpg');
-  height: 60vh;
+  min-height: 60vh;
 }
 /* End of Hero */
 /* Banner */
@@ -932,24 +932,79 @@ tr:nth-child(even) {
 }
 /* end of booking Details Screen */
 
-/* .badge {
-  padding-left: 9px;
-  padding-right: 9px;
-  -webkit-border-radius: 9px;
-  -moz-border-radius: 9px;
-  border-radius: 9px;
-} */
+/* Menu Screen */
+.modal-box {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding-top: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+.modal-content {
+  position: relative;
+  width: 80%;
+  max-width: 500px;
+  background-color: white;
+}
+.close {
+  position: absolute;
+  top: 0;
+  right: 5px;
+  float: right;
+  width: 1.5em;
+  height: 1.5em;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: var(--mainWhite);
+  font-weight: bold;
+  font-size: 2em;
+  cursor: pointer;
+  border-radius: 50%;
+}
+.modal-image {
+  width: 100%;
+  height: 50%;
+}
+.modal-image img {
+  height: 100%;
+  width: 100%;
+}
 
-.label-warning[href],
-.badge-warning[href] {
-  background-color: #c67605;
+.modal-content p {
+  color: #808080;
+  font-size: 0.8em;
 }
-#lblCartCount {
-  font-size: 14px;
-  padding: 0 2px;
-  background: #ff0000;
-  border-radius: 9px;
-  color: #fff;
-  vertical-align: top;
-  margin-left: -10px;
+
+.modal-row {
+  display: flex;
 }
+.modal-button-container {
+  padding: 20px 0;
+  justify-content: space-between;
+}
+
+.order-count-item {
+  margin: 0 10px 0 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 2.5em;
+  height: 2.5em;
+}
+
+.order-count-btn {
+  background: #eeeeee;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.order-count-btn span {
+  font-weight: bold;
+  font-size: 1.4em;
+}
+
+/* end of Menu Screen */

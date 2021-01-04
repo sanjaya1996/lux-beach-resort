@@ -22,7 +22,7 @@ const MenuContainer = () => {
   }
 
   if (error) {
-    return <AlertBox message={error} />;
+    return <AlertBox message={'Error! ' + error} noBtn />;
   }
 
   return (
