@@ -2,6 +2,7 @@ import {
   CART_ADD_ROOM,
   CART_ADD_MEAL,
   CART_REMOVE_ROOM,
+  CART_REMOVE_MEAL,
 } from '../actions/cart';
 
 export const cartReducer = (
@@ -44,6 +45,11 @@ export const cartReducer = (
       return {
         ...state,
         rooms: state.rooms.filter((item) => item.id !== action.payload),
+      };
+    case CART_REMOVE_MEAL:
+      return {
+        ...state,
+        meals: state.meals.filter((item) => item.id !== action.payload),
       };
     default:
       return state;

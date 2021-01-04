@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 import ItemCard from '../ItemCard';
 import AlertBox from '../AlertBox';
 import * as cartActions from '../../store/actions/cart';
+import { CHECK_AVAILABILITY_RESET } from '../../store/reducers/rooms';
 
 const MealList = ({ meals }) => {
+  const history = useHistory();
+
   const [showModal, setShowModal] = useState(false);
   const [clickedMeal, setClickedMeal] = useState({});
   const [orderCount, setOrderCount] = useState(1);
@@ -27,8 +31,9 @@ const MealList = ({ meals }) => {
 
   const addToOrderHandler = () => {
     clickedMeal.qty = orderCount;
-    console.log(clickedMeal);
     dispatch(cartActions.addToCartMeal(clickedMeal));
+    dispatch({ type: CHECK_AVAILABILITY_RESET });
+    history.push('/cart');
   };
 
   if (meals.length === 0) {

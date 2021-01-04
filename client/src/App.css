@@ -700,12 +700,13 @@ h6 {
 
 /* Cart Screen */
 .cart {
-  padding: 2rem;
+  padding: 10px;
+  padding-left: 7vw;
+  padding-right: 7vw;
 }
 .cart-item {
   width: 60vw;
   text-transform: capitalize;
-  margin: 4rem;
   padding-bottom: 5rem;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));

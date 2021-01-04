@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { FaAlignRight } from 'react-icons/fa';
+import { CHECK_AVAILABILITY_RESET } from '../store/reducers/rooms';
 
 const Navbar = () => {
   const history = useHistory();
+
+  const dispatch = useDispatch();
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -43,7 +47,10 @@ const Navbar = () => {
           </li>
           {rooms.length + meals.length > 0 && (
             <li>
-              <Link to='/cart'>
+              <Link
+                to='/cart'
+                onClick={() => dispatch({ type: CHECK_AVAILABILITY_RESET })}
+              >
                 <span>Cart</span>
                 <i className='fas fa-shopping-cart' id='cart'>
                   <span className='cart-count'>
