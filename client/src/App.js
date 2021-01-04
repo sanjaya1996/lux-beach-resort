@@ -19,6 +19,7 @@ import ProfileScreen from './screens/ProfileScreen';
 import BookingDetailsScreen from './screens/BookingDetailsScreen';
 import BookingListScreen from './screens/BookingListScreen';
 import MenuScreen from './screens/meal/MenuScreen';
+import OrderPaymentScreen from './screens/meal/OrderPaymentScreen';
 // import Loading from './components/Loading';
 
 const App = () => {
@@ -38,7 +39,6 @@ const App = () => {
       <Switch>
         <Route path='/rooms' component={RoomsScreen} exact />
         <Route path='/rooms/:id' component={SingleRoomScreen} />
-        <Route path='/menu' component={MenuScreen} />
         <Route path='/cart/:id?' component={CartScreen} />
         <Route
           path='/payment/:id/:guests/:chkin/:chkout'
@@ -52,6 +52,8 @@ const App = () => {
         <Route path='/admin/roomlist' component={AdminRoomListScreen} />
         <Route path='/admin/room/:id?/edit' component={EditRoomScreen} />
         <Route path='/admin/bookinglist' component={BookingListScreen} />
+        <Route path='/menu' component={MenuScreen} />
+        <Route path='/meal/:id/orderpayment' component={OrderPaymentScreen} />
         <Route path='/' component={HomeScreen} exact />
         <Route component={ErrorScreen} />
       </Switch>

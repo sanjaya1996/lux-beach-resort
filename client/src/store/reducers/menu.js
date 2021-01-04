@@ -1,4 +1,7 @@
 import {
+  MEAL_DETAILS_FAIL,
+  MEAL_DETAILS_REQUEST,
+  MEAL_DETAILS_SUCCESS,
   MEAL_LIST_FAIL,
   MEAL_LIST_REQUEST,
   MEAL_LIST_SUCCESS,
@@ -64,6 +67,19 @@ export const mealListReducer = (
 
     case MEAL_LIST_FILTER_RESET:
       return { ...state, filteredMeals: state.meals };
+    default:
+      return state;
+  }
+};
+
+export const mealDetailsReducer = (state = {}, action) => {
+  switch (action.type) {
+    case MEAL_DETAILS_REQUEST:
+      return { loading: true };
+    case MEAL_DETAILS_SUCCESS:
+      return { loading: false, meal: action.payload };
+    case MEAL_DETAILS_FAIL:
+      return { loading: false, error: action.payload };
     default:
       return state;
   }

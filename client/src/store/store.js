@@ -18,7 +18,7 @@ import {
   roomBookingReducer,
 } from './reducers/bookings';
 import { currentUserReducer, userUpdateReducer } from './reducers/guests';
-import { mealListReducer } from './reducers/menu';
+import { mealDetailsReducer, mealListReducer } from './reducers/menu';
 
 const cartRoomsFromStorage = localStorage.getItem('cartRooms')
   ? JSON.parse(localStorage.getItem('cartRooms'))
@@ -42,6 +42,7 @@ const rootReducer = combineReducers({
   bookingDetails: bookingDetailsReducer,
   bookingPay: bookingPayReducer,
   mealList: mealListReducer,
+  mealDetails: mealDetailsReducer,
   currentUser: currentUserReducer,
   userUpdate: userUpdateReducer,
 });

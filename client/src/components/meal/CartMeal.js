@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
 import * as cartActions from '../../store/actions/cart';
@@ -7,10 +8,6 @@ const CartMeal = ({ meal }) => {
   const [orderCount, setOrderCount] = useState(meal.qty);
 
   const dispatch = useDispatch();
-
-  const selectMealHandler = () => {
-    console.log('Meal is selected');
-  };
 
   const removeFromCartHandler = (id) => {
     dispatch(cartActions.removeFromCartMeal(id));
@@ -56,14 +53,9 @@ const CartMeal = ({ meal }) => {
               total : ${Number(orderCount * meal.price).toFixed(2)}
             </label>
           </div>
-          <div>
-            <button
-              onClick={selectMealHandler}
-              className='btn-primary action-btn'
-            >
-              Select
-            </button>
-          </div>
+          <Link to={`/meal/${meal.id}/orderpayment?qty=${orderCount}`}>
+            <button className='btn-primary action-btn'>Select</button>
+          </Link>
           <div>
             <p
               style={{
