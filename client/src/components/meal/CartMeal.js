@@ -53,7 +53,7 @@ const CartMeal = ({ meal }) => {
               total : ${Number(orderCount * meal.price).toFixed(2)}
             </label>
           </div>
-          <Link to={`/meal/${meal.id}/orderpayment?qty=${orderCount}`}>
+          <Link to='/meal/placeorder'>
             <button className='btn-primary action-btn'>Select</button>
           </Link>
           <div>

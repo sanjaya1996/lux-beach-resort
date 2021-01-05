@@ -19,7 +19,7 @@ import ProfileScreen from './screens/ProfileScreen';
 import BookingDetailsScreen from './screens/BookingDetailsScreen';
 import BookingListScreen from './screens/BookingListScreen';
 import MenuScreen from './screens/meal/MenuScreen';
-import OrderPaymentScreen from './screens/meal/OrderPaymentScreen';
+import PlaceOrderScreen from './screens/meal/PlaceOrderScreen';
 // import Loading from './components/Loading';
 
 const App = () => {
@@ -53,7 +53,7 @@ const App = () => {
         <Route path='/admin/room/:id?/edit' component={EditRoomScreen} />
         <Route path='/admin/bookinglist' component={BookingListScreen} />
         <Route path='/menu' component={MenuScreen} />
-        <Route path='/meal/:id/orderpayment' component={OrderPaymentScreen} />
+        <Route path='/meal/placeorder' component={PlaceOrderScreen} />
         <Route path='/' component={HomeScreen} exact />
         <Route component={ErrorScreen} />
       </Switch>

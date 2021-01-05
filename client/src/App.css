@@ -1013,3 +1013,42 @@ tr:nth-child(even) {
 }
 
 /* end of Menu Screen */
+
+/* PlaceOrder Screen */
+
+.placeorder-section {
+  padding-bottom: 2em;
+  width: 100%;
+  max-width: 800px;
+}
+
+.placeorder-itemlist {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-top: none;
+  font-size: 12px;
+  letter-spacing: var(--mainSpacing);
+  text-transform: capitalize;
+}
+.orderitems li:first-child {
+  border-top: 1px solid #ccc;
+}
+.item-column {
+  width: 30%;
+  padding: 0.5em;
+}
+.item-column img {
+  width: 80%;
+  height: 80%;
+  max-width: 100px;
+  max-height: 100px;
+}
+
+.payment-summary {
+  padding-bottom: 20px;
+  width: 100%;
+  max-width: 500px;
+}
+
+/* end of PlaceOrder Screen */
