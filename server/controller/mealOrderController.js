@@ -18,14 +18,20 @@ const getMealOrders = async (req, res, next) => {
 // @access  Private
 const createMealOrder = async (req, res, next) => {
   try {
-    const userId = req.user.id;
-    const { meals, pickupTime, pickupNote, totalAmount } = req.body;
-    const isPaid = req.isPaid;
+    let userId;
+    if (req.isAuthenticated()) {
+      userId = req.user.id;
+    } else {
+      userId = req.guestId;
+    }
+
+    const { meals, pickupTime, pickupNote, amount } = req.body;
+    const isPaid = req.is_paid;
 
     const insertOrderquery = {
       text:
         'INSERT INTO orders (guest_id, pickup_time, pickup_note, total_amount, is_paid) VALUES($1, $2, $3, $4, $5) RETURNING id',
-      values: [userId, pickupTime, pickupNote, totalAmount, isPaid],
+      values: [userId, pickupTime, pickupNote, amount, isPaid],
     };
 
     const results = await db.query(insertOrderquery);

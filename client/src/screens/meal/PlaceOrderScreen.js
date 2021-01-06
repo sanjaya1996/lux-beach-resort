@@ -1,11 +1,14 @@
-import React, { useReducer, useCallback } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useReducer, useCallback, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import DatePicker from 'react-datepicker';
 import StripeCheckout from 'react-stripe-checkout';
 
 import AlertBox from '../../components/AlertBox';
 import Title from '../../components/Title';
 import Input from '../../components/Input';
+import Loading from '../../components/Loading';
+import * as mealOrderActions from '../../store/actions/mealOrders';
+import { MEAL_ORDER_RESET } from '../../store/reducers/mealOrders';
 
 const currentDate = new Date();
 const inititalPickupTime = currentDate.setTime(
@@ -38,9 +41,11 @@ const formReducer = (state, action) => {
   }
 };
 
-const PlaceOrderScreen = () => {
+const PlaceOrderScreen = ({ history }) => {
   const cart = useSelector((state) => state.cart);
   const { meals } = cart;
+
+  const dispatch = useDispatch();
 
   // Calculate Prices
   cart.mealsPrice = cart.meals
@@ -54,6 +59,19 @@ const PlaceOrderScreen = () => {
     Number(cart.taxPrice)
   ).toFixed(2);
 
+  const mealOrder = useSelector((state) => state.mealOrder);
+  const { loading, error, success } = mealOrder;
+
+  useEffect(() => {
+    if (success) {
+      const title = 'Thank You !';
+      const message =
+        'Your order has been placed successfully, Please show OrderId from your email while picking up your food.';
+      history.push(`/success/${title}/${message}`);
+      dispatch({ type: MEAL_ORDER_RESET });
+    }
+  }, [success, dispatch, history]);
+
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
       email: '',
@@ -62,6 +80,7 @@ const PlaceOrderScreen = () => {
       title: 'Mr',
       mobileNumber: '',
       pickupTime: inititalPickupTime,
+      pickupNote: '',
     },
     inputValidities: {
       email: false,
@@ -69,10 +88,36 @@ const PlaceOrderScreen = () => {
       lName: true,
       title: true,
       mobileNumber: false,
-      pickupTime: true,
+      pickupNote: true,
     },
     formIsValid: false,
   });
+
+  const makePayment = (token) => {
+    const name =
+      formState.inputValues.fName + ' ' + formState.inputValues.lName;
+    const email = formState.inputValues.email;
+    const phone = formState.inputValues.mobileNumber;
+    const title = formState.inputValues.title;
+    const pickupTime = formState.inputValues.pickupTime;
+    const pickupNote = formState.inputValues.pickupNote;
+
+    dispatch(
+      mealOrderActions.orderMeal(
+        token,
+        cart.totalPrice,
+        meals,
+        pickupTime,
+        pickupNote,
+        {
+          name,
+          email,
+          phone,
+          title,
+        }
+      )
+    );
+  };
 
   const inputChangeHandler = useCallback(
     (inputIdentifier, inputValue, inputValidity) => {
@@ -102,12 +147,23 @@ const PlaceOrderScreen = () => {
     });
   };
 
+  const alertCloseHandler = () => {
+    dispatch({ type: MEAL_ORDER_RESET });
+  };
+
+  if (loading) {
+    return <Loading />;
+  }
+
   if (meals.length === 0) {
     return <AlertBox message='Your Cart is Empty !' type='message' noBtn />;
   }
 
   return (
     <div className='screen'>
+      {error && (
+        <AlertBox message={'Error! ' + error} onClose={alertCloseHandler} />
+      )}
       <section className='placeorder-section'>
         <div style={{ display: 'flex' }}>
           <Title title='Order items' />
@@ -157,12 +213,21 @@ const PlaceOrderScreen = () => {
           />
         </div>
         <div style={{ maxWidth: '800px' }} className='form-group'>
-          <label htmlFor='date'>Pickup Note :</label>{' '}
+          {/* <label htmlFor='date'>Pickup Note :</label>{' '}
           <textarea
+          name= 'pickupNote'
             rows='2'
             cols='50'
             maxLength='200'
             className='form-control'
+          /> */}
+          <Input
+            label='Pickup Note : '
+            type='text'
+            name='pickupNote'
+            value={formState.inputValues.pickupNote}
+            onInputChange={inputChangeHandler}
+            initiallyValid={true}
           />
         </div>
       </section>
@@ -273,7 +338,7 @@ const PlaceOrderScreen = () => {
           {formState.formIsValid ? (
             <StripeCheckout
               stripeKey='pk_test_BbuVbJumpNKWuxCFdOAUYoix00ZZvbAiJk'
-              // token={makePayment}
+              token={makePayment}
               name={'lux-beach-resort'}
               amount={cart.totalPrice * 100}
               description='meal order'

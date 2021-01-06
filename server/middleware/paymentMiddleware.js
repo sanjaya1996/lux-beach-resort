@@ -2,16 +2,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 // const { v4: uuid } = require('uuid');
 
 const makePayment = (req, res, next) => {
-  const { token, amount } = req.body;
-  console.log('Amount: ' + amount);
-
-  const bookingId = req.params.bookingId;
-  let bookingDetails;
-
-  if (!bookingId) {
-    bookingDetails = req.body.bookingDetails;
-  }
-  // const idempontentencyKey = uuid();
+  const { token, amount, paymentDescription } = req.body;
 
   return stripe.customers
     .create({
@@ -24,9 +15,7 @@ const makePayment = (req, res, next) => {
         currency: 'aud',
         customer: customer.id,
         receipt_email: token.email,
-        description: bookingId
-          ? `Payment of booking. bookingId= ${bookingId}`
-          : `Pay and book Room, roomId= ${bookingDetails.roomId}`,
+        description: paymentDescription || 'No description',
         // shipping: {
         //   name: token.card.name,
         //   address: {

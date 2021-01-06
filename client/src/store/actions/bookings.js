@@ -140,7 +140,6 @@ export const payAndBookRoom = (
 ) => {
   return async (dispatch) => {
     try {
-      console.log(token);
       dispatch({ type: ROOM_BOOKING_REQUEST });
 
       const body = {
@@ -152,6 +151,7 @@ export const payAndBookRoom = (
           checkOutDate,
         },
         amount: total,
+        paymentDescription: `Room Booking Payment by ${name}`,
       };
 
       const config = {
@@ -199,7 +199,11 @@ export const payBooking = (token, total, bookingId) => {
 
       await axios.put(
         `/api/bookings/${bookingId}/payment`,
-        { token, amount: total },
+        {
+          token,
+          amount: total,
+          paymentDescription: `Payment of unpaid booking, id = ${bookingId}`,
+        },
         config
       );
 

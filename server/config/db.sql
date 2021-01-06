@@ -382,7 +382,7 @@ ADD COLUMN isAdmin BOOLEAN DEFAULT false;
 
 -- Alter Table guests and add auth_provider_id and auth_provider_name columns
 ALTER TABLE guests
-ADD column auth_provider_id VARCHAR(50) NOT NULL,
+ADD column auth_id VARCHAR(50) NOT NULL,
 ADD column auth_provider_name VARCHAR(50) NOT NULL;
 
 ALTER TABLE guests
@@ -390,6 +390,12 @@ RENAME COLUMN isAdmin TO is_admin;
 
 ALTER TABLE guests
 ADD COLUMN title VARCHAR(10);
+
+ALTER TABLE guests 
+ALTER COLUMN auth_id DROP NOT NULL;
+
+ALTER TABLE guests 
+ALTER COLUMN auth_provider_name DROP NOT NULL;
 
 INSERT INTO guests
   ( name, phone, email )

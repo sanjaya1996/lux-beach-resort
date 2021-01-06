@@ -40,6 +40,12 @@ const createGuest = async (req, res, next) => {
       phone = guestDetails.phone;
       email = guestDetails.email;
       title = guestDetails.title;
+    } else if (req.type === 'mealOrder') {
+      const { customer } = req.body;
+      name = customer.name;
+      phone = customer.phone;
+      email = customer.email;
+      title = customer.title;
     } else {
       name = req.body.name;
       phone = req.body.phone;
@@ -55,7 +61,7 @@ const createGuest = async (req, res, next) => {
 
     const results = await db.query(query);
 
-    if (req.params.roomId) {
+    if (req.params.roomId || req.type === 'mealOrder') {
       req.guestId = results.rows[0].id;
       next();
       return;
@@ -81,6 +87,11 @@ const updateProfile = async (req, res, next) => {
       phone = guestDetails.phone;
       email = guestDetails.email;
       title = guestDetails.title;
+    } else if (req.type === 'mealOrder') {
+      const { customer } = req.body;
+      phone = customer.phone;
+      email = customer.email;
+      title = customer.title;
     } else {
       phone = req.body.phone;
       email = req.body.email;
@@ -101,10 +112,7 @@ const updateProfile = async (req, res, next) => {
 
     const results = await db.query(query);
 
-    if (req.params.roomId) {
-      req.guestId = results.rows[0].id;
-      console.log('SUCCESS UPDATING GUEST....');
-
+    if (req.params.roomId || req.type === 'mealOrder') {
       next();
       return;
     }
