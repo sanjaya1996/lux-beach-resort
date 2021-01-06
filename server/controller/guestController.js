@@ -27,7 +27,6 @@ const getProfile = async (req, res, next) => {
 
 const createGuest = async (req, res, next) => {
   try {
-    console.log('CREATING GUEST....');
     let name;
     let phone;
     let email;
@@ -71,8 +70,6 @@ const createGuest = async (req, res, next) => {
 
 const updateProfile = async (req, res, next) => {
   try {
-    console.log('UPDATING GUEST....');
-
     let phone;
     let email;
     let title;

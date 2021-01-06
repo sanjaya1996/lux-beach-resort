@@ -101,9 +101,6 @@ const updateBookingToPaid = async (req, res, next) => {
 
     const roomId = results.rows[0].room_id;
 
-    console.log(results.rows[0]);
-    console.log(roomId);
-
     await db.query('UPDATE rooms SET is_booked= true  WHERE id = $1;', [
       roomId,
     ]);

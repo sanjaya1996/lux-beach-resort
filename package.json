@@ -33,6 +33,7 @@
     "passport-facebook": "^3.0.0",
     "passport-google-oauth20": "^2.0.0",
     "pg": "^8.5.1",
+    "pg-format": "^1.0.4",
     "stripe": "^8.128.0",
     "uuid": "^8.3.2"
   },

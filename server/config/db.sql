@@ -490,3 +490,45 @@ VALUES
    ('Quick & Easy', 'Classic Hawaii', 15.0, 'https://cdn.pixabay.com/photo/2018/07/11/21/51/toast-3532016_1280.jpg', 10, '1 Slice White Bread, 1 Slice Ham, Pinapple Slice, Slice of Cheese and Butter', false, false, false, false),
    ('Hamburgers', 'Classic Hamburger', 14.5, 'https://cdn.pixabay.com/photo/2014/10/23/18/05/burger-500054_1280.jpg', 45, '300g Cattle Hack, Tomato, Cucumber, Pickel, Onion and Ketchup', false, false, false, true);
 
+-- ORDERS ................................................
+-- Create Table  Orders
+
+CREATE TABLE orders (
+   id SERIAL NOT NULL,
+   guest_id INT,
+   pickup_time TIMESTAMP NOT NULL,
+   ordered_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
+   pickup_note VARCHAR(250),
+   total_amount DECIMAL(20,2) NOT NULL,
+   is_pickedup BOOLEAN NOT NULL DEFAULT FALSE,
+   is_paid BOOLEAN NOT NULL DEFAULT FALSE,
+   PRIMARY KEY (id),
+   CONSTRAINT guest_id FOREIGN KEY(guest_id) REFERENCES guests(id)
+);
+
+INSERT INTO orders
+   (guest_id, pickup_time, pickup_note, total_amount, is_paid)
+VALUES
+   (29, CURRENT_TIMESTAMP, 'This is the pickup not for my order', 40.50, true );
+
+-- MEALS ORDERS (many-to-many resolve table) ................................................
+-- Create Table  meals_orders
+
+CREATE TABLE meals_orders (
+   order_id INT,
+   meal_id INT,
+   quantity INT NOT NULL DEFAULT 1,
+   PRIMARY KEY (meal_id, order_id),
+   CONSTRAINT meal_id FOREIGN KEY(meal_id) REFERENCES meals(id),
+   CONSTRAINT order_id FOREIGN KEY(order_id) REFERENCES orders(id)
+);
+
+INSERT INTO meals_orders
+   (order_id, meal_id, quantity )
+VALUES
+(1, 2, 2),
+(1, 3, 3);
+
+
+
+
