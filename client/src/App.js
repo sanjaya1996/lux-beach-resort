@@ -20,6 +20,7 @@ import BookingDetailsScreen from './screens/BookingDetailsScreen';
 import BookingListScreen from './screens/BookingListScreen';
 import MenuScreen from './screens/meal/MenuScreen';
 import PlaceOrderScreen from './screens/meal/PlaceOrderScreen';
+import AdminOrderListScreen from './screens/meal/AdminOrderListScreen';
 // import Loading from './components/Loading';
 
 const App = () => {
@@ -52,6 +53,7 @@ const App = () => {
         <Route path='/admin/roomlist' component={AdminRoomListScreen} />
         <Route path='/admin/room/:id?/edit' component={EditRoomScreen} />
         <Route path='/admin/bookinglist' component={BookingListScreen} />
+        <Route path='/admin/orderlist' component={AdminOrderListScreen} />
         <Route path='/menu' component={MenuScreen} />
         <Route path='/meal/placeorder' component={PlaceOrderScreen} />
         <Route path='/' component={HomeScreen} exact />

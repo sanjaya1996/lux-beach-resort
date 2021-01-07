@@ -70,6 +70,7 @@ const Navbar = () => {
                   <>
                     <Link to='/admin/roomlist'>Rooms</Link>
                     <Link to='/admin/bookinglist'>Bookings</Link>
+                    <Link to='/admin/orderlist'>Orders</Link>
                   </>
                 )}
                 <a href='/api/auth/logout'>Logout</a>

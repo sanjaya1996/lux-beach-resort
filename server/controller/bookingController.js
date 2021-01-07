@@ -118,8 +118,9 @@ const createBooking = async (req, res, next) => {
     const guestId = req.guestId || req.user.id;
     const roomId = req.params.roomId;
     const isPaid = req.is_paid || false;
+    const paidAt = req.is_paid ? 'CURRENT_TIMESTAMP' : null;
     let {
-      bookingDetails: { checkInDate, checkOutDate },
+      bookingDetails: { checkInDate, checkOutDate, amount },
     } = req.body;
 
     checkInDate = new Date(checkInDate);
@@ -127,8 +128,16 @@ const createBooking = async (req, res, next) => {
 
     const query = {
       text:
-        'INSERT INTO bookings (room_id, guest_id, checkin_date, checkout_date, is_paid) VALUES($1, $2, $3, $4, $5) RETURNING *',
-      values: [roomId, guestId, checkInDate, checkOutDate, isPaid],
+        'INSERT INTO bookings (room_id, guest_id, checkin_date, checkout_date, is_paid, paid_at, total_amount) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+      values: [
+        roomId,
+        guestId,
+        checkInDate,
+        checkOutDate,
+        isPaid,
+        paidAt,
+        amount,
+      ],
     };
 
     const results = await db.query(query);

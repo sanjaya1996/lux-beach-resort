@@ -159,6 +159,7 @@ const PaymentScreen = ({ match, history }) => {
       roomId: selectedRoom.id,
       checkInDate: selectedCheckIn,
       checkOutDate: selectedCheckOut,
+      amount: total,
     };
 
     dispatch(bookingActions.bookRoom(bookingDetails, 'email'));

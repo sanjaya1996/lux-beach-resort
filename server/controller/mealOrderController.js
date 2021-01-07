@@ -71,7 +71,7 @@ const getMyOrders = async (req, res, next) => {
     const {
       rows: orders,
     } = await db.query(
-      'SELECT id, total_amount, is_paid FROM orders WHERE guest_id = $1',
+      'SELECT id, total_amount, is_paid, ordered_at, is_pickedup FROM orders WHERE guest_id = $1',
       [userId]
     );
 

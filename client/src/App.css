@@ -896,13 +896,16 @@ tr:nth-child(even) {
 .profile-screen {
   display: flex;
 }
-.user-profile {
-  padding: 2em;
-  width: 50%;
-}
-.bookings {
+.profileScreen-section {
   padding: 2em;
   width: 100%;
+}
+.user-profile {
+  width: 50%;
+}
+
+.profileScreen-section section {
+  padding-bottom: 3em;
 }
 
 @media screen and (max-width: 800px) {
@@ -935,6 +938,7 @@ tr:nth-child(even) {
 
 /* Menu Screen */
 .modal-box {
+  overflow-y: auto;
   position: fixed;
   top: 0;
   left: 0;
