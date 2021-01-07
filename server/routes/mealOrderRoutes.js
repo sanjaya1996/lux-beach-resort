@@ -1,7 +1,13 @@
 const express = require('express');
-const { createMealOrder } = require('../controller/mealOrderController');
+const {
+  createMealOrder,
+  getMealOrders,
+  getMealOrderById,
+  getMyOrders,
+} = require('../controller/mealOrderController');
 const { updateProfile, createGuest } = require('../controller/guestController');
 const makePayment = require('../middleware/paymentMiddleware');
+const { checkAuth, checkAdmin } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
@@ -16,6 +22,13 @@ const createOrUpdateGuest = (req, res, next) => {
   }
 };
 
-router.post('/', makePayment, createOrUpdateGuest, createMealOrder);
+router
+  .route('/')
+  .get(checkAdmin, getMealOrders)
+  .post(makePayment, createOrUpdateGuest, createMealOrder);
+
+router.get('/myorders', checkAuth, getMyOrders);
+
+router.get('/:id', checkAuth, getMealOrderById);
 
 module.exports = router;

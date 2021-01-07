@@ -78,9 +78,8 @@ const getBookingById = async (req, res, next) => {
       results.rows.length === 0 ||
       (!user.is_admin && results.rows[0].guest_id !== user.id)
     ) {
-      const error = new Error('Booking not found');
       res.status(404);
-      next(error);
+      throw new Error('Booking not found');
     } else {
       res.json(results.rows[0]);
     }

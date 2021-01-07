@@ -1,4 +1,4 @@
-import React, { useReducer, useCallback, useEffect } from 'react';
+import React, { useReducer, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import DatePicker from 'react-datepicker';
 import StripeCheckout from 'react-stripe-checkout';
@@ -42,6 +42,8 @@ const formReducer = (state, action) => {
 };
 
 const PlaceOrderScreen = ({ history }) => {
+  const [showError, setShowError] = useState(false);
+
   const cart = useSelector((state) => state.cart);
   const { meals } = cart;
 
@@ -88,6 +90,7 @@ const PlaceOrderScreen = ({ history }) => {
       lName: true,
       title: true,
       mobileNumber: false,
+      pickupTime: true,
       pickupNote: true,
     },
     formIsValid: false,
@@ -225,9 +228,10 @@ const PlaceOrderScreen = ({ history }) => {
             label='Pickup Note : '
             type='text'
             name='pickupNote'
-            value={formState.inputValues.pickupNote}
             onInputChange={inputChangeHandler}
+            initialValue=''
             initiallyValid={true}
+            showError={showError}
           />
         </div>
       </section>
@@ -244,11 +248,12 @@ const PlaceOrderScreen = ({ history }) => {
               type='email'
               name='email'
               errorText='Email not valid!'
-              value={formState.inputValues.email}
               onInputChange={inputChangeHandler}
+              initialValue=''
               initiallyValid={false}
               required
               email
+              showError={showError}
             />
           </div>
 
@@ -258,10 +263,11 @@ const PlaceOrderScreen = ({ history }) => {
               type='text'
               name='fName'
               errorText='name not valid!'
-              value={formState.inputValues.fName}
               onInputChange={inputChangeHandler}
+              initialValue=''
               initiallyValid={false}
               required
+              showError={showError}
             />
           </div>
 
@@ -270,9 +276,10 @@ const PlaceOrderScreen = ({ history }) => {
               label='Last Name: '
               type='text'
               name='lName'
-              value={formState.inputValues.lName}
               onInputChange={inputChangeHandler}
+              initialValue=''
               initiallyValid={true}
+              showError={showError}
             />
           </div>
 
@@ -281,11 +288,12 @@ const PlaceOrderScreen = ({ history }) => {
               label='Title: '
               type='select'
               name='title'
-              value={formState.inputValues.title}
               options={['Mr', 'Dr', 'Miss', 'Mr & Mrs', 'Mrs', 'Ms']}
               onInputChange={inputChangeHandler}
+              initialValue='Mr'
               initiallyValid={true}
               required
+              showError={showError}
             />
           </div>
 
@@ -295,10 +303,11 @@ const PlaceOrderScreen = ({ history }) => {
               type='text'
               name='mobileNumber'
               errorText='mobile not valid!'
-              value={formState.inputValues.mobileNumber}
               onInputChange={inputChangeHandler}
+              initialValue=''
               initiallyValid={false}
               required
+              showError={showError}
             />
           </div>
         </form>
@@ -351,7 +360,10 @@ const PlaceOrderScreen = ({ history }) => {
           ) : (
             <button
               type='button'
-              onClick={() => alert('Your Details are not valid!')}
+              onClick={() => {
+                alert('Your Details are not valid!');
+                setShowError(true);
+              }}
               className='btn-primary action-btn'
             >
               {`Pay for $${cart.totalPrice}`}

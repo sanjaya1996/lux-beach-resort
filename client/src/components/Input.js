@@ -31,6 +31,7 @@ const Input = (props) => {
     initiallyValid,
     onInputChange,
     errorText,
+    showError,
   } = props;
 
   const [inputState, dispatch] = useReducer(inputReducer, {
@@ -65,7 +66,8 @@ const Input = (props) => {
     <>
       <label htmlFor={name} className='summary-label'>
         {label}{' '}
-        {inputState.touched && !inputState.isValid && (
+        {((inputState.touched && !inputState.isValid) ||
+          (showError && !inputState.isValid)) && (
           <span
             style={{
               padding: 0,
@@ -100,7 +102,9 @@ const Input = (props) => {
           onChange={textChangeHandler}
           onBlur={lostFocusHandler}
           className={`form-control ${
-            inputState.touched && !inputState.isValid && 'input-error'
+            ((inputState.touched && !inputState.isValid) ||
+              (showError && !inputState.isValid)) &&
+            'input-error'
           }`}
         />
       )}
