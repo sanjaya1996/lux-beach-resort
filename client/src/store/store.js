@@ -24,6 +24,7 @@ import {
   mealOrderListMyReducer,
   mealOrderListReducer,
   mealOrderReducer,
+  orderPickedUpReducer,
 } from './reducers/mealOrders';
 
 const cartRoomsFromStorage = localStorage.getItem('cartRooms')
@@ -53,6 +54,7 @@ const rootReducer = combineReducers({
   mealOrderList: mealOrderListReducer,
   mealOrderListMy: mealOrderListMyReducer,
   mealOrderDetails: mealOrderDetailsReducer,
+  orderPickedUp: orderPickedUpReducer,
   currentUser: currentUserReducer,
   userUpdate: userUpdateReducer,
 });

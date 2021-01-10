@@ -30,7 +30,7 @@ const getMealOrderById = async (req, res, next) => {
         SELECT orders.*, guests.name AS guest_name, guests.email AS guest_email, guests.phone AS guest_phone 
         FROM orders 
         JOIN guests ON orders.guest_id = guests.id
-        WHERE id = $1
+        WHERE orders.id = $1
       `,
       [req.params.id]
     );
@@ -43,16 +43,14 @@ const getMealOrderById = async (req, res, next) => {
     } else {
       const { rows: meals_orders } = await db.query(
         `
-          SELECT meal_id, quantity , meals.name AS meal_name, meals.imageurl FROM meals_orders
+          SELECT meal_id, quantity , meals.name AS meal_name, meals.price, meals.imageurl FROM meals_orders
           JOIN meals ON meals_orders.meal_id = meals.id
           WHERE order_id = $1;
         `,
         [req.params.id]
       );
 
-      order.meals = meals_orders.map(
-        ({ order_id, ...otherValues }) => otherValues
-      );
+      order.meals = meals_orders;
 
       res.json(order);
     }
@@ -143,9 +141,31 @@ const createMealOrder = async (req, res, next) => {
   }
 };
 
+const updateOrderToPicked = async (req, res, next) => {
+  try {
+    const results = await db.query(
+      `UPDATE orders 
+       SET is_pickedup = true, picked_up_time = CURRENT_TIMESTAMP
+       WHERE id = $1 RETURNING *;
+      `,
+      [req.params.id]
+    );
+
+    if (results.rows.length === 0) {
+      res.status(404);
+      throw new Error('Order not found');
+    }
+
+    res.json(results.rows);
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   getMealOrders,
   getMealOrderById,
   getMyOrders,
   createMealOrder,
+  updateOrderToPicked,
 };

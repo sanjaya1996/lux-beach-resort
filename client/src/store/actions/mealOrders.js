@@ -16,6 +16,10 @@ export const MEAL_ORDER_REQUEST = 'MEAL_ORDER_REQUEST';
 export const MEAL_ORDER_SUCCESS = 'MEAL_ORDER_SUCCESS';
 export const MEAL_ORDER_FAIL = 'MEAL_ORDER_FAIL';
 
+export const ORDER_PICKED_UP_REQUEST = 'ORDER_PICKED_UP_REQUEST';
+export const ORDER_PICKED_UP_SUCCESS = 'ORDER_PICKED_UP_SUCCESS';
+export const ORDER_PICKED_UP_FAIL = 'ORDER_PICKED_UP_FAIL';
+
 export const listMealOrders = () => {
   return async (dispatch) => {
     try {
@@ -110,6 +114,32 @@ export const orderMeal = (
     } catch (error) {
       dispatch({
         type: MEAL_ORDER_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
+};
+
+export const markOrderasPickedUp = (id) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: ORDER_PICKED_UP_REQUEST });
+
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+
+      await axios.put(`/api/mealorders/${id}/picked`, {}, config);
+
+      dispatch({ type: ORDER_PICKED_UP_SUCCESS });
+    } catch (error) {
+      dispatch({
+        type: ORDER_PICKED_UP_FAIL,
         payload:
           error.response && error.response.data.message
             ? error.response.data.message

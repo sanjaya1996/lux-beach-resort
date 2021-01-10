@@ -21,6 +21,7 @@ import BookingListScreen from './screens/BookingListScreen';
 import MenuScreen from './screens/meal/MenuScreen';
 import PlaceOrderScreen from './screens/meal/PlaceOrderScreen';
 import AdminOrderListScreen from './screens/meal/AdminOrderListScreen';
+import OrderDetailsScreen from './screens/meal/OrderDetailsScreen';
 // import Loading from './components/Loading';
 
 const App = () => {
@@ -56,6 +57,7 @@ const App = () => {
         <Route path='/admin/orderlist' component={AdminOrderListScreen} />
         <Route path='/menu' component={MenuScreen} />
         <Route path='/meal/placeorder' component={PlaceOrderScreen} />
+        <Route path='/mealorders/:id' component={OrderDetailsScreen} />
         <Route path='/' component={HomeScreen} exact />
         <Route component={ErrorScreen} />
       </Switch>

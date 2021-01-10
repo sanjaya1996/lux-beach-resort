@@ -240,7 +240,7 @@ const ProfileScreen = ({ history }) => {
                         <td>{moment(item.ordered_at).format('YYYY-MM-DD')}</td>
                         <td>
                           {item.meals.map((meal) => (
-                            <p>
+                            <p key={meal.meal_id}>
                               {meal.quantity} * {meal.meal_name}
                             </p>
                           ))}
@@ -271,7 +271,7 @@ const ProfileScreen = ({ history }) => {
                           )}
                         </td>
                         <td>
-                          <Link to='/'>
+                          <Link to={`/mealorders/${item.id}`}>
                             <button className='btn-primary'>Details</button>
                           </Link>
                         </td>

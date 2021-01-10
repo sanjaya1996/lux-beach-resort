@@ -94,7 +94,7 @@ const AdminOrderListScreen = ({ history }) => {
                   )}
                 </td>
                 <td>
-                  <Link to='/'>
+                  <Link to={`/mealorders/${item.id}`}>
                     <button className='btn-primary'>Details</button>
                   </Link>
                 </td>

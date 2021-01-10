@@ -4,6 +4,7 @@ const {
   getMealOrders,
   getMealOrderById,
   getMyOrders,
+  updateOrderToPicked,
 } = require('../controller/mealOrderController');
 const { updateProfile, createGuest } = require('../controller/guestController');
 const makePayment = require('../middleware/paymentMiddleware');
@@ -30,5 +31,7 @@ router
 router.get('/myorders', checkAuth, getMyOrders);
 
 router.get('/:id', checkAuth, getMealOrderById);
+
+router.put('/:id/picked', checkAdmin, updateOrderToPicked);
 
 module.exports = router;
