@@ -25,6 +25,7 @@ const Input = (props) => {
   // name should be act as a unique id
   const {
     label,
+    placeholder,
     type,
     name,
     initialValue,
@@ -99,6 +100,7 @@ const Input = (props) => {
           type={type}
           name={name}
           value={inputState.value}
+          placeholder={placeholder}
           onChange={textChangeHandler}
           onBlur={lostFocusHandler}
           className={`form-control ${

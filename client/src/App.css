@@ -76,7 +76,6 @@ h6 {
   color: #fff;
 
   /* box styles */
-  height: 40px;
   background: #255796;
   border: 1px solid #255796;
   border-radius: 21px;
@@ -117,6 +116,17 @@ h6 {
   text-align: center;
   margin-top: 3rem;
 }
+.small-loading {
+  height: 3.5em;
+  width: 3.5em;
+  color: white;
+  margin: 0;
+}
+.small-loading img {
+  height: 100%;
+  width: 100%;
+}
+
 .error {
   text-align: center;
   text-transform: uppercase;
@@ -190,6 +200,9 @@ h6 {
 }
 
 .show-nav {
+  height: 200px;
+}
+.show-nav-min-height {
   height: 150px;
 }
 
@@ -210,13 +223,7 @@ h6 {
 
 .profile-dropdown {
   margin: auto;
-  text-align: center;
   max-width: 10rem;
-  color: var(--primaryColor);
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: 600;
-  padding-top: 0.5rem;
 }
 
 .dropdown-content {
@@ -243,7 +250,7 @@ h6 {
   display: block;
 }
 
-@media screen and (min-width: 850px) {
+@media screen and (min-width: 1055px) {
   .nav-btn {
     display: none;
   }
@@ -261,14 +268,14 @@ h6 {
     margin: 0 1rem;
     padding: 0.5rem 0;
   }
-  .profile-dropdown {
+  .profile-dropdown-align {
     position: absolute;
     right: 5rem;
-    top: 1.3rem;
     padding-top: 0;
+    display: flex;
   }
-  .admin-dropdown {
-    right: 2rem;
+  .profile-dropdown {
+    padding-right: 1em;
   }
 }
 /* end of navbar */
@@ -700,7 +707,7 @@ h6 {
 
 /* Cart Screen */
 .cart {
-  padding: 10px;
+  padding: 2em 0;
   padding-left: 7vw;
   padding-right: 7vw;
 }
@@ -722,6 +729,14 @@ h6 {
 .cart-image img {
   width: 100%;
   height: 100%;
+}
+
+@media screen and (max-width: 1066px) {
+  .cart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 /* end of Cart Screen */

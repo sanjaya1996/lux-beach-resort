@@ -37,7 +37,15 @@ const Navbar = () => {
             <FaAlignRight className='nav-icon' />
           </button>
         </div>
-        <ul className={isOpen ? 'nav-links show-nav' : 'nav-links'}>
+        <ul
+          className={
+            isOpen && !isAuthenticated
+              ? 'nav-links show-nav-min-height'
+              : isOpen
+              ? 'nav-links show-nav'
+              : 'nav-links'
+          }
+        >
           <li>
             <Link to='/rooms'>Rooms</Link>
           </li>
@@ -60,27 +68,39 @@ const Navbar = () => {
               </Link>
             </li>
           )}
-          {isAuthenticated && user ? (
-            <li className='profile-dropdown'>
-              {user.name.split(' ')[0]}{' '}
-              <i className='fas fa-caret-down fa-lg'></i>
-              <div className='dropdown-content'>
-                <Link to='/profile'>Profile</Link>
+          <div className='profile-dropdown-align'>
+            {isAuthenticated && user ? (
+              <>
                 {user.is_admin && (
-                  <>
-                    <Link to='/admin/roomlist'>Rooms</Link>
-                    <Link to='/admin/bookinglist'>Bookings</Link>
-                    <Link to='/admin/orderlist'>Orders</Link>
-                  </>
+                  <li className='profile-dropdown'>
+                    <Link to='#'>
+                      Admin
+                      <i className='fas fa-caret-down fa-lg'></i>
+                    </Link>
+                    <div className='dropdown-content'>
+                      <Link to='/admin/roomlist'>Rooms</Link>
+                      <Link to='/admin/bookinglist'>Bookings</Link>
+                      <Link to='/admin/orderlist'>Orders</Link>
+                    </div>
+                  </li>
                 )}
-                <a href='/api/auth/logout'>Logout</a>
-              </div>
-            </li>
-          ) : (
-            <li onClick={loginHandler} className='profile-dropdown'>
-              Login
-            </li>
-          )}
+                <li className='profile-dropdown'>
+                  <Link to='#'>
+                    {user.name.split(' ')[0]}
+                    <i className='fas fa-caret-down fa-lg'></i>
+                  </Link>
+                  <div className='dropdown-content'>
+                    <Link to='/profile'>Profile</Link>
+                    <a href='/api/auth/logout'>Logout</a>
+                  </div>
+                </li>
+              </>
+            ) : (
+              <li onClick={loginHandler}>
+                <Link to='/login'>Login</Link>
+              </li>
+            )}
+          </div>
         </ul>
       </div>
     </nav>

@@ -42,7 +42,7 @@ const OrderDetailsScreen = ({ history, match }) => {
     dispatch({ type: ORDER_PICKED_UP_RESET });
   };
 
-  if (loading || loadingPickedUp) {
+  if (loading) {
     return <Loading />;
   }
 
@@ -136,17 +136,22 @@ const OrderDetailsScreen = ({ history, match }) => {
               ) : user.is_admin ? (
                 <div
                   style={{
-                    textAlign: 'center',
-                    margin: 'auto',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                     paddingBottom: '1em',
                   }}
                 >
-                  <button
-                    onClick={markAsPickedUpHandler}
-                    className='btn-primary'
-                  >
-                    Mark as picked up
-                  </button>
+                  {loadingPickedUp ? (
+                    <Loading small />
+                  ) : (
+                    <button
+                      onClick={markAsPickedUpHandler}
+                      className='btn-primary'
+                    >
+                      Mark as picked up
+                    </button>
+                  )}
                 </div>
               ) : (
                 <AlertBox message='Not Picked Up' noBtn />

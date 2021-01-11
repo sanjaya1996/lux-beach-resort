@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
 import * as cartActions from '../../store/actions/cart';
@@ -50,12 +49,10 @@ const CartMeal = ({ meal }) => {
           </div>
           <div>
             <label htmlFor='date'>
-              total : ${Number(orderCount * meal.price).toFixed(2)}
+              ${Number(orderCount * meal.price).toFixed(2)}
             </label>
           </div>
-          <Link to='/meal/placeorder'>
-            <button className='btn-primary action-btn'>Select</button>
-          </Link>
+
           <div>
             <p
               style={{

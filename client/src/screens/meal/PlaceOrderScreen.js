@@ -226,6 +226,7 @@ const PlaceOrderScreen = ({ history }) => {
           /> */}
           <Input
             label='Pickup Note : '
+            placeholder='Leave a note for the resturant'
             type='text'
             name='pickupNote'
             onInputChange={inputChangeHandler}

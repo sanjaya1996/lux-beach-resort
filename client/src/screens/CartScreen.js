@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import * as roomActions from '../store/actions/rooms';
@@ -13,6 +14,10 @@ const CartScreen = ({ history }) => {
 
   const cart = useSelector((state) => state.cart);
   const { rooms, meals } = cart;
+
+  const mealsTotal = meals
+    .reduce((acc, meal) => acc + Number(meal.price * meal.qty), 0)
+    .toFixed(2);
 
   const checkRoomAvailability = useSelector(
     (state) => state.checkRoomAvailability
@@ -83,6 +88,11 @@ const CartScreen = ({ history }) => {
               {meals.map((meal) => (
                 <CartMeal key={meal.id} meal={meal} />
               ))}
+              <Link to='/meal/placeorder'>
+                <button className='btn-primary action-btn'>
+                  Checkout orders (${mealsTotal})
+                </button>
+              </Link>
             </>
           )}
         </>
