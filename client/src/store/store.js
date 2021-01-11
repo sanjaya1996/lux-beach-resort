@@ -19,7 +19,10 @@ import {
 } from './reducers/bookings';
 import {
   currentUserReducer,
+  guestDeleteReducer,
+  guestDetailsReducer,
   guestListReducer,
+  guestUpdateReducer,
   userUpdateReducer,
 } from './reducers/guests';
 import { mealDetailsReducer, mealListReducer } from './reducers/menu';
@@ -60,6 +63,9 @@ const rootReducer = combineReducers({
   mealOrderDetails: mealOrderDetailsReducer,
   orderPickedUp: orderPickedUpReducer,
   guestList: guestListReducer,
+  guestDetails: guestDetailsReducer,
+  guestDelete: guestDeleteReducer,
+  guestUpdate: guestUpdateReducer,
   currentUser: currentUserReducer,
   userUpdate: userUpdateReducer,
 });

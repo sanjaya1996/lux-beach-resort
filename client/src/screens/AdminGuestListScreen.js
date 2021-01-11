@@ -6,6 +6,7 @@ import AlertBox from '../components/AlertBox';
 import Loading from '../components/Loading';
 import Title from '../components/Title';
 import * as guestActions from '../store/actions/guests';
+import { GUEST_DELETE_RESET } from '../store/reducers/guests';
 
 const AdminGuestListScreen = ({ history }) => {
   const dispatch = useDispatch();
@@ -16,29 +17,36 @@ const AdminGuestListScreen = ({ history }) => {
   const guestList = useSelector((state) => state.guestList);
   const { loading, guests, error } = guestList;
 
+  const guestDelete = useSelector((state) => state.guestDelete);
+  const {
+    loading: loadingDelete,
+    success: successDelete,
+    error: errorDelete,
+  } = guestDelete;
+
   useEffect(() => {
     if (isAuthenticated === false || (user && !user.is_admin)) {
       history.push('/login');
     } else {
       dispatch(guestActions.listGuests());
     }
-  }, [dispatch, isAuthenticated, user, history]);
+  }, [dispatch, isAuthenticated, user, history, successDelete]);
 
-  //   const deleteRoomHandler = (id) => {
-  //     if (
-  //       window.confirm('Are you Sure? Do you really want to delete this room?')
-  //     ) {
-  //       dispatch(roomActions.deleteRoom(id));
-  //     } else {
-  //       return;
-  //     }
-  //   };
+  const deleteGuestHandler = (id) => {
+    if (
+      window.confirm('Are you Sure? Do you really want to delete this guest?')
+    ) {
+      dispatch(guestActions.deleteGuest(id));
+    } else {
+      return;
+    }
+  };
 
-  //   const alertCloseHandler = () => {
-  //     dispatch({ type: ROOM_DELETE_RESET });
-  //   };
+  const alertCloseHandler = () => {
+    dispatch({ type: GUEST_DELETE_RESET });
+  };
 
-  if (loading) {
+  if (loading || loadingDelete) {
     return <Loading />;
   }
 
@@ -52,6 +60,19 @@ const AdminGuestListScreen = ({ history }) => {
 
   return (
     <div className='screen'>
+      {errorDelete && (
+        <AlertBox
+          message={'Error! ' + errorDelete}
+          onClose={alertCloseHandler}
+        />
+      )}
+      {successDelete && (
+        <AlertBox
+          message='Guest deleted successfully'
+          type='message'
+          onClose={alertCloseHandler}
+        />
+      )}
       <Title title='Guests' />
 
       <div style={{ overflowX: 'auto' }}>
@@ -87,6 +108,7 @@ const AdminGuestListScreen = ({ history }) => {
                     <div
                       style={{
                         display: 'flex',
+                        alignItems: 'center',
                         justifyContent: 'space-between',
                       }}
                     >
@@ -97,7 +119,7 @@ const AdminGuestListScreen = ({ history }) => {
                         ></i>
                       </Link>
                       <i
-                        // onClick={() => deleteRoomHandler(room.id)}
+                        onClick={() => deleteGuestHandler(guest.id)}
                         style={{ color: 'red', cursor: 'pointer' }}
                         className='fas fa-trash'
                       ></i>
