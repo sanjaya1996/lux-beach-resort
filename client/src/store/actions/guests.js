@@ -1,5 +1,9 @@
 import axios from 'axios';
 
+export const GUEST_LIST_REQUEST = 'GUEST_LIST_REQUEST';
+export const GUEST_LIST_SUCCESS = 'GUEST_LIST_SUCCESS';
+export const GUEST_LIST_FAIL = 'GUEST_LIST_FAIL';
+
 export const CURRENT_USER_REQUEST = 'CURRENT_USER_REQUEST';
 export const CURRENT_USER_SUCCESS = 'CURRENT_USER_SUCCESS';
 export const CURRENT_USER_FAIL = 'CURRENT_USER_FAIL';
@@ -9,6 +13,26 @@ export const USER_UPDATE_PROFILE_SUCCESS = 'USER_UPDATE_PROFILE_SUCCESS';
 export const USER_UPDATE_PROFILE_FAIL = 'USER_UPDATE_PROFILE_FAIL';
 
 export const CURRENT_USER_UPDATE = 'CURRENT_USER_UPDATE';
+
+export const listGuests = () => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: GUEST_LIST_REQUEST });
+
+      const { data } = await axios.get('/api/guests');
+
+      dispatch({ type: GUEST_LIST_SUCCESS, payload: data });
+    } catch (error) {
+      dispatch({
+        type: GUEST_LIST_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
+};
 
 export const getCurrentUser = () => {
   return async (dispatch) => {

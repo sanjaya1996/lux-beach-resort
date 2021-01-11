@@ -3,6 +3,9 @@ import {
   CURRENT_USER_REQUEST,
   CURRENT_USER_SUCCESS,
   CURRENT_USER_UPDATE,
+  GUEST_LIST_FAIL,
+  GUEST_LIST_REQUEST,
+  GUEST_LIST_SUCCESS,
   USER_UPDATE_PROFILE_FAIL,
   USER_UPDATE_PROFILE_REQUEST,
   USER_UPDATE_PROFILE_SUCCESS,
@@ -10,6 +13,19 @@ import {
 
 export const CURRENT_USER_RESET = 'CURRENT_USER_RESET';
 export const USER_UPDATE_PROFILE_RESET = 'USER_UPDATE_PROFILE_RESET';
+
+export const guestListReducer = (state = { guests: [] }, action) => {
+  switch (action.type) {
+    case GUEST_LIST_REQUEST:
+      return { ...state, loading: true };
+    case GUEST_LIST_SUCCESS:
+      return { loading: false, guests: action.payload };
+    case GUEST_LIST_FAIL:
+      return { ...state, loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
 
 export const currentUserReducer = (state = {}, action) => {
   switch (action.type) {

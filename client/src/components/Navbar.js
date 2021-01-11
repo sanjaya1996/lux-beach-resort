@@ -39,7 +39,7 @@ const Navbar = () => {
         </div>
         <ul
           className={
-            isOpen && !isAuthenticated
+            isOpen && (!isAuthenticated || !user.is_admin)
               ? 'nav-links show-nav-min-height'
               : isOpen
               ? 'nav-links show-nav'
@@ -80,7 +80,9 @@ const Navbar = () => {
                     <div className='dropdown-content'>
                       <Link to='/admin/roomlist'>Rooms</Link>
                       <Link to='/admin/bookinglist'>Bookings</Link>
+                      <Link to='/admin/meallist'>Meals</Link>
                       <Link to='/admin/orderlist'>Orders</Link>
+                      <Link to='/admin/guestlist'>Guests</Link>
                     </div>
                   </li>
                 )}
