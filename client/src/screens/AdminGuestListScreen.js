@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import AlertBox from '../components/AlertBox';
 
@@ -22,10 +23,6 @@ const AdminGuestListScreen = ({ history }) => {
       dispatch(guestActions.listGuests());
     }
   }, [dispatch, isAuthenticated, user, history]);
-
-  //   const editRoomHandler = (id) => {
-  //     history.push(`/admin/room/${id}/edit`);
-  //   };
 
   //   const deleteRoomHandler = (id) => {
   //     if (
@@ -93,11 +90,12 @@ const AdminGuestListScreen = ({ history }) => {
                         justifyContent: 'space-between',
                       }}
                     >
-                      <i
-                        // onClick={() => editRoomHandler(room.id)}
-                        style={{ cursor: 'pointer' }}
-                        className='fas fa-edit'
-                      ></i>
+                      <Link to={`/admin/guest/${guest.id}/edit`}>
+                        <i
+                          style={{ cursor: 'pointer', color: '#000000' }}
+                          className='fas fa-edit'
+                        ></i>
+                      </Link>
                       <i
                         // onClick={() => deleteRoomHandler(room.id)}
                         style={{ color: 'red', cursor: 'pointer' }}

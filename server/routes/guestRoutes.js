@@ -3,12 +3,21 @@ const {
   getGuests,
   getProfile,
   updateProfile,
+  getGuestById,
+  updateGuest,
+  deleteGuest,
 } = require('../controller/guestController');
 const { checkAuth, checkAdmin } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
 router.get('/', checkAdmin, getGuests);
+
+router
+  .route('/:id')
+  .get(checkAdmin, getGuestById)
+  .put(checkAdmin, updateGuest)
+  .delete(checkAdmin, deleteGuest);
 
 router
   .route('/profile')

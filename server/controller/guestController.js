@@ -13,6 +13,86 @@ const getGuests = async (req, res, next) => {
   }
 };
 
+// @desc    Fetch a single guest by Id
+// @route   GET /api/guests/:id
+// @access  Admin only
+const getGuestById = async (req, res, next) => {
+  try {
+    const results = await db.query('SELECT * FROM guests WHERE id = $1', [
+      req.params.id,
+    ]);
+
+    if (results.rows.length === 0) {
+      res.status(404);
+      throw new Error('Guest not found');
+    }
+
+    res.json(results.rows[0]);
+  } catch (err) {
+    const newError = new Error(err);
+    next(newError);
+  }
+};
+
+// @desc    Update gues
+// @route   PUT /api/guests/:id
+// @access  Private/Admin
+const updateGuest = async (req, res, next) => {
+  try {
+    const guestResults = await db.query('SELECT * FROM guests WHERE id = $1', [
+      req.params.id,
+    ]);
+
+    if (guestResults.rows.length === 0) {
+      res.status(404);
+      throw new Error('Guest not found');
+    }
+
+    const guest = guestResults.rows[0];
+
+    let { email, phone, title, isAdmin } = req.body;
+
+    email =
+      guest.auth_provider_name === 'google' || !email ? guest.email : email;
+    phone = phone || guest.phone;
+    title = title || guest.title;
+    isAdmin = isAdmin === undefined ? guest.isAdmin : isAdmin;
+
+    const query = {
+      text: `UPDATE guests SET (phone, email, title, is_admin) = ($1, $2, $3, $4) 
+             WHERE id = $5 RETURNING *`,
+      values: [phone, email, title, isAdmin, user.id],
+    };
+
+    const results = await db.query(query);
+
+    res.json(results.rows[0]);
+  } catch (err) {
+    next(err);
+  }
+};
+
+// @desc    Delete a guest by Id
+// @route   DELETE /api/guests/:id
+// @access  Private/Admin
+const deleteGuest = async (req, res, next) => {
+  try {
+    const results = await db.query(
+      'DELETE FROM guests WHERE id = $1 RETURNING id;',
+      [req.params.id]
+    );
+
+    if (results.rowCount || results.rows.length != 0) {
+      res.json({ message: 'Guest Deleted Successfully' });
+    } else {
+      res.status(404);
+      throw new Error('Guest Not found');
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
 const getProfile = async (req, res, next) => {
   try {
     const user = req.user;
@@ -123,4 +203,12 @@ const updateProfile = async (req, res, next) => {
   }
 };
 
-module.exports = { getGuests, createGuest, getProfile, updateProfile };
+module.exports = {
+  getGuests,
+  getGuestById,
+  updateGuest,
+  deleteGuest,
+  createGuest,
+  getProfile,
+  updateProfile,
+};
