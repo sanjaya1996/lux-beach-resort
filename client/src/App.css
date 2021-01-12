@@ -70,6 +70,10 @@ h6 {
   text-transform: uppercase;
   cursor: pointer;
 }
+.btn-no-color {
+  background: var(--mainWhite);
+  border: none;
+}
 .action-btn {
   /* text styles */
   font-size: 20px;
@@ -86,6 +90,10 @@ h6 {
 .btn-primary:hover {
   background: transparent;
   color: var(--primaryColor);
+}
+.btn-no-color:hover {
+  background: var(--primaryColor);
+  color: var(--mainWhite);
 }
 
 .action-btn:hover {
@@ -651,7 +659,7 @@ h6 {
 /* end of rooms fitler*/
 
 /* Login form */
-.edit-room {
+.edit-form-screen {
   padding: 3rem 5rem;
   max-width: 50rem;
 }

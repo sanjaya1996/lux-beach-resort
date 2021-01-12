@@ -56,6 +56,10 @@ const OrderDetailsScreen = ({ history, match }) => {
 
   return (
     <div className='screen'>
+      <button className='btn-primary btn-no-color' onClick={history.goBack}>
+        go back
+      </button>
+
       {errorPickedUp && (
         <AlertBox
           message={'Error! ' + errorPickedUp}

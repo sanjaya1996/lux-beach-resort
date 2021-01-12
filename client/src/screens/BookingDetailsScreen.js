@@ -65,6 +65,11 @@ const BookingDetailsScreen = ({ history, match }) => {
 
   return (
     <div className='bookingDetails-screen'>
+      <div style={{ paddingTop: '1em', paddingLeft: '1em' }}>
+        <button className='btn-primary btn-no-color' onClick={history.goBack}>
+          go back
+        </button>
+      </div>
       {errorPay && <AlertBox message={errorPay} onClose={alertCloseHandler} />}
       {success && (
         <AlertBox

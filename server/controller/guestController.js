@@ -61,7 +61,7 @@ const updateGuest = async (req, res, next) => {
     const query = {
       text: `UPDATE guests SET (phone, email, title, is_admin) = ($1, $2, $3, $4) 
              WHERE id = $5 RETURNING *`,
-      values: [phone, email, title, isAdmin, user.id],
+      values: [phone, email, title, isAdmin, guest.id],
     };
 
     const results = await db.query(query);

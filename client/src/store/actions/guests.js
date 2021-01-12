@@ -86,12 +86,22 @@ export const deleteGuest = (id) => {
   };
 };
 
-export const updateGuest = (id) => {
+export const updateGuest = (id, email, phone, title, isAdmin) => {
   return async (dispatch) => {
     try {
       dispatch({ type: GUEST_UPDATE_REQUEST });
 
-      await axios.put(`/api/guests/${id}`);
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+
+      await axios.put(
+        `/api/guests/${id}`,
+        { email, phone, title, isAdmin },
+        config
+      );
 
       dispatch({ type: GUEST_UPDATE_SUCCESS });
     } catch (error) {

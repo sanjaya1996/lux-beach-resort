@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -9,10 +11,10 @@ import {
   ROOM_UPDATE_RESET,
 } from '../../store/reducers/rooms';
 import AlertBox from '../../components/AlertBox';
+import Title from '../../components/Title';
 
 const EditRoomScreen = ({ match, history }) => {
   const roomId = match.params.id;
-  console.log(roomId);
 
   const [uploading, setUploading] = useState(false);
   const [name, setName] = useState('');
@@ -152,7 +154,13 @@ const EditRoomScreen = ({ match, history }) => {
   }
 
   return (
-    <div className='edit-room'>
+    <div className='edit-form-screen'>
+      <div style={{ paddingBottom: '1em' }}>
+        <Link to='/admin/roomlist' className='btn-primary btn-no-color'>
+          go back
+        </Link>
+      </div>
+      <Title title={roomId ? 'Edit room' : 'Create room'} />
       {((roomId && errorUpdate) || (!roomId && errorCreate)) && (
         <AlertBox
           message={roomId ? errorUpdate : errorCreate}

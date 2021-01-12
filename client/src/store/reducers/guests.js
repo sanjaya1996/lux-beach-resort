@@ -43,7 +43,7 @@ export const guestDetailsReducer = (state = {}, action) => {
     case GUEST_DETAILS_REQUEST:
       return { ...state, loading: true };
     case GUEST_DETAILS_SUCCESS:
-      return { loading: false, guests: action.payload };
+      return { loading: false, guest: action.payload };
     case GUEST_DETAILS_FAIL:
       return { ...state, loading: false, error: action.payload };
     default:
