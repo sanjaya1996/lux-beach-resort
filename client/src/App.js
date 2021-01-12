@@ -22,7 +22,7 @@ import MenuScreen from './screens/meal/MenuScreen';
 import PlaceOrderScreen from './screens/meal/PlaceOrderScreen';
 import AdminOrderListScreen from './screens/meal/AdminOrderListScreen';
 import OrderDetailsScreen from './screens/meal/OrderDetailsScreen';
-import AdminMealListScreen from './screens/AdminMealListScreen';
+import AdminMealListScreen from './screens/meal/AdminMealListScreen';
 import AdminGuestListScreen from './screens/AdminGuestListScreen';
 import EditGuestScreen from './screens/EditGuestScreen';
 // import Loading from './components/Loading';

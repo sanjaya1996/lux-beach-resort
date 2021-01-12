@@ -1,9 +1,14 @@
 const express = require('express');
-const { getMeals, getMealById } = require('../controller/menuController');
+const { checkAdmin } = require('../middleware/authMiddleware');
+const {
+  getMeals,
+  getMealById,
+  deleteMeal,
+} = require('../controller/menuController');
 
 const router = express.Router();
 
 router.get('/', getMeals);
-router.get('/:id', getMealById);
+router.route('/:id').get(getMealById).delete(checkAdmin, deleteMeal);
 
 module.exports = router;

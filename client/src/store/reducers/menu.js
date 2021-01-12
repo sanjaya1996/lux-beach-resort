@@ -1,4 +1,7 @@
 import {
+  MEAL_DELETE_FAIL,
+  MEAL_DELETE_REQUEST,
+  MEAL_DELETE_SUCCESS,
   MEAL_DETAILS_FAIL,
   MEAL_DETAILS_REQUEST,
   MEAL_DETAILS_SUCCESS,
@@ -9,6 +12,7 @@ import {
 
 export const MEAL_LIST_FILTER = 'MEAL_LIST_FILTER';
 export const MEAL_LIST_FILTER_RESET = 'MEAL_LIST_FILTER_RESET';
+export const MEAL_DELETE_RESET = 'MEAL_DELETE_RESET';
 
 export const mealListReducer = (
   state = { meals: [], filteredMeals: [] },
@@ -80,6 +84,21 @@ export const mealDetailsReducer = (state = {}, action) => {
       return { loading: false, meal: action.payload };
     case MEAL_DETAILS_FAIL:
       return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const mealDeleteReducer = (state = {}, action) => {
+  switch (action.type) {
+    case MEAL_DELETE_REQUEST:
+      return { loading: true };
+    case MEAL_DELETE_SUCCESS:
+      return { loading: false, success: true };
+    case MEAL_DELETE_FAIL:
+      return { loading: false, error: action.payload };
+    case MEAL_DELETE_RESET:
+      return {};
     default:
       return state;
   }

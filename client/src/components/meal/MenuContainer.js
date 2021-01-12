@@ -14,7 +14,7 @@ const MenuContainer = () => {
   const { loading, error, meals, filteredMeals } = mealList;
 
   useEffect(() => {
-    dispatch(menuActions.listMeal());
+    dispatch(menuActions.listMeals());
   }, [dispatch]);
 
   if (loading) {

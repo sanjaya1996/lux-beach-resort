@@ -910,6 +910,11 @@ td {
   text-transform: capitalize;
 }
 
+td img {
+  max-height: 4em;
+  max-width: 4em;
+}
+
 tr:nth-child(even) {
   background-color: var(--mainGrey);
 }

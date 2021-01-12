@@ -8,7 +8,11 @@ export const MEAL_DETAILS_REQUEST = 'MEAL_DETAILS_REQUEST';
 export const MEAL_DETAILS_SUCCESS = 'MEAL_DETAILS_SUCCESS';
 export const MEAL_DETAILS_FAIL = 'MEAL_DETAILS_FAIL';
 
-export const listMeal = () => {
+export const MEAL_DELETE_REQUEST = 'MEAL_DELETE_REQUEST';
+export const MEAL_DELETE_SUCCESS = 'MEAL_DELETE_SUCCESS';
+export const MEAL_DELETE_FAIL = 'MEAL_DELETE_FAIL';
+
+export const listMeals = () => {
   return async (dispatch) => {
     try {
       dispatch({ type: MEAL_LIST_REQUEST });
@@ -39,6 +43,26 @@ export const listMealDetails = (id) => {
     } catch (error) {
       dispatch({
         type: MEAL_DETAILS_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
+};
+
+export const deleteMeal = (id) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: MEAL_DELETE_REQUEST });
+
+      await axios.delete(`/api/menu/${id}`);
+
+      dispatch({ type: MEAL_DELETE_SUCCESS });
+    } catch (error) {
+      dispatch({
+        type: MEAL_DELETE_FAIL,
         payload:
           error.response && error.response.data.message
             ? error.response.data.message

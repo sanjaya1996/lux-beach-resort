@@ -26,4 +26,25 @@ const getMealById = async (req, res, next) => {
   }
 };
 
-module.exports = { getMeals, getMealById };
+// @desc    Delete a meal by Id
+// @route   DELETE /api/menu/:id
+// @access  Private/Admin
+const deleteMeal = async (req, res, next) => {
+  try {
+    const results = await db.query(
+      'DELETE FROM meals WHERE id = $1 RETURNING id;',
+      [req.params.id]
+    );
+
+    if (results.rowCount || results.rows.length != 0) {
+      res.json({ message: 'Meal Deleted Successfully' });
+    } else {
+      res.status(404);
+      throw new Error('Meal Not found');
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { getMeals, getMealById, deleteMeal };
