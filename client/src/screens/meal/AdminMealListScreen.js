@@ -34,12 +34,16 @@ const AdminMealListScreen = ({ history }) => {
 
   const deleteMealHandler = (id) => {
     if (
-      window.confirm('Are you Sure? Do you really want to delete this guest?')
+      window.confirm('Are you Sure? Do you really want to delete this Meal?')
     ) {
       dispatch(menuActions.deleteMeal(id));
     } else {
       return;
     }
+  };
+
+  const createMealHandler = () => {
+    history.push('/admin/meal/edit');
   };
 
   const alertCloseHandler = () => {
@@ -55,7 +59,7 @@ const AdminMealListScreen = ({ history }) => {
   }
 
   if (meals.length === 0) {
-    return <AlertBox message='Your bookings is empty!' type='success' noBtn />;
+    return <AlertBox message=' No meals in your menu!' type='success' noBtn />;
   }
 
   return (
@@ -68,13 +72,29 @@ const AdminMealListScreen = ({ history }) => {
       )}
       {successDelete && (
         <AlertBox
-          message='Guest deleted successfully'
+          message='Meal deleted successfully'
           type='message'
           onClose={alertCloseHandler}
         />
       )}
 
-      <Title title='all Meals' />
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          marginBottom: 0,
+        }}
+      >
+        <Title title='Meals' />
+        <button
+          onClick={createMealHandler}
+          style={{ marginBottom: '2rem' }}
+          className='btn-primary'
+        >
+          <i className='fas fa-plus'></i> Create Meal
+        </button>
+      </div>
+
       <div style={{ overflowX: 'auto' }}>
         <table>
           <tbody>
@@ -106,7 +126,7 @@ const AdminMealListScreen = ({ history }) => {
                       justifyContent: 'space-between',
                     }}
                   >
-                    <Link to='/'>
+                    <Link to={`/admin/meal/${item.id}/edit`}>
                       <i
                         style={{
                           cursor: 'pointer',

@@ -25,6 +25,7 @@ import OrderDetailsScreen from './screens/meal/OrderDetailsScreen';
 import AdminMealListScreen from './screens/meal/AdminMealListScreen';
 import AdminGuestListScreen from './screens/AdminGuestListScreen';
 import EditGuestScreen from './screens/EditGuestScreen';
+import EditMealScreen from './screens/meal/EditMealScreen';
 // import Loading from './components/Loading';
 
 const App = () => {
@@ -59,6 +60,7 @@ const App = () => {
         <Route path='/admin/bookinglist' component={BookingListScreen} />
         <Route path='/admin/orderlist' component={AdminOrderListScreen} />
         <Route path='/admin/meallist' component={AdminMealListScreen} />
+        <Route path='/admin/meal/:id?/edit' component={EditMealScreen} />
         <Route path='/admin/guestlist' component={AdminGuestListScreen} />
         <Route path='/admin/guest/:id/edit' component={EditGuestScreen} />
         <Route path='/menu' component={MenuScreen} />

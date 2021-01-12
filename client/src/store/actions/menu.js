@@ -91,7 +91,7 @@ export const createMeal = (meal) => {
         },
       };
 
-      const { data } = await axios.post(`/api/meals`, meal, config);
+      const { data } = await axios.post('/api/menu', meal, config);
 
       dispatch({ type: MEAL_CREATE_SUCCESS, payload: data });
     } catch (error) {
@@ -117,7 +117,7 @@ export const updateMeal = (meal) => {
         },
       };
 
-      const { data } = await axios.put(`/api/meals/${meal.id}`, meal, config);
+      const { data } = await axios.put(`/api/menu/${meal.id}`, meal, config);
 
       dispatch({ type: MEAL_UPDATE_SUCCESS, payload: data });
     } catch (error) {
