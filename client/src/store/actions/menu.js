@@ -12,6 +12,14 @@ export const MEAL_DELETE_REQUEST = 'MEAL_DELETE_REQUEST';
 export const MEAL_DELETE_SUCCESS = 'MEAL_DELETE_SUCCESS';
 export const MEAL_DELETE_FAIL = 'MEAL_DELETE_FAIL';
 
+export const MEAL_CREATE_REQUEST = 'MEAL_CREATE_REQUEST';
+export const MEAL_CREATE_SUCCESS = 'MEAL_CREATE_SUCCESS';
+export const MEAL_CREATE_FAIL = 'MEAL_CREATE_FAIL';
+
+export const MEAL_UPDATE_REQUEST = 'MEAL_UPDATE_REQUEST';
+export const MEAL_UPDATE_SUCCESS = 'MEAL_UPDATE_SUCCESS';
+export const MEAL_UPDATE_FAIL = 'MEAL_UPDATE_FAIL';
+
 export const listMeals = () => {
   return async (dispatch) => {
     try {
@@ -63,6 +71,58 @@ export const deleteMeal = (id) => {
     } catch (error) {
       dispatch({
         type: MEAL_DELETE_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
+};
+
+export const createMeal = (meal) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: MEAL_CREATE_REQUEST });
+
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+
+      const { data } = await axios.post(`/api/meals`, meal, config);
+
+      dispatch({ type: MEAL_CREATE_SUCCESS, payload: data });
+    } catch (error) {
+      dispatch({
+        type: MEAL_CREATE_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
+};
+
+export const updateMeal = (meal) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: MEAL_UPDATE_REQUEST });
+
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+
+      const { data } = await axios.put(`/api/meals/${meal.id}`, meal, config);
+
+      dispatch({ type: MEAL_UPDATE_SUCCESS, payload: data });
+    } catch (error) {
+      dispatch({
+        type: MEAL_UPDATE_FAIL,
         payload:
           error.response && error.response.data.message
             ? error.response.data.message

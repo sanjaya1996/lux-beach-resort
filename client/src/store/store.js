@@ -26,9 +26,11 @@ import {
   userUpdateReducer,
 } from './reducers/guests';
 import {
+  mealCreateReducer,
   mealDeleteReducer,
   mealDetailsReducer,
   mealListReducer,
+  mealUpdateReducer,
 } from './reducers/menu';
 import {
   mealOrderDetailsReducer,
@@ -66,6 +68,8 @@ const rootReducer = combineReducers({
   mealOrderListMy: mealOrderListMyReducer,
   mealOrderDetails: mealOrderDetailsReducer,
   mealDelete: mealDeleteReducer,
+  mealCreate: mealCreateReducer,
+  mealUpdate: mealUpdateReducer,
   orderPickedUp: orderPickedUpReducer,
   guestList: guestListReducer,
   guestDetails: guestDetailsReducer,
