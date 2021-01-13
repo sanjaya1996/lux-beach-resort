@@ -108,7 +108,7 @@ const MealsFilter = ({ meals }) => {
             type='range'
             name='price'
             min={0}
-            max={maxPrice}
+            max={Math.ceil(maxPrice)}
             id='price'
             value={formState.price}
             onChange={(e) => inputChangeHandler(e)}

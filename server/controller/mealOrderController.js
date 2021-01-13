@@ -1,3 +1,4 @@
+const format = require('pg-format');
 const db = require('../config/db.js');
 
 // @desc    Fetch all food orders
@@ -110,12 +111,13 @@ const createMealOrder = async (req, res, next) => {
     }
 
     const { meals, pickupTime, pickupNote, amount } = req.body;
+    console.log(pickupTime);
     const isPaid = req.is_paid;
 
     const insertOrderquery = {
       text:
         'INSERT INTO orders (guest_id, pickup_time, pickup_note, total_amount, is_paid) VALUES($1, $2, $3, $4, $5) RETURNING id',
-      values: [userId, pickupTime, pickupNote, amount, isPaid],
+      values: [userId, new Date(pickupTime), pickupNote, amount, isPaid],
     };
 
     const results = await db.query(insertOrderquery);
