@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useReducer } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useReducer,
+  useMemo,
+  useState,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import StripeCheckout from 'react-stripe-checkout';
@@ -55,6 +61,15 @@ const formReducer = (state, action) => {
 const PaymentScreen = ({ match, history }) => {
   const { id, guests, chkin, chkout } = match.params;
 
+  const [showError, setShowError] = useState(false);
+
+  const currentUser = useSelector((state) => state.currentUser);
+  const { user } = currentUser;
+
+  const getUser = useMemo(() => {
+    return user;
+  }, [user]);
+
   const dispatch = useDispatch();
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
@@ -104,19 +119,32 @@ const PaymentScreen = ({ match, history }) => {
 
   // Validate url parameters and validate in backend
   useEffect(() => {
-    dispatch(roomActions.checkAvailability(id, chkin, chkout, guests));
-  }, [dispatch, id, chkin, chkout, guests]);
-
-  // Redirect to
-  useEffect(() => {
     if (success) {
       const title = successMessage.title;
       const message = successMessage.message;
       history.push(`/success/${title}/${message}`);
       dispatch({ type: ROOM_BOOKING_RESET });
       dispatch({ type: CHECK_AVAILABILITY_RESET });
+    } else {
+      dispatch(roomActions.checkAvailability(id, chkin, chkout, guests));
     }
-  }, [success, successMessage, history, dispatch]);
+  }, [dispatch, success, successMessage, history, id, chkin, chkout, guests]);
+
+  useEffect(() => {
+    if (user) {
+      const type = FORM_INPUT_UPDATE;
+      const isValid = true;
+      const { email, name, title, phone } = user;
+      const fName = name.split(' ')[0];
+      const lName = name.split(' ')[1];
+
+      dispatchFormState({ type, input: 'email', value: email, isValid });
+      dispatchFormState({ type, input: 'fName', value: fName, isValid });
+      dispatchFormState({ type, input: 'lName', value: lName, isValid });
+      dispatchFormState({ type, input: 'title', value: title, isValid });
+      dispatchFormState({ type, input: 'mobileNumber', value: phone, isValid });
+    }
+  }, [user]);
 
   const makePayment = async (token) => {
     const name =
@@ -264,11 +292,14 @@ const PaymentScreen = ({ match, history }) => {
             type='email'
             name='email'
             errorText='Email not valid!'
-            value={formState.inputValues.email}
+            disabled={user && user.auth_provider_name === 'google'}
             onInputChange={inputChangeHandler}
-            initiallyValid={false}
+            initialValue={user ? user.email : ''}
+            initiallyValid={user ? true : false}
             required
             email
+            showError={showError}
+            getUser={getUser}
           />
         </div>
 
@@ -278,10 +309,13 @@ const PaymentScreen = ({ match, history }) => {
             type='text'
             name='fName'
             errorText='name not valid!'
-            value={formState.inputValues.fName}
+            disabled={user ? true : false}
             onInputChange={inputChangeHandler}
-            initiallyValid={false}
+            initialValue={user ? user.name.split(' ')[0] : ''}
+            initiallyValid={user ? true : false}
             required
+            showError={showError}
+            getUser={getUser}
           />
         </div>
 
@@ -290,9 +324,11 @@ const PaymentScreen = ({ match, history }) => {
             label='Last Name: '
             type='text'
             name='lName'
-            value={formState.inputValues.lName}
+            disabled={user ? true : false}
             onInputChange={inputChangeHandler}
+            initialValue={user ? user.name.split(' ')[1] : ''}
             initiallyValid={true}
+            getUser={getUser}
           />
         </div>
 
@@ -301,11 +337,12 @@ const PaymentScreen = ({ match, history }) => {
             label='Title: '
             type='select'
             name='title'
-            value={formState.inputValues.title}
             options={['Mr', 'Dr', 'Miss', 'Mr & Mrs', 'Mrs', 'Ms']}
             onInputChange={inputChangeHandler}
+            initialValue={user ? user.title : 'Mr'}
             initiallyValid={true}
             required
+            getUser={getUser}
           />
         </div>
 
@@ -315,15 +352,19 @@ const PaymentScreen = ({ match, history }) => {
             type='text'
             name='mobileNumber'
             errorText='mobile not valid!'
-            value={formState.inputValues.mobileNumber}
             onInputChange={inputChangeHandler}
-            initiallyValid={false}
+            initialValue={user ? user.phone : ''}
+            initiallyValid={user ? true : false}
             required
+            minLength={10}
+            showError={showError}
+            getUser={getUser}
           />
         </div>
         <div className='form-group item-f note-input'>
           <Input
-            label='note: '
+            label='Booking Note: '
+            placeholder='Leave a note for your booking...'
             type='text'
             name='note'
             value={formState.inputValues.note}
@@ -351,7 +392,10 @@ const PaymentScreen = ({ match, history }) => {
         ) : (
           <button
             type='button'
-            onClick={() => alert('Your Details are not valid!')}
+            onClick={() => {
+              alert('Your Details are not valid!');
+              setShowError(true);
+            }}
             className='btn-primary action-btn'
           >
             {`Pay for $${total}`}

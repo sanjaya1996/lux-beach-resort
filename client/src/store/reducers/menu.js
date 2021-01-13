@@ -21,6 +21,7 @@ export const MEAL_LIST_FILTER_RESET = 'MEAL_LIST_FILTER_RESET';
 export const MEAL_DELETE_RESET = 'MEAL_DELETE_RESET';
 export const MEAL_CREATE_RESET = 'MEAL_CREATE_RESET';
 export const MEAL_UPDATE_RESET = 'MEAL_UPDATE_RESET';
+export const MEAL_DETAILS_RESET = 'MEAL_DETAILS_RESET';
 
 export const mealListReducer = (
   state = { meals: [], filteredMeals: [] },
@@ -92,6 +93,8 @@ export const mealDetailsReducer = (state = {}, action) => {
       return { loading: false, meal: action.payload };
     case MEAL_DETAILS_FAIL:
       return { loading: false, error: action.payload };
+    case MEAL_DETAILS_RESET:
+      return {};
     default:
       return state;
   }

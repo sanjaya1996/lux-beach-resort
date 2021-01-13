@@ -1,4 +1,10 @@
-import React, { useReducer, useCallback, useEffect, useState } from 'react';
+import React, {
+  useReducer,
+  useCallback,
+  useEffect,
+  useState,
+  useMemo,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import DatePicker from 'react-datepicker';
 import StripeCheckout from 'react-stripe-checkout';
@@ -44,6 +50,13 @@ const formReducer = (state, action) => {
 const PlaceOrderScreen = ({ history }) => {
   const [showError, setShowError] = useState(false);
 
+  const currentUser = useSelector((state) => state.currentUser);
+  const { user } = currentUser;
+
+  const getUser = useMemo(() => {
+    return user;
+  }, [user]);
+
   const cart = useSelector((state) => state.cart);
   const { meals } = cart;
 
@@ -63,16 +76,6 @@ const PlaceOrderScreen = ({ history }) => {
 
   const mealOrder = useSelector((state) => state.mealOrder);
   const { loading, error, success } = mealOrder;
-
-  useEffect(() => {
-    if (success) {
-      const title = 'Thank You !';
-      const message =
-        'Your order has been placed successfully, Please show OrderId from your email while picking up your food.';
-      history.push(`/success/${title}/${message}`);
-      dispatch({ type: MEAL_ORDER_RESET });
-    }
-  }, [success, dispatch, history]);
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
@@ -95,6 +98,28 @@ const PlaceOrderScreen = ({ history }) => {
     },
     formIsValid: false,
   });
+
+  useEffect(() => {
+    if (success) {
+      const title = 'Thank You !';
+      const message =
+        'Your order has been placed successfully, Please show OrderId from your email while picking up your food.';
+      history.push(`/success/${title}/${message}`);
+      dispatch({ type: MEAL_ORDER_RESET });
+    } else if (user) {
+      const type = FORM_INPUT_UPDATE;
+      const isValid = true;
+      const { email, name, title, phone } = user;
+      const fName = name.split(' ')[0];
+      const lName = name.split(' ')[1];
+
+      dispatchFormState({ type, input: 'email', value: email, isValid });
+      dispatchFormState({ type, input: 'fName', value: fName, isValid });
+      dispatchFormState({ type, input: 'lName', value: lName, isValid });
+      dispatchFormState({ type, input: 'title', value: title, isValid });
+      dispatchFormState({ type, input: 'mobileNumber', value: phone, isValid });
+    }
+  }, [success, dispatch, history, user]);
 
   const makePayment = (token) => {
     const name =
@@ -249,12 +274,14 @@ const PlaceOrderScreen = ({ history }) => {
               type='email'
               name='email'
               errorText='Email not valid!'
+              disabled={user && user.auth_provider_name === 'google'}
               onInputChange={inputChangeHandler}
-              initialValue=''
-              initiallyValid={false}
+              initialValue={user ? user.email : ''}
+              initiallyValid={user ? true : false}
               required
               email
               showError={showError}
+              getUser={getUser}
             />
           </div>
 
@@ -264,11 +291,13 @@ const PlaceOrderScreen = ({ history }) => {
               type='text'
               name='fName'
               errorText='name not valid!'
+              disabled={user ? true : false}
               onInputChange={inputChangeHandler}
-              initialValue=''
-              initiallyValid={false}
+              initialValue={user ? user.name.split(' ')[0] : ''}
+              initiallyValid={user ? true : false}
               required
               showError={showError}
+              getUser={getUser}
             />
           </div>
 
@@ -277,10 +306,11 @@ const PlaceOrderScreen = ({ history }) => {
               label='Last Name: '
               type='text'
               name='lName'
+              disabled={user ? true : false}
               onInputChange={inputChangeHandler}
-              initialValue=''
+              initialValue={user ? user.name.split(' ')[1] : ''}
               initiallyValid={true}
-              showError={showError}
+              getUser={getUser}
             />
           </div>
 
@@ -291,10 +321,10 @@ const PlaceOrderScreen = ({ history }) => {
               name='title'
               options={['Mr', 'Dr', 'Miss', 'Mr & Mrs', 'Mrs', 'Ms']}
               onInputChange={inputChangeHandler}
-              initialValue='Mr'
+              initialValue={user ? user.title : 'Mr'}
               initiallyValid={true}
-              required
               showError={showError}
+              getUser={getUser}
             />
           </div>
 
@@ -305,10 +335,11 @@ const PlaceOrderScreen = ({ history }) => {
               name='mobileNumber'
               errorText='mobile not valid!'
               onInputChange={inputChangeHandler}
-              initialValue=''
-              initiallyValid={false}
+              initialValue={user ? user.phone : ''}
+              initiallyValid={user ? true : false}
               required
               showError={showError}
+              getUser={getUser}
             />
           </div>
         </form>

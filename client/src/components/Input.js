@@ -31,12 +31,15 @@ const Input = (props) => {
     initialValue,
     initiallyValid,
     onInputChange,
+    disabled,
     errorText,
     showError,
   } = props;
 
+  const getUser = props.getUser;
+
   const [inputState, dispatch] = useReducer(inputReducer, {
-    value: initialValue ? initialValue : '',
+    value: initialValue || initialValue === 0 ? initialValue : '',
     isValid: initiallyValid,
     touched: false,
   });
@@ -44,6 +47,16 @@ const Input = (props) => {
   useEffect(() => {
     onInputChange(name, inputState.value, inputState.isValid);
   }, [name, inputState, onInputChange]);
+
+  useEffect(() => {
+    if (getUser) {
+      dispatch({
+        type: INPUT_CHANGE,
+        value: initialValue,
+        isValid: initiallyValid,
+      });
+    }
+  }, [getUser]);
 
   const textChangeHandler = (event) => {
     const inputText = event.target.value;
@@ -54,6 +67,9 @@ const Input = (props) => {
       isValid = false;
     }
     if (props.email && !emailRegex.test(inputText.toLowerCase())) {
+      isValid = false;
+    }
+    if (props.minLength != null && inputText.trim().length < props.minLength) {
       isValid = false;
     }
     dispatch({ type: INPUT_CHANGE, value: inputText, isValid });
@@ -95,10 +111,24 @@ const Input = (props) => {
             </option>
           ))}
         </select>
+      ) : type === 'textarea' ? (
+        <textarea
+          name={name}
+          value={inputState.value}
+          onChange={textChangeHandler}
+          onBlur={lostFocusHandler}
+          className={`form-control ${
+            ((inputState.touched && !inputState.isValid) ||
+              (showError && !inputState.isValid)) &&
+            'input-error'
+          }`}
+          style={{ height: 100 }}
+        />
       ) : (
         <input
           type={type}
           name={name}
+          disabled={disabled}
           value={inputState.value}
           placeholder={placeholder}
           onChange={textChangeHandler}

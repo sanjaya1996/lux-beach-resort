@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback, useReducer } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 // import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,30 +8,36 @@ import { useDispatch, useSelector } from 'react-redux';
 import Loading from '../../components/Loading';
 import AlertBox from '../../components/AlertBox';
 import Title from '../../components/Title';
+import Input from '../../components/Input';
 import * as menuActions from '../../store/actions/menu';
 import {
   MEAL_CREATE_RESET,
   MEAL_UPDATE_RESET,
+  MEAL_DETAILS_RESET,
 } from '../../store/reducers/menu';
+import customFormReducer from '../../reusableFunctions/formReducer';
+
+const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
+
+const formReducer = (state, action) => {
+  return customFormReducer(state, action, FORM_INPUT_UPDATE);
+};
 
 const EditMealScreen = ({ match, history }) => {
   const mealId = match.params.id;
 
-  const [name, setName] = useState('');
-  const [category, setCategory] = useState('');
-  const [price, setPrice] = useState(0);
-  const [imageUrl, setImageUrl] = useState('');
-  const [duration, setDuration] = useState(0);
-  const [ingredients, setIngredients] = useState('');
-  const [isGlutenFree, setIsGlutenFree] = useState(false);
-  const [isVegan, setIsVegan] = useState(false);
-  const [isVegeterian, setIsVegeterian] = useState(false);
-  const [isLactoseFree, setIsLactoseFree] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [errorUpload, setErrorUpload] = useState(null);
+  const [showError, setShowError] = useState(false);
 
   const dispatch = useDispatch();
 
   const mealDetails = useSelector((state) => state.mealDetails);
-  const { loading, meal, error } = mealDetails;
+  let { loading, meal, error } = mealDetails;
+
+  if (!mealId) {
+    meal = null;
+  }
 
   const mealCreate = useSelector((state) => state.mealCreate);
   const {
@@ -46,32 +53,131 @@ const EditMealScreen = ({ match, history }) => {
     error: errorUpdate,
   } = mealUpdate;
 
+  const [formState, dispatchFormState] = useReducer(formReducer, {
+    inputValues: {
+      name: '',
+      category: '',
+      price: 0,
+      imageUrl: '',
+      duration: 0,
+      ingredients: '',
+      isGlutenFree: false,
+      isVegan: false,
+      isVegeterian: false,
+      isLactoseFree: false,
+    },
+    inputValidities: {
+      name: false,
+      category: false,
+      price: true,
+      imageUrl: false,
+      duration: true,
+      ingredients: false,
+      isGlutenFree: true,
+      isVegan: true,
+      isVegeterian: true,
+      isLactoseFree: true,
+    },
+    formIsValid: meal ? true : false,
+  });
+
+  console.log(formState.inputValues);
+
   useEffect(() => {
     if (successCreate || successUpdate) {
       dispatch({ type: mealId ? MEAL_UPDATE_RESET : MEAL_CREATE_RESET });
       history.push('/admin/meallist');
     } else if (mealId) {
       dispatch(menuActions.listMealDetails(mealId));
+    } else {
+      dispatch({ type: MEAL_DETAILS_RESET });
     }
   }, [dispatch, mealId, history, successUpdate, successCreate]);
 
   useEffect(() => {
-    if (meal && mealId) {
-      setName(meal.name);
-      setCategory(meal.category);
-      setPrice(Number(meal.price));
-      setImageUrl(meal.imageurl);
-      setDuration(Number(meal.duration));
-      setIngredients(meal.ingredients);
-      setIsGlutenFree(meal.is_gluten_free);
-      setIsVegan(meal.is_vegan);
-      setIsVegeterian(meal.is_vegeterian);
-      setIsLactoseFree(meal.is_lactose_free);
+    if (mealId && meal) {
+      const type = FORM_INPUT_UPDATE;
+      const isValid = true;
+      dispatchFormState({ type, input: 'name', value: meal.name, isValid });
+      dispatchFormState({
+        type,
+        input: 'category',
+        value: meal.category,
+        isValid,
+      });
+      dispatchFormState({
+        type,
+        input: 'price',
+        value: Number(meal.price),
+        isValid,
+      });
+      dispatchFormState({
+        type,
+        input: 'imageUrl',
+        value: meal.imageurl,
+        isValid,
+      });
+      dispatchFormState({
+        type,
+        input: 'duration',
+        value: Number(meal.duration),
+        isValid,
+      });
+      dispatchFormState({
+        type,
+        input: 'ingredients',
+        value: meal.ingredients,
+        isValid,
+      });
+      dispatchFormState({
+        type,
+        input: 'isGlutenFree',
+        value: meal.is_gluten_free,
+        isValid,
+      });
+      dispatchFormState({
+        type,
+        input: 'isVegan',
+        value: meal.is_vegan,
+        isValid,
+      });
+      dispatchFormState({
+        type,
+        input: 'isVegeterian',
+        value: meal.is_vegeterian,
+        isValid,
+      });
+      dispatchFormState({
+        type,
+        input: 'isLactoseFree',
+        value: meal.is_lactose_free,
+        isValid,
+      });
     }
-  }, [meal, mealId]);
+  }, [mealId, meal]);
 
   const submitHandler = (e) => {
     e.preventDefault();
+
+    if (!formState.formIsValid) {
+      alert('Form Validation Failed!');
+      setShowError(true);
+      return;
+    }
+
+    const {
+      name,
+      category,
+      price,
+      imageUrl,
+      duration,
+      isGlutenFree,
+      isVegan,
+      isVegeterian,
+      isLactoseFree,
+      ingredients,
+    } = formState.inputValues;
+
     if (mealId) {
       dispatch(
         menuActions.updateMeal({
@@ -106,6 +212,42 @@ const EditMealScreen = ({ match, history }) => {
     }
   };
 
+  const inputChangeHandler = useCallback(
+    (inputIdentifier, inputValue, inputValidity) => {
+      dispatchFormState({
+        type: FORM_INPUT_UPDATE,
+        input: inputIdentifier,
+        isValid: inputValidity,
+        value: inputValue,
+      });
+    },
+    [dispatchFormState]
+  );
+
+  const uploadFileHandler = async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append('mealImage', file);
+    setUploading(true);
+
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      };
+
+      const { data } = await axios.post('/api/upload/meal', formData, config);
+
+      inputChangeHandler('imageUrl', data, true);
+      setUploading(false);
+    } catch (error) {
+      console.log(error);
+      setUploading(false);
+      setErrorUpload(error);
+    }
+  };
+
   const alertCloseHandler = () => {
     dispatch({ type: mealId ? MEAL_UPDATE_RESET : MEAL_CREATE_RESET });
   };
@@ -135,87 +277,91 @@ const EditMealScreen = ({ match, history }) => {
 
       <form onSubmit={submitHandler} className='form-container'>
         <div className='form-group'>
-          <label htmlFor='name'>Meal Name:</label>
-          <input
+          <Input
+            label='Meal Name: '
             type='text'
             name='name'
-            id='name'
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className='form-control'
-          />
-        </div>
-        <div className='form-group'>
-          <label htmlFor='category'>Category:</label>
-          <input
-            type='text'
-            name='category'
-            id='category'
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className='form-control'
-          />
-        </div>
-        <div className='form-group'>
-          <label htmlFor='price'>Price:</label>
-          <input
-            type='number'
-            name='price'
-            id='price'
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            className='form-control'
-          />
-        </div>
-        <div className='form-group'>
-          <label htmlFor='imageUrl'>Image:</label>
-          <input
-            type='text'
-            name='imageUrl'
-            id='imageUrl'
-            value={imageUrl}
-            onChange={(e) => setImageUrl(e.target.value)}
-            className='form-control'
-          />
-        </div>
-        {/* <div className='form-group'>
-        <label htmlFor='images'>Images:</label>
-        {uploading && Loading}
-        <input
-          type='file'
-          name='images'
-          id='images'
-          multiple
-          onChange={uploadFileHandler}
-          className='form-control'
-        />
-        <ul className='extra-list'>
-          {images.map((item, index) => (
-            <li key={index}>- {item}</li>
-          ))}
-        </ul>
-      </div> */}
-        <div className='form-group'>
-          <label htmlFor='capacity'>Duration to Cook (in min):</label>
-          <input
-            type='number'
-            name='duration'
-            id='duration'
-            value={duration}
-            onChange={(e) => setDuration(e.target.value)}
-            className='form-control'
+            errorText='Not valid name!'
+            onInputChange={inputChangeHandler}
+            initialValue={meal ? meal.name : ''}
+            initiallyValid={meal ? true : false}
+            required
+            showError={showError}
           />
         </div>
 
         <div className='form-group'>
-          <label htmlFor='ingredients'>Key Ingredients:</label>
-          <input
+          <Input
+            label='Category: '
+            type='text'
+            name='category'
+            errorText='Not valid category!'
+            onInputChange={inputChangeHandler}
+            initialValue={meal ? meal.category : ''}
+            initiallyValid={meal ? true : false}
+            required
+            showError={showError}
+          />
+        </div>
+
+        <div className='form-group'>
+          <Input
+            label='Price: '
+            type='number'
+            name='price'
+            errorText='Not valid price!'
+            onInputChange={inputChangeHandler}
+            initialValue={meal ? meal.price : 0}
+            initiallyValid={true}
+            required
+            showError={showError}
+          />
+        </div>
+
+        <div className='form-group' style={{ paddingBottom: '1em' }}>
+          <Input
+            label='Image: '
+            type='text'
+            name='imageUrl'
+            errorText='Not valid image url!'
+            onInputChange={inputChangeHandler}
+            initialValue={meal ? meal.imageurl : ''}
+            initiallyValid={meal ? true : false}
+            required
+            minLength={5}
+            showError={showError}
+          />
+          {uploading && <Loading small />}
+          {errorUpload && <AlertBox message={`Error! ` + errorUpload} />}
+          <input type='file' name='imageUrl' onChange={uploadFileHandler} />
+        </div>
+
+        <div className='form-group'>
+          <Input
+            label='Duration to Cook (in mins): '
+            type='number'
+            name='duration'
+            errorText='Not Valid duration!'
+            onInputChange={inputChangeHandler}
+            initialValue={meal ? meal.duration : 0}
+            initiallyValid={true}
+            required
+            showError={showError}
+          />
+        </div>
+
+        <div className='form-group'>
+          <Input
+            label='Key Ingredients: '
             type='text'
             name='ingredients'
-            id='ingredients'
-            value={ingredients}
-            onChange={(e) => setIngredients(e.target.value)}
-            className='form-control'
+            errorText='Not valid ingredients!'
+            onInputChange={inputChangeHandler}
+            initialValue={meal ? meal.ingredients : ''}
+            initiallyValid={meal ? true : false}
+            required
+            minLength={10}
+            showError={showError}
           />
         </div>
 
@@ -223,40 +369,44 @@ const EditMealScreen = ({ match, history }) => {
           <div className='single-extra'>
             <input
               type='checkbox'
-              name='vegan'
-              id='vegan'
-              checked={isVegan}
-              onChange={(e) => setIsVegan(e.target.checked)}
+              name='isVegan'
+              checked={formState.inputValues.isVegan}
+              onChange={(e) =>
+                inputChangeHandler('isVegan', e.target.checked, true)
+              }
             />
             <label htmlFor='vegan'>vegan</label>
           </div>
           <div className='single-extra'>
             <input
               type='checkbox'
-              name='vegeterian'
-              id='vegeterian'
-              checked={isVegeterian}
-              onChange={(e) => setIsVegeterian(e.target.checked)}
+              name='isVegeterian'
+              checked={formState.inputValues.isVegeterian}
+              onChange={(e) =>
+                inputChangeHandler('isVegeterian', e.target.checked, true)
+              }
             />
             <label htmlFor='pets'>vegeterian</label>
           </div>
           <div className='single-extra'>
             <input
               type='checkbox'
-              name='glutenFree'
-              id='glutenFree'
-              checked={isGlutenFree}
-              onChange={(e) => setIsGlutenFree(e.target.checked)}
+              name='isGlutenFree'
+              checked={formState.inputValues.isGlutenFree}
+              onChange={(e) =>
+                inputChangeHandler('isGlutenFree', e.target.checked, true)
+              }
             />
             <label htmlFor='glutenFree'>gluten-free</label>
           </div>
           <div className='single-extra'>
             <input
               type='checkbox'
-              name='lactoseFree'
-              id='lactoseFree'
-              checked={isLactoseFree}
-              onChange={(e) => setIsLactoseFree(e.target.checked)}
+              name='isLactoseFree'
+              checked={formState.inputValues.isLactoseFree}
+              onChange={(e) =>
+                inputChangeHandler('isLactoseFree', e.target.checked, true)
+              }
             />
             <label htmlFor='lactoseFree'>lactose-free</label>
           </div>

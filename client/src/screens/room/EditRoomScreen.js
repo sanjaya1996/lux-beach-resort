@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useReducer, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 
 import axios from 'axios';
@@ -12,28 +12,37 @@ import {
 } from '../../store/reducers/rooms';
 import AlertBox from '../../components/AlertBox';
 import Title from '../../components/Title';
+import Input from '../../components/Input';
+import customFormReducer from '../../reusableFunctions/formReducer';
+
+const errorTextStyles = {
+  padding: 0,
+  fontWeight: 'normal',
+  fontStyle: 'italic',
+  fontSize: '0.6rem',
+  color: 'red',
+};
+
+const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
+
+const formReducer = (state, action) => {
+  return customFormReducer(state, action, FORM_INPUT_UPDATE);
+};
 
 const EditRoomScreen = ({ match, history }) => {
   const roomId = match.params.id;
 
   const [uploading, setUploading] = useState(false);
-  const [name, setName] = useState('');
-  const [type, setType] = useState('');
-  const [price, setPrice] = useState('');
-  const [size, setSize] = useState('');
-  const [capacity, setCapacity] = useState(1);
-  const [images, setImages] = useState([]);
-  const [description, setDescription] = useState('');
-  const [extra, setExtra] = useState('');
-  const [extras, setExtras] = useState([]);
-  const [pets, setPets] = useState(false);
-  const [breakfast, setBreakfast] = useState(false);
-  const [featured, setFeatured] = useState(false);
+  const [showError, setShowError] = useState(false);
 
   const dispatch = useDispatch();
 
   const roomDetails = useSelector((state) => state.roomDetails);
-  const { loading, room, error } = roomDetails;
+  let { loading, room, error } = roomDetails;
+
+  if (!roomId) {
+    room = null;
+  }
 
   const roomCreate = useSelector((state) => state.roomCreate);
   const {
@@ -49,6 +58,35 @@ const EditRoomScreen = ({ match, history }) => {
     error: errorUpdate,
   } = roomUpdate;
 
+  const [formState, dispatchFormState] = useReducer(formReducer, {
+    inputValues: {
+      name: '',
+      type: '',
+      price: '',
+      size: 0,
+      capacity: 1,
+      images: [],
+      description: '',
+      extra: '',
+      extras: [],
+      pets: false,
+      breakfast: false,
+      featured: false,
+    },
+    inputValidities: {
+      name: false,
+      type: false,
+      price: true,
+      size: false,
+      capacity: true,
+      images: false,
+      pets: true,
+      breakfast: true,
+      featured: true,
+    },
+    formIsValid: false,
+  });
+
   useEffect(() => {
     if (successCreate || successUpdate) {
       dispatch({ type: roomId ? ROOM_UPDATE_RESET : ROOM_CREATE_RESET });
@@ -60,22 +98,40 @@ const EditRoomScreen = ({ match, history }) => {
 
   useEffect(() => {
     if (room && roomId) {
-      setName(room.name);
-      setType(room.type);
-      setPrice(room.price);
-      setSize(room.size);
-      setCapacity(room.capacity);
-      setImages(room.images);
-      setExtras(room.extras);
-      setDescription(room.description);
-      setPets(room.pets);
-      setBreakfast(room.breakfast);
-      setFeatured(room.featured);
+      const type = FORM_INPUT_UPDATE;
+      const isValid = true;
+      const { id, is_booked, ...otherValues } = room;
+      for (const key of Object.keys(otherValues)) {
+        dispatchFormState({
+          type,
+          input: key,
+          isValid,
+          value: otherValues[key],
+        });
+      }
     }
   }, [room, roomId]);
 
   const submitHandler = (e) => {
     e.preventDefault();
+    if (!formState.formIsValid) {
+      alert('Form Validation Failed!');
+      setShowError(true);
+      return;
+    }
+    const {
+      name,
+      type,
+      price,
+      size,
+      capacity,
+      images,
+      description,
+      extras,
+      pets,
+      breakfast,
+      featured,
+    } = formState.inputValues;
     if (roomId) {
       dispatch(
         roomActions.updateRoom({
@@ -112,6 +168,27 @@ const EditRoomScreen = ({ match, history }) => {
     }
   };
 
+  const { extras } = formState.inputValues;
+
+  const inputChangeHandler = useCallback(
+    (inputIdentifier, inputValue, inputValidity) => {
+      let value = inputValue;
+
+      if (inputIdentifier === 'extras') {
+        value = [...formState.inputValues[inputIdentifier], inputValue];
+      }
+
+      dispatchFormState({
+        type: FORM_INPUT_UPDATE,
+        input: inputIdentifier,
+        isValid: inputValidity,
+        value,
+      });
+    },
+    // eslint-disable-next-line
+    [dispatchFormState, extras]
+  );
+
   const uploadFileHandler = async (e) => {
     const files = e.target.files;
     const formData = new FormData();
@@ -127,9 +204,18 @@ const EditRoomScreen = ({ match, history }) => {
         },
       };
 
-      const { data } = await axios.post('/api/upload', formData, config);
-
-      setImages(data);
+      const { data } = await axios.post(
+        '/api/upload/roomimages',
+        formData,
+        config
+      );
+      console.log(data);
+      dispatchFormState({
+        type: FORM_INPUT_UPDATE,
+        input: 'images',
+        isValid: true,
+        value: data,
+      });
       setUploading(false);
     } catch (err) {
       console.log(err);
@@ -138,7 +224,18 @@ const EditRoomScreen = ({ match, history }) => {
   };
 
   const deleteExtraHandler = (index) => {
-    setExtras(extras.filter((item, i) => i !== index));
+    let isValid = true;
+    const value = formState.inputValues.extras.filter((item, i) => i !== index);
+    if (value.length === 0) {
+      isValid = false;
+    }
+
+    dispatchFormState({
+      type: FORM_INPUT_UPDATE,
+      input: 'extras',
+      isValid,
+      value,
+    });
   };
 
   const alertCloseHandler = () => {
@@ -170,63 +267,83 @@ const EditRoomScreen = ({ match, history }) => {
 
       <form onSubmit={submitHandler} className='form-container'>
         <div className='form-group'>
-          <label htmlFor='name'>Room Name:</label>
-          <input
+          <Input
+            label='Room Name: '
             type='text'
             name='name'
-            id='name'
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className='form-control'
+            errorText='Not valid name!'
+            onInputChange={inputChangeHandler}
+            initialValue={room ? room.name : ''}
+            initiallyValid={room ? true : false}
+            required
+            showError={showError}
           />
         </div>
+
         <div className='form-group'>
-          <label htmlFor='type'>Room Type:</label>
-          <input
+          <Input
+            label='Room Type: '
             type='text'
             name='type'
-            id='type'
-            value={type}
-            onChange={(e) => setType(e.target.value)}
-            className='form-control'
+            errorText='Not valid type!'
+            onInputChange={inputChangeHandler}
+            initialValue={room ? room.type : ''}
+            initiallyValid={room ? true : false}
+            required
+            showError={showError}
           />
         </div>
+
         <div className='form-group'>
-          <label htmlFor='price'>Price:</label>
-          <input
-            type='text'
+          <Input
+            label='Price: '
+            type='number'
             name='price'
-            id='price'
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            className='form-control'
+            errorText='Not valid price!'
+            onInputChange={inputChangeHandler}
+            initialValue={room ? room.price : 0}
+            initiallyValid={true}
+            required
+            showError={showError}
           />
         </div>
+
         <div className='form-group'>
-          <label htmlFor='size'>Size:</label>
-          <input
-            type='text'
+          <Input
+            label='Room Size: '
+            type='number'
             name='size'
-            id='size'
-            value={size}
-            onChange={(e) => setSize(e.target.value)}
-            className='form-control'
+            errorText='Not valid room size!'
+            onInputChange={inputChangeHandler}
+            initialValue={room ? room.size : 0}
+            initiallyValid={room ? true : false}
+            required
+            showError={showError}
           />
         </div>
+
         <div className='form-group'>
-          <label htmlFor='capacity'>Capacity:</label>
-          <input
+          <Input
+            label='Capacity: '
             type='number'
             name='capacity'
-            id='capacity'
-            value={capacity}
-            onChange={(e) => setCapacity(e.target.value)}
-            className='form-control'
+            errorText='Not valid capacity!'
+            onInputChange={inputChangeHandler}
+            initialValue={room ? room.capacity : 1}
+            initiallyValid={true}
+            required
+            showError={showError}
           />
         </div>
+
         <div className='form-group'>
-          <label htmlFor='images'>Images:</label>
-          {uploading && Loading}
+          <label htmlFor='images'>
+            Images:{' '}
+            {showError && !formState.inputValidities.images && (
+              <span style={errorTextStyles}>Not valid images!</span>
+            )}
+          </label>
+          {uploading && <Loading small />}
           <input
             type='file'
             name='images'
@@ -236,53 +353,70 @@ const EditRoomScreen = ({ match, history }) => {
             className='form-control'
           />
           <ul className='extra-list'>
-            {images.map((item, index) => (
+            {formState.inputValues.images.map((item, index) => (
               <li key={index}>- {item}</li>
             ))}
           </ul>
         </div>
+
         <div className='form-group'>
-          <label htmlFor='extra'>Extras:</label>
+          <label htmlFor='extra'>
+            Extras:{' '}
+            {showError && !formState.inputValidities.extras && (
+              <span style={errorTextStyles}>Not valid extra list!</span>
+            )}
+          </label>
           <div className='extras-input'>
             <input
               type='text'
               name='extra'
               id='extra'
-              value={extra}
+              value={formState.inputValues.extra}
               multiple
-              onChange={(e) => setExtra(e.target.value)}
+              onChange={(e) =>
+                inputChangeHandler('extra', e.target.value, true)
+              }
               className='form-control'
             />
             <button
               type='button'
               style={{ width: 'auto' }}
-              onClick={() => setExtras((prevState) => [...prevState, extra])}
+              onClick={() => {
+                if (formState.inputValues.extra.trim().length === 0) {
+                  return;
+                }
+                inputChangeHandler('extras', formState.inputValues.extra, true);
+              }}
             >
               Add to list
             </button>
           </div>
           <ul className='extra-list'>
-            {extras.map((item, index) => (
+            {formState.inputValues.extras.map((item, index) => (
               <li key={index} onClick={() => deleteExtraHandler(index)}>
                 - {item}
               </li>
             ))}
           </ul>
-          {extras.length > 0 && (
+          {formState.inputValues.extras.length > 0 && (
             <p className='note'>
               <i>*click an item to remove*</i>
             </p>
           )}
         </div>
+
         <div className='form-group'>
-          <label htmlFor='description'>Description:</label>
-          <textarea
+          <Input
+            label='Description: '
+            type='textarea'
             name='description'
-            id='description'
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className='form-control'
-            style={{ height: 100 }}
+            errorText='Not valid description!'
+            onInputChange={inputChangeHandler}
+            initialValue={room ? room.description : ''}
+            initiallyValid={room ? true : false}
+            required
+            minLength={10}
+            showError={showError}
           />
         </div>
         <div className='form-group'>
@@ -291,8 +425,10 @@ const EditRoomScreen = ({ match, history }) => {
               type='checkbox'
               name='breakfast'
               id='breakfast'
-              checked={breakfast}
-              onChange={(e) => setBreakfast(e.target.checked)}
+              checked={formState.inputValues.breakfast}
+              onChange={(e) =>
+                inputChangeHandler('breakfast', e.target.checked, true)
+              }
             />
             <label htmlFor='breakfast'>breakfast</label>
           </div>
@@ -301,8 +437,10 @@ const EditRoomScreen = ({ match, history }) => {
               type='checkbox'
               name='pets'
               id='pets'
-              checked={pets}
-              onChange={(e) => setPets(e.target.checked)}
+              checked={formState.inputValues.pets}
+              onChange={(e) =>
+                inputChangeHandler('pets', e.target.checked, true)
+              }
             />
             <label htmlFor='pets'>pets</label>
           </div>
@@ -311,8 +449,10 @@ const EditRoomScreen = ({ match, history }) => {
               type='checkbox'
               name='featured'
               id='featured'
-              checked={featured}
-              onChange={(e) => setFeatured(e.target.checked)}
+              checked={formState.inputValues.featured}
+              onChange={(e) =>
+                inputChangeHandler('featured', e.target.checked, true)
+              }
             />
             <label htmlFor='featured'>Featured</label>
           </div>

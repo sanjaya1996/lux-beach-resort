@@ -494,7 +494,7 @@ h6 {
 .room-info {
   background: var(--darkGrey);
   text-transform: capitalize;
-  margin-bottom: 0px;
+  margin: 0;
   padding: 0.5rem 0;
   text-align: center;
   font-weight: 700;

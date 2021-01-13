@@ -2,6 +2,8 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 
+const { checkAdmin } = require('../middleware/authMiddleware');
+
 const router = express.Router();
 
 const storage = multer.diskStorage({
@@ -32,10 +34,10 @@ const upload = multer({
   storage: storage,
   limits: { fileSize: 1024 * 1024 * 5 },
   fileFilter: fileFilter,
-}).array('roomImages', 5);
+});
 
-router.post('/', (req, res, next) => {
-  upload(req, res, function (err) {
+router.post('/roomimages', checkAdmin, (req, res, next) => {
+  upload.array('roomImages', 5)(req, res, function (err) {
     if (err instanceof multer.MulterError) {
       // A multer error occurred when uploading like fileFilter thrown error
       next(err);
@@ -53,6 +55,28 @@ router.post('/', (req, res, next) => {
       //success upload
       const imagesPath = req.files.map((file) => '/' + file.path);
       res.send(imagesPath);
+    }
+  });
+});
+
+router.post('/meal', checkAdmin, (req, res, next) => {
+  upload.single('mealImage')(req, res, function (err) {
+    if (err instanceof multer.MulterError) {
+      // A multer error occurred when uploading like fileFilter thrown error
+      next(err);
+    } else if (err) {
+      // An unknown error occured while uploading
+
+      next(err);
+    } else if (!req.file) {
+      // when no file was choosen while uploading
+
+      const error = new Error('please choose file');
+      res.status(400);
+      next(error);
+    } else {
+      //success upload
+      res.send(`/${req.file.path}`);
     }
   });
 });
