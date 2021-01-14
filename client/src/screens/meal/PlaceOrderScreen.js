@@ -378,7 +378,7 @@ const PlaceOrderScreen = ({ history }) => {
         <div style={{ display: 'inline-block' }}>
           {formState.formIsValid ? (
             <StripeCheckout
-              stripeKey='pk_test_BbuVbJumpNKWuxCFdOAUYoix00ZZvbAiJk'
+              stripeKey={process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY}
               token={makePayment}
               name={'lux-beach-resort'}
               amount={cart.totalPrice * 100}

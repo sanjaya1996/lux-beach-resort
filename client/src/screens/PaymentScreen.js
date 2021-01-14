@@ -18,6 +18,7 @@ import * as roomActions from '../store/actions/rooms';
 import * as bookingActions from '../store/actions/bookings';
 import { CHECK_AVAILABILITY_RESET } from '../store/reducers/rooms';
 import { ROOM_BOOKING_RESET } from '../store/reducers/bookings';
+import { Link } from 'react-router-dom';
 
 // Calculate Total Subtotal
 let subTotal = 0;
@@ -171,7 +172,6 @@ const PaymentScreen = ({ match, history }) => {
     );
   };
 
-  console.log(formState.inputValues.mobileNumber);
   // Book room after payment
 
   const reserveNowHandler = () => {
@@ -229,9 +229,15 @@ const PaymentScreen = ({ match, history }) => {
     <div className='payment-screen'>
       {reserveError && <AlertBox message={reserveError} />}
       <p>
-        Please <span className='underlined-link'>Sign In</span> /{' '}
-        <span className='underlined-link'>Create an account</span> for easy &
-        secure bookings.
+        Please{' '}
+        <span className='underlined-link'>
+          <Link to='/login'>Sign In</Link>
+        </span>{' '}
+        /{' '}
+        <span className='underlined-link'>
+          <Link to='/login'>Create an account</Link>
+        </span>{' '}
+        for easy & secure bookings.
       </p>
       <div className='summary-container'>
         <div className='one-half-responsive summary-heading'>Your Stay:</div>
@@ -379,7 +385,7 @@ const PaymentScreen = ({ match, history }) => {
       <div style={{ display: 'inline-block' }}>
         {formState.formIsValid ? (
           <StripeCheckout
-            stripeKey='pk_test_BbuVbJumpNKWuxCFdOAUYoix00ZZvbAiJk'
+            stripeKey={process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY}
             token={makePayment}
             name={'lux-beach-resort'}
             amount={total * 100}
@@ -390,16 +396,21 @@ const PaymentScreen = ({ match, history }) => {
             </button>
           </StripeCheckout>
         ) : (
-          <button
-            type='button'
-            onClick={() => {
-              alert('Your Details are not valid!');
-              setShowError(true);
-            }}
-            className='btn-primary action-btn'
-          >
-            {`Pay for $${total}`}
-          </button>
+          <div style={{ display: 'inline-block', cursor: 'not-allowed' }}>
+            <button
+              type='button'
+              disabled={!formState.formIsValid}
+              onClick={() => {
+                alert('Your Details are not valid!');
+                setShowError(true);
+              }}
+              className={`btn-primary action-btn ${
+                !formState.formIsValid && 'btn-disable'
+              }`}
+            >
+              {`Pay for $${total}`}
+            </button>
+          </div>
         )}
       </div>
       <div style={{ alignSelf: 'flex-start', marginTop: '2rem' }}>
@@ -407,9 +418,21 @@ const PaymentScreen = ({ match, history }) => {
         <p style={{ paddingBottom: 10 }}>
           For our new guests, we will send an email to confirm your reservation.
         </p>
-        <button onClick={reserveNowHandler} className='btn-primary action-btn'>
-          Reserve now
-        </button>
+        <div
+          style={{
+            display: 'inline-block',
+            cursor: !formState.formIsValid && 'not-allowed',
+          }}
+        >
+          <button
+            onClick={reserveNowHandler}
+            className={`btn-primary action-btn ${
+              !formState.formIsValid && 'btn-disable'
+            }`}
+          >
+            Reserve now
+          </button>
+        </div>
       </div>
     </div>
   );

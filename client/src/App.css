@@ -110,7 +110,6 @@ h6 {
 }
 .btn-disable {
   background: #ccc;
-  cursor: context-menu;
   pointer-events: none;
   border: none;
 }
