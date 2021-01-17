@@ -3,10 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 
-import Loading from '../components/Loading';
-import AlertBox from '../components/AlertBox';
-import Title from '../components/Title';
-import * as bookingActions from '../store/actions/bookings';
+import Loading from '../../components/Loading';
+import AlertBox from '../../components/AlertBox';
+import Title from '../../components/Title';
+import * as bookingActions from '../../store/actions/bookings';
 
 const BookingListScreen = ({ history }) => {
   const dispatch = useDispatch();

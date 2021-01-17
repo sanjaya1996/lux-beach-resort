@@ -3,8 +3,8 @@ import { useDispatch } from 'react-redux';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
-import Title from './Title';
-import * as roomsActions from '../store/actions/rooms';
+import Title from '../Title';
+import * as roomsActions from '../../store/actions/rooms';
 
 const FORM_FILTER_UPDATE = 'FORM_FILTER_UPDATE';
 const FORM_FILTER_RESET = 'FORM_FILTER_RESET';

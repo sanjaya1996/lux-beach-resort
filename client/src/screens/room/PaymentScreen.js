@@ -9,15 +9,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import StripeCheckout from 'react-stripe-checkout';
 
-import ErrorScreen from './ErrorScreen';
-import Loading from '../components/Loading';
-import Title from '../components/Title';
-import Input from '../components/Input';
-import AlertBox from '../components/AlertBox';
-import * as roomActions from '../store/actions/rooms';
-import * as bookingActions from '../store/actions/bookings';
-import { CHECK_AVAILABILITY_RESET } from '../store/reducers/rooms';
-import { ROOM_BOOKING_RESET } from '../store/reducers/bookings';
+import ErrorScreen from '../ErrorScreen';
+import Loading from '../../components/Loading';
+import Title from '../../components/Title';
+import Input from '../../components/Input';
+import AlertBox from '../../components/AlertBox';
+import * as roomActions from '../../store/actions/rooms';
+import * as bookingActions from '../../store/actions/bookings';
+import { CHECK_AVAILABILITY_RESET } from '../../store/reducers/rooms';
+import { ROOM_BOOKING_RESET } from '../../store/reducers/bookings';
 import { Link } from 'react-router-dom';
 
 // Calculate Total Subtotal

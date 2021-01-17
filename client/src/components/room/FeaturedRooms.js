@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import Loading from './Loading';
-import ItemCard from './ItemCard';
-import Title from './Title';
-import * as roomActions from '../store/actions/rooms';
-import AlertBox from './AlertBox';
+import Loading from '../Loading';
+import ItemCard from '../ItemCard';
+import Title from '../Title';
+import * as roomActions from '../../store/actions/rooms';
+import AlertBox from '../AlertBox';
 
 const FeaturedRooms = () => {
   const dispatch = useDispatch();

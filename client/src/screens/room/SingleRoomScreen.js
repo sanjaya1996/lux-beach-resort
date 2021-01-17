@@ -2,13 +2,13 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import Loading from '../components/Loading';
-import Banner from '../components/Banner';
-import StyledHero from '../components/StyledHero';
-import * as roomsActions from '../store/actions/rooms';
-import * as cartActions from '../store/actions/cart';
-import ErrorScreen from './ErrorScreen';
-import { CHECK_AVAILABILITY_RESET } from '../store/reducers/rooms';
+import Loading from '../../components/Loading';
+import Banner from '../../components/Banner';
+import StyledHero from '../../components/StyledHero';
+import * as roomsActions from '../../store/actions/rooms';
+import * as cartActions from '../../store/actions/cart';
+import ErrorScreen from '../ErrorScreen';
+import { CHECK_AVAILABILITY_RESET } from '../../store/reducers/rooms';
 
 const SingleRoomScreen = ({ match, history }) => {
   const dispatch = useDispatch();

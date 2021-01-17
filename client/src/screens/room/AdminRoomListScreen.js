@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import AlertBox from '../components/AlertBox';
+import AlertBox from '../../components/AlertBox';
 
-import Loading from '../components/Loading';
-import Title from '../components/Title';
-import * as roomActions from '../store/actions/rooms';
-import { ROOM_DELETE_RESET } from '../store/reducers/rooms';
+import Loading from '../../components/Loading';
+import Title from '../../components/Title';
+import * as roomActions from '../../store/actions/rooms';
+import { ROOM_DELETE_RESET } from '../../store/reducers/rooms';
 
 const AdminRoomListScreen = ({ history }) => {
   const dispatch = useDispatch();

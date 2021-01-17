@@ -3,11 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import StripeCheckout from 'react-stripe-checkout';
 
-import Loading from '../components/Loading';
-import * as bookingActions from '../store/actions/bookings';
-import Title from '../components/Title';
-import AlertBox from '../components/AlertBox';
-import { MAKE_PAYMENT_RESET } from '../store/reducers/bookings';
+import Loading from '../../components/Loading';
+import * as bookingActions from '../../store/actions/bookings';
+import Title from '../../components/Title';
+import AlertBox from '../../components/AlertBox';
+import { MAKE_PAYMENT_RESET } from '../../store/reducers/bookings';
 
 // Calculate Total Subtotal
 let subTotal = 0;

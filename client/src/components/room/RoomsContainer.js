@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import RoomsFilter from './RoomsFilter';
 import RoomList from './RoomList';
-import Loading from './Loading';
-import * as roomsActions from '../store/actions/rooms';
-import AlertBox from './AlertBox';
+import Loading from '../Loading';
+import * as roomsActions from '../../store/actions/rooms';
+import AlertBox from '../AlertBox';
 
 const RoomsContainer = () => {
   const dispatch = useDispatch();

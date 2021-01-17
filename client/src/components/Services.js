@@ -8,25 +8,25 @@ const services = [
     icon: <FaCocktail />,
     title: 'Free Cocktails',
     info:
-      'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Alias molestias eius libero?',
+      'Irish coffee cocktail. “It’s a cold version of an Irish coffee—an Australian version!” co-owner Stefano Catino says. Ingredients include Redbreast 12 Irish whisky, house-made cold brew, and cream to finish.',
   },
   {
     icon: <FaHiking />,
     title: 'Endless Hiking',
     info:
-      'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Alias molestias eius libero?',
+      'You’ve conquered Sydney’s iconic bushwalks, now it’s time to challenge yourself with a longer track! Lucky for you Sydney and its surrounding areas have plenty of beautiful terrain.',
   },
   {
     icon: <FaShuttleVan />,
     title: 'Free Shuttle',
     info:
-      'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Alias molestias eius libero?',
+      'The Parramatta shuttle bus (formerly the Loop) is a fast, free transport solution run by Transport for NSW through Transdev that connects tourists, residents and commuters to the commercial, retail and recreational landmarks of the city.',
   },
   {
     icon: <FaBeer />,
     title: 'Strongest Beer',
     info:
-      'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Alias molestias eius libero?',
+      'The strongest beer in the world is the Brewmeister Snake Venom. Bottled at 67.5% ABV, the Scottish beer is easily the heaviest on offer.',
   },
 ];
 

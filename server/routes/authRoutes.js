@@ -8,7 +8,7 @@ router.get('/facebook', passport.authenticate('facebook'));
 router.get(
   '/facebook/callback',
   passport.authenticate('facebook', { failureRedirect: '/login' }),
-  (req, res) => res.redirect('http://localhost:3000')
+  (req, res) => res.redirect('/')
 );
 
 // Login with google route
@@ -20,7 +20,7 @@ router.get(
 router.get(
   '/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
-  (req, res) => res.redirect('http://localhost:3000')
+  (req, res) => res.redirect('/')
 );
 
 // Get Currently authenticated User
