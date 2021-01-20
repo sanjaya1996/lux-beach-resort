@@ -11,7 +11,7 @@ const HomeScreen = () => {
     <>
       <Hero>
         <Banner
-          title='luxurious rooms update'
+          title='luxurious rooms'
           subtitle='deluxe rooms starting at $299'
         >
           <Link to='/rooms' className='btn-primary'>
