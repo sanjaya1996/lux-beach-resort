@@ -1,4 +1,5 @@
 #!/bin/bash
+cd /home/ubuntu/apps/lux-beach-resort
 npm install
 cd client
 npm install
