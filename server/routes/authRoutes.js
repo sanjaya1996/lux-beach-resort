@@ -4,7 +4,7 @@ const passport = require('passport');
 const router = express.Router();
 
 // Login with facebook route
-router.get('/facebook', passport.authenticate('facebook'));
+router.get('/facebook', passport.authenticate('facebook', { scope: 'email' }));
 router.get(
   '/facebook/callback',
   passport.authenticate('facebook', { failureRedirect: '/login' }),

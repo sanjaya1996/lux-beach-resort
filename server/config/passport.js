@@ -5,10 +5,10 @@ const db = require('./db.js');
 
 // Find or Create user function after authProvider response
 const findOrCreateUser = async (profile, done) => {
-  const { displayName, emails, id, provider } = profile;
-  const email = emails[0].value;
-
   try {
+    const { displayName, emails, id, provider } = profile;
+    const email = emails[0].value;
+
     const results = await db.query(
       'SELECT * FROM guests WHERE auth_id = $1 AND auth_provider_name= $2',
       [id, provider]
@@ -54,7 +54,8 @@ module.exports = function (passport) {
       {
         clientID: process.env.FACEBOOK_APP_ID,
         clientSecret: process.env.FACEBOOK_APP_SECRET,
-        callbackURL: '/api/auth/facebook/callback',
+        callbackURL:
+          'https://luxbeachresort.services/api/auth/facebook/callback',
         profileFields: [
           'id',
           'displayName',
