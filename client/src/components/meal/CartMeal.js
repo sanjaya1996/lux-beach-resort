@@ -4,12 +4,16 @@ import { useDispatch } from 'react-redux';
 import * as cartActions from '../../store/actions/cart';
 
 const CartMeal = ({ meal }) => {
-  const [orderCount, setOrderCount] = useState(meal.qty);
-
   const dispatch = useDispatch();
 
   const removeFromCartHandler = (id) => {
     dispatch(cartActions.removeFromCartMeal(id));
+  };
+
+  const addToCartHandler = (eventType) => {
+    meal.qty =
+      eventType === 'increment' ? Number(meal.qty) + 1 : Number(meal.qty) - 1;
+    dispatch(cartActions.addToCartMeal(meal));
   };
 
   return (
@@ -27,8 +31,8 @@ const CartMeal = ({ meal }) => {
         <div id='filter-form'>
           <div className='modal-row'>
             <button
-              disabled={orderCount <= 1}
-              onClick={() => setOrderCount(orderCount - 1)}
+              disabled={meal.qty <= 1}
+              onClick={() => addToCartHandler('decrement')}
               className='order-count-item order-count-btn'
             >
               <span>
@@ -36,10 +40,10 @@ const CartMeal = ({ meal }) => {
               </span>
             </button>
             <div className='order-count-item'>
-              <span>{orderCount}</span>
+              <span>{meal.qty}</span>
             </div>
             <button
-              onClick={() => setOrderCount(orderCount + 1)}
+              onClick={() => addToCartHandler('increment')}
               className='order-count-item order-count-btn'
             >
               <span>
@@ -49,7 +53,7 @@ const CartMeal = ({ meal }) => {
           </div>
           <div>
             <label htmlFor='date'>
-              ${Number(orderCount * meal.price).toFixed(2)}
+              ${Number(meal.qty * meal.price).toFixed(2)}
             </label>
           </div>
 

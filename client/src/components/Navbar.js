@@ -18,9 +18,24 @@ const Navbar = () => {
   const cart = useSelector((state) => state.cart);
   const { rooms, meals } = cart;
 
+  const totalItemsInCart = rooms.length + meals.length;
   const loginHandler = () => {
     history.push('/login');
   };
+
+  let navLinksClassName = 'nav-links';
+
+  if (user && user.is_admin) {
+    if (totalItemsInCart === 0) {
+      navLinksClassName = 'nav-links show-nav';
+    } else {
+      navLinksClassName = 'nav-links show-nav-max-height';
+    }
+  } else if (totalItemsInCart === 0) {
+    navLinksClassName = 'nav-links show-nav-min-height';
+  } else {
+    navLinksClassName = 'nav-links show-nav';
+  }
 
   return (
     <nav className='navbar'>
@@ -37,15 +52,7 @@ const Navbar = () => {
             <FaAlignRight className='nav-icon' />
           </button>
         </div>
-        <ul
-          className={
-            isOpen && (!isAuthenticated || !user.is_admin)
-              ? 'nav-links show-nav-min-height'
-              : isOpen
-              ? 'nav-links show-nav'
-              : 'nav-links'
-          }
-        >
+        <ul className={isOpen ? navLinksClassName : 'nav-links'}>
           <li>
             <Link to='/rooms'>Rooms</Link>
           </li>
@@ -53,7 +60,7 @@ const Navbar = () => {
           <li>
             <Link to='/menu'>Menu</Link>
           </li>
-          {rooms.length + meals.length > 0 && (
+          {totalItemsInCart > 0 && (
             <li>
               <Link
                 to='/cart'
@@ -61,9 +68,7 @@ const Navbar = () => {
               >
                 <span>Cart</span>
                 <i className='fas fa-shopping-cart' id='cart'>
-                  <span className='cart-count'>
-                    {rooms.length + meals.length}
-                  </span>
+                  <span className='cart-count'>{totalItemsInCart}</span>
                 </i>
               </Link>
             </li>

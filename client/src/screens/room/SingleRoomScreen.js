@@ -121,7 +121,7 @@ const SingleRoomScreen = ({ match, history }) => {
         </div>
       </section>
       <section className='room-extras'>
-        <h6>extras </h6>
+        <h3>extras </h3>
         <ul className='extras'>
           {extras.map((item, index) => (
             <li key={index}>- {item}</li>

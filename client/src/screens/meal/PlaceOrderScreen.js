@@ -116,8 +116,18 @@ const PlaceOrderScreen = ({ history }) => {
       dispatchFormState({ type, input: 'email', value: email, isValid });
       dispatchFormState({ type, input: 'fName', value: fName, isValid });
       dispatchFormState({ type, input: 'lName', value: lName, isValid });
-      dispatchFormState({ type, input: 'title', value: title, isValid });
-      dispatchFormState({ type, input: 'mobileNumber', value: phone, isValid });
+      dispatchFormState({
+        type,
+        input: 'title',
+        value: title || 'Mr',
+        isValid,
+      });
+      dispatchFormState({
+        type,
+        input: 'mobileNumber',
+        value: phone || '',
+        isValid,
+      });
     }
   }, [success, dispatch, history, user]);
 
@@ -217,7 +227,9 @@ const PlaceOrderScreen = ({ history }) => {
           <Title title='Pickup order' />
         </div>
         <div className='form-group'>
-          <label htmlFor='date'>Pickup Time :</label>{' '}
+          <label htmlFor='date' className='summary-label'>
+            Pickup Time :
+          </label>{' '}
           {!formState.inputValidities.pickupTime && (
             <p
               style={{
@@ -264,7 +276,7 @@ const PlaceOrderScreen = ({ history }) => {
 
       <section className='placeorder-section'>
         <div style={{ display: 'flex' }}>
-          <Title title='Customer Details' />
+          <Title title='Customer' />
         </div>
 
         <form className='guest-form form-one-half-responsive'>
@@ -321,7 +333,7 @@ const PlaceOrderScreen = ({ history }) => {
               name='title'
               options={['Mr', 'Dr', 'Miss', 'Mr & Mrs', 'Mrs', 'Ms']}
               onInputChange={inputChangeHandler}
-              initialValue={user ? user.title : 'Mr'}
+              initialValue={user && user.title ? user.title : 'Mr'}
               initiallyValid={true}
               showError={showError}
               getUser={getUser}
@@ -335,7 +347,7 @@ const PlaceOrderScreen = ({ history }) => {
               name='mobileNumber'
               errorText='mobile not valid!'
               onInputChange={inputChangeHandler}
-              initialValue={user ? user.phone : ''}
+              initialValue={user && user.phone ? user.phone : ''}
               initiallyValid={user ? true : false}
               required
               showError={showError}

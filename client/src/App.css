@@ -54,6 +54,10 @@ h6 {
   margin-bottom: 1.5em;
 }
 
+/* p {
+  font-size: 1em;
+} */
+
 .screen {
   padding: 2em 3vw;
 }
@@ -76,7 +80,7 @@ h6 {
 }
 .action-btn {
   /* text styles */
-  font-size: 20px;
+  font-size: 15px;
   color: #fff;
 
   /* box styles */
@@ -117,6 +121,13 @@ h6 {
 .align-bottom-right {
   text-align: end;
   padding: 3rem;
+}
+
+@media screen and (max-width: 500px) {
+  .btn-sm {
+    letter-spacing: 2px;
+    font-size: 9px;
+  }
 }
 .loading {
   text-transform: capitalize;
@@ -211,6 +222,9 @@ h6 {
 }
 .show-nav-min-height {
   height: 120px;
+}
+.show-nav-max-height {
+  height: 195px;
 }
 
 #cart {
@@ -355,7 +369,7 @@ h6 {
   margin-bottom: 2rem;
 }
 .section-title h4 {
-  font-size: 2rem;
+  font-size: 1.5rem;
   letter-spacing: var(--mainSpacing);
   text-transform: capitalize;
   margin-bottom: 1rem;
@@ -365,6 +379,12 @@ h6 {
   height: 5px;
   margin: 0 auto;
   background: var(--primaryColor);
+}
+
+@media screen and (max-width: 500px) {
+  .section-title h4 {
+    font-size: 1rem;
+  }
 }
 /* end of Title */
 
@@ -710,6 +730,12 @@ h6 {
 .form-group button {
   width: 8rem;
 }
+
+@media screen and (max-width: 500px) {
+  .form-group {
+    font-size: 10px;
+  }
+}
 /* end of Login form */
 
 /* Cart Screen */
@@ -917,6 +943,13 @@ td img {
 tr:nth-child(even) {
   background-color: var(--mainGrey);
 }
+
+@media screen and (max-width: 500px) {
+  td,
+  th {
+    font-size: 10px;
+  }
+}
 /* end of Admin Room List Screen */
 
 /* Profile Screen*/
@@ -1058,7 +1091,7 @@ tr:nth-child(even) {
   align-items: center;
   border: 1px solid #ccc;
   border-top: none;
-  font-size: 12px;
+  font-size: 10px;
   letter-spacing: var(--mainSpacing);
   text-transform: capitalize;
 }

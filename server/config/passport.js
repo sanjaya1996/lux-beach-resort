@@ -3,6 +3,11 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const db = require('./db.js');
 
+const baseUrl =
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:3000'
+    : 'https://luxbeachresort.services';
+
 // Find or Create user function after authProvider response
 const findOrCreateUser = async (profile, done) => {
   try {
@@ -54,8 +59,7 @@ module.exports = function (passport) {
       {
         clientID: process.env.FACEBOOK_APP_ID,
         clientSecret: process.env.FACEBOOK_APP_SECRET,
-        callbackURL:
-          'https://luxbeachresort.services/api/auth/facebook/callback',
+        callbackURL: `${baseUrl}/api/auth/facebook/callback`,
         profileFields: [
           'id',
           'displayName',
