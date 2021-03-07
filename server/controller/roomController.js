@@ -3,7 +3,7 @@ const db = require('../config/db.js');
 // @desc    Fetch all rooms
 // @route   GET /api/rooms
 // @access  Public
-const getRooms = async (req, res) => {
+const getRooms = async (req, res, next) => {
   try {
     const results = await db.query('select * from rooms');
     res.status(200).json(results.rows);
