@@ -351,3 +351,113 @@ values (
        '/images/details-4.jpeg'
     ]
 );
+
+
+-- GUESTS ..............................................
+
+-- Create table Guests
+CREATE TABLE guests (
+   id SERIAL NOT NULL,
+   name VARCHAR(100) NOT NULL,
+   phone VARCHAR(15),
+   email VARCHAR(50) NOT NULL,
+   title VARCHAR(10),
+   is_Admin BOOLEAN DEFAULT false,
+   auth_id VARCHAR(50),
+   auth_provider_name VARCHAR(50),
+   PRIMARY KEY(id)
+);
+
+INSERT INTO guests
+  ( name, phone, email )
+VALUES
+  ('John', '0459584949', 'john@yahoo.com'), 
+  ('Jane', '0459584949', 'jane@yahoo.com'), 
+  ('Billy', '0459584949', 'billy@yahoo.com'),
+  ('Miranda', '0459584949', 'miranda@yahoo.com');
+
+
+  -- BOOKINGS -----------------------------------------------------
+-- Create table Bookings
+CREATE TABLE bookings (
+   id SERIAL NOT NULL,
+   room_id INT,
+   guest_id INT,
+   checkin_date DATE NOT NULL,
+   checkout_date DATE NOT NULL,
+   booked_date DATE NOT NULL DEFAULT CURRENT_DATE, 
+   total_guests INT NOT NULL DEFAULT 1,
+   is_paid BOOLEAN NOT NULL DEFAULT false,
+   paid_at TIMESTAMP,
+   total_amount DECIMAL(20,2),
+   notes VARCHAR(250),
+   vacated BOOLEAN NOT NULL DEFAULT FALSE,
+   PRIMARY KEY (id),
+   CONSTRAINT room_id FOREIGN KEY(room_id) REFERENCES rooms(id),
+   CONSTRAINT guest_id FOREIGN KEY(guest_id) REFERENCES guests(id)
+);
+
+-- MEALS ................................................
+-- Create Table Meals
+
+CREATE TABLE meals (
+   id SERIAL NOT NULL,
+   category VARCHAR(50) NOT NULL,
+   name VARCHAR(50) NOT NULL,
+   price DECIMAL(20,2) NOT NULL,
+   imageUrl VARCHAR(1000) NOT NULL,
+   duration INT NOT NULL,
+   ingredients VARCHAR(150),
+   is_gluten_free BOOLEAN NOT NULL DEFAULT FALSE,
+   is_vegan BOOLEAN NOT NULL DEFAULT FALSE,
+   is_vegeterian BOOLEAN NOT NULL DEFAULT FALSE,
+   is_lactose_free BOOLEAN NOT NULL DEFAULT FALSE,
+   PRIMARY KEY (id)
+);
+
+INSERT INTO meals 
+   (category, name, price, imageUrl, duration, ingredients, is_gluten_free, is_vegan, is_vegeterian, is_lactose_free)
+VALUES
+   ('Salmon Fish', 'Salmon Fish', 34.50, '/uploads\mealImage-1610490698463.jpg', 20, '350 gm grilled Salmon, Tossed Crisp vegetables in a tangy Lemon basil dressing.', true, false, false, true),
+   ('Italian', 'Spaghetti with Tomato Sauce', 20.0, '/images/meals/meal-spaghettiBolognese.jpg', 20, 'Napoletana sauce, garlic, cherry tomato, basil and parmesan.', false, true, true, true),
+   ('Quick & Easy', 'Classic Hawaii', 15.0, '/images/meals/meal-classicHawai.jpg', 10, '1 Slice White Bread, 1 Slice Ham, Pinapple Slice, Slice of Cheese and Butter', false, false, false, false),
+   ('Hamburgers', 'Classic Hamburger', 14.5, '/images/meals/meal-classicHamburger.jpg', 45, '300g Cattle Hack, Tomato, Cucumber, Pickel, Onion and Ketchup', false, false, false, true);
+
+-- ORDERS ................................................
+-- Create Table  Orders
+
+CREATE TABLE orders (
+   id SERIAL NOT NULL,
+   guest_id INT,
+   pickup_time TIMESTAMP NOT NULL,
+   ordered_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
+   pickup_note VARCHAR(250),
+   total_amount DECIMAL(20,2) NOT NULL,
+   is_pickedup BOOLEAN NOT NULL DEFAULT FALSE,
+   is_paid BOOLEAN NOT NULL DEFAULT FALSE,
+   PRIMARY KEY (id),
+   CONSTRAINT guest_id FOREIGN KEY(guest_id) REFERENCES guests(id)
+);
+
+INSERT INTO orders
+   (guest_id, pickup_time, pickup_note, total_amount, is_paid)
+VALUES
+   (29, CURRENT_TIMESTAMP, 'This is the pickup not for my order', 40.50, true );
+
+   -- MEALS ORDERS (many-to-many resolve table) ................................................
+-- Create Table  meals_orders
+
+CREATE TABLE meals_orders (
+   order_id INT,
+   meal_id INT,
+   quantity INT NOT NULL DEFAULT 1,
+   PRIMARY KEY (meal_id, order_id),
+   CONSTRAINT meal_id FOREIGN KEY(meal_id) REFERENCES meals(id),
+   CONSTRAINT order_id FOREIGN KEY(order_id) REFERENCES orders(id)
+);
+
+INSERT INTO meals_orders
+   (order_id, meal_id, quantity )
+VALUES
+(1, 2, 2),
+(1, 3, 3);

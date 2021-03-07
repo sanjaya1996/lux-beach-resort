@@ -6,7 +6,7 @@ const db = require('./db.js');
 const baseUrl =
   process.env.NODE_ENV === 'development'
     ? 'http://localhost:3000'
-    : 'https://luxbeachresort.services';
+    : 'https://luxbeachresort.herokuapp.com';
 
 // Find or Create user function after authProvider response
 const findOrCreateUser = async (profile, done) => {
