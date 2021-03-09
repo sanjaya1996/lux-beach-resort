@@ -69,6 +69,8 @@ app.use('/api/upload', uploadRoutes);
 // Make uploads folder static
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
+/*
+// For fullstack deployment client+server together
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/build')));
 
@@ -82,6 +84,11 @@ if (process.env.NODE_ENV === 'production') {
     res.send('API is running...');
   });
 }
+*/
+
+app.get('/', (req, res) => {
+  res.send('API is up and running...');
+});
 
 app.use(notFound);
 
