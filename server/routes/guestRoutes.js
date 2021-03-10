@@ -14,12 +14,6 @@ const router = express.Router();
 router.get('/', checkAdmin, getGuests);
 
 router
-  .route('/:id')
-  .get(checkAdmin, getGuestById)
-  .put(checkAdmin, updateGuest)
-  .delete(checkAdmin, deleteGuest);
-
-router
   .route('/profile')
   .get(checkAuth, getProfile)
   .put(checkAuth, updateProfile);
@@ -27,5 +21,11 @@ router
 router.get('/current', (req, res) => {
   console.log(req.isAuthenticated());
 });
+
+router
+  .route('/:id')
+  .get(checkAdmin, getGuestById)
+  .put(checkAdmin, updateGuest)
+  .delete(checkAdmin, deleteGuest);
 
 module.exports = router;

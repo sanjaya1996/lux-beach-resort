@@ -204,6 +204,7 @@ const EditRoomScreen = ({ match, history }) => {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
+        withCredentials: true,
       };
 
       const { data } = await axios.post(

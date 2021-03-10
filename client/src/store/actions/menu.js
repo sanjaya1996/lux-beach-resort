@@ -67,7 +67,9 @@ export const deleteMeal = (id) => {
     try {
       dispatch({ type: MEAL_DELETE_REQUEST });
 
-      await axios.delete(`${API_URI}/api/menu/${id}`);
+      const config = { withCredentials: true };
+
+      await axios.delete(`${API_URI}/api/menu/${id}`, config);
 
       dispatch({ type: MEAL_DELETE_SUCCESS });
     } catch (error) {
@@ -91,6 +93,7 @@ export const createMeal = (meal) => {
         headers: {
           'Content-Type': 'application/json',
         },
+        withCredentials: true,
       };
 
       const { data } = await axios.post(`${API_URI}/api/menu`, meal, config);
@@ -117,6 +120,7 @@ export const updateMeal = (meal) => {
         headers: {
           'Content-Type': 'application/json',
         },
+        withCredentials: true,
       };
 
       const { data } = await axios.put(

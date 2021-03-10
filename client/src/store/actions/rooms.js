@@ -115,6 +115,7 @@ export const createRoom = (room) => {
         headers: {
           'Content-Type': 'application/json',
         },
+        withCredentials: true,
       };
 
       const { data } = await axios.post(`${API_URI}/api/rooms`, room, config);
@@ -137,7 +138,9 @@ export const deleteRoom = (id) => {
     try {
       dispatch({ type: ROOM_DELETE_REQUEST });
 
-      await axios.delete(`${API_URI}/api/rooms/${id}`);
+      const config = { withCredentials: true };
+
+      await axios.delete(`${API_URI}/api/rooms/${id}`, config);
 
       dispatch({ type: ROOM_DELETE_SUCCESS });
     } catch (error) {
@@ -161,6 +164,7 @@ export const updateRoom = (room) => {
         headers: {
           'Content-Type': 'application/json',
         },
+        withCredentials: true,
       };
 
       const { data } = await axios.put(

@@ -27,7 +27,9 @@ export const listMyBookings = () => {
     try {
       dispatch({ type: BOOKING_LIST_MY_REQUEST });
 
-      const { data } = await axios.get(`${API_URI}/api/bookings/mybookings`);
+      const { data } = await axios.get(`${API_URI}/api/bookings/mybookings`, {
+        withCredentials: true,
+      });
 
       dispatch({ type: BOOKING_LIST_MY_SUCCESS, payload: data });
     } catch (error) {
@@ -48,7 +50,10 @@ export const listBookings = () => {
       dispatch({ type: BOOKING_LIST_REQUEST });
 
       const { data } = await axios.get(
-        `${API_URI}/api/bookings/adminbookinglist`
+        `${API_URI}/api/bookings/adminbookinglist`,
+        {
+          withCredentials: true,
+        }
       );
 
       dispatch({ type: BOOKING_LIST_SUCCESS, payload: data });
@@ -69,7 +74,9 @@ export const getBookingDetails = (id) => {
     try {
       dispatch({ type: BOOKING_DETAILS_REQUEST });
 
-      const { data } = await axios.get(`${API_URI}/api/bookings/${id}`);
+      const { data } = await axios.get(`${API_URI}/api/bookings/${id}`, {
+        withCredentials: true,
+      });
 
       dispatch({ type: BOOKING_DETAILS_SUCCESS, payload: data });
     } catch (error) {
@@ -118,7 +125,14 @@ export const bookRoom = (bookingDetails, type) => {
         message = `Email has been sent to <<${bookingDetails.email}>>. Please confirm your booking from your email. Thanks`;
       }
 
-      const { data } = await axios.post(url, bookingDetails, config);
+      const { data } = await axios.post(
+        url,
+        {
+          withCredentials: true,
+        },
+        bookingDetails,
+        config
+      );
       console.log(data);
       dispatch({ type: ROOM_BOOKING_SUCCESS, payload: { title, message } });
     } catch (error) {

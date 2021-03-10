@@ -1,4 +1,5 @@
 const checkAuth = (req, res, next) => {
+  console.log('CHECKING USER AUTH.......');
   if (req.isAuthenticated()) {
     next();
   } else {
@@ -8,6 +9,7 @@ const checkAuth = (req, res, next) => {
 };
 
 const checkAdmin = (req, res, next) => {
+  console.log('CHECKING ADMIN AUTH...');
   if (req.isAuthenticated()) {
     if (req.user.is_admin) {
       next();

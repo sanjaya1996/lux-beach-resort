@@ -33,7 +33,9 @@ export const listGuests = () => {
     try {
       dispatch({ type: GUEST_LIST_REQUEST });
 
-      const { data } = await axios.get(`${API_URI}/api/guests`);
+      const config = { withCredentials: true };
+
+      const { data } = await axios.get(`${API_URI}/api/guests`, config);
 
       dispatch({ type: GUEST_LIST_SUCCESS, payload: data });
     } catch (error) {
@@ -53,7 +55,9 @@ export const getGuestDetails = (id) => {
     try {
       dispatch({ type: GUEST_DETAILS_REQUEST });
 
-      const { data } = await axios.get(`${API_URI}/api/guests/${id}`);
+      const config = { withCredentials: true };
+
+      const { data } = await axios.get(`${API_URI}/api/guests/${id}`, config);
 
       dispatch({ type: GUEST_DETAILS_SUCCESS, payload: data });
     } catch (error) {
@@ -73,7 +77,9 @@ export const deleteGuest = (id) => {
     try {
       dispatch({ type: GUEST_DELETE_REQUEST });
 
-      await axios.delete(`${API_URI}/api/guests/${id}`);
+      const config = { withCredentials: true };
+
+      await axios.delete(`${API_URI}/api/guests/${id}`, config);
 
       dispatch({ type: GUEST_DELETE_SUCCESS });
     } catch (error) {
@@ -97,6 +103,7 @@ export const updateGuest = (id, email, phone, title, isAdmin) => {
         headers: {
           'Content-Type': 'application/json',
         },
+        withCredentials: true,
       };
 
       await axios.put(
@@ -123,7 +130,12 @@ export const getCurrentUser = () => {
     try {
       dispatch({ type: CURRENT_USER_REQUEST });
 
-      const { data } = await axios.get(`${API_URI}/api/auth/currentuser`);
+      const config = { withCredentials: true };
+
+      const { data } = await axios.get(
+        `${API_URI}/api/auth/currentuser`,
+        config
+      );
 
       dispatch({ type: CURRENT_USER_SUCCESS, payload: data });
     } catch (error) {
@@ -143,11 +155,7 @@ export const updateUserProfile = (phone, email, title) => {
     try {
       dispatch({ type: USER_UPDATE_PROFILE_REQUEST });
 
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      };
+      const config = { withCredentials: true };
 
       const { data } = await axios.put(
         `${API_URI}/api/guests/profile`,

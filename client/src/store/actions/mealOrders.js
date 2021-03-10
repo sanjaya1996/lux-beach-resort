@@ -27,7 +27,9 @@ export const listMealOrders = () => {
     try {
       dispatch({ type: MEAL_ORDER_LIST_REQUEST });
 
-      const { data } = await axios.get(`${API_URI}/api/mealorders`);
+      const config = { withCredentials: true };
+
+      const { data } = await axios.get(`${API_URI}/api/mealorders`, config);
 
       dispatch({ type: MEAL_ORDER_LIST_SUCCESS, payload: data });
     } catch (error) {
@@ -47,7 +49,12 @@ export const listMyMealOrders = () => {
     try {
       dispatch({ type: MEAL_ORDER_LIST_MY_REQUEST });
 
-      const { data } = await axios.get(`${API_URI}/api/mealorders/myorders`);
+      const config = { withCredentials: true };
+
+      const { data } = await axios.get(
+        `${API_URI}/api/mealorders/myorders`,
+        config
+      );
 
       dispatch({ type: MEAL_ORDER_LIST_MY_SUCCESS, payload: data });
     } catch (error) {
@@ -67,7 +74,12 @@ export const getMealOrderDetails = (id) => {
     try {
       dispatch({ type: MEAL_ORDER_DETAILS_REQUEST });
 
-      const { data } = await axios.get(`${API_URI}/api/mealorders/${id}`);
+      const config = { withCredentials: true };
+
+      const { data } = await axios.get(
+        `${API_URI}/api/mealorders/${id}`,
+        config
+      );
 
       dispatch({ type: MEAL_ORDER_DETAILS_SUCCESS, payload: data });
     } catch (error) {
@@ -108,6 +120,7 @@ export const orderMeal = (
         headers: {
           'Content-Type': 'application/json',
         },
+        withCredentials: true,
       };
 
       await axios.post(`${API_URI}/api/mealorders`, body, config);
@@ -134,6 +147,7 @@ export const markOrderasPickedUp = (id) => {
         headers: {
           'Content-Type': 'application/json',
         },
+        withCredentials: true,
       };
 
       await axios.put(`${API_URI}/api/mealorders/${id}/picked`, {}, config);

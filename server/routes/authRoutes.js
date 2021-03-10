@@ -20,11 +20,12 @@ router.get(
 router.get(
   '/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
-  (req, res) => res.redirect('/')
+  (req, res) => res.redirect('http://localhost:3000')
 );
 
 // Get Currently authenticated User
 router.get('/currentuser', (req, res) => {
+  console.log(req);
   const isAuthenticated = req.isAuthenticated();
   let user = null;
   if (req.user) {
