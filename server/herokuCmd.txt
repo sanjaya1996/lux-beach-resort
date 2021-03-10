@@ -1,0 +1,2 @@
+PUSH SUBDIRECTORY- $ git subtree push --prefix server heroku master
+ACCESS POSTGRES DB- $ heroku psql

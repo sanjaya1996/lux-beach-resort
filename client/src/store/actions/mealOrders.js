@@ -20,12 +20,14 @@ export const ORDER_PICKED_UP_REQUEST = 'ORDER_PICKED_UP_REQUEST';
 export const ORDER_PICKED_UP_SUCCESS = 'ORDER_PICKED_UP_SUCCESS';
 export const ORDER_PICKED_UP_FAIL = 'ORDER_PICKED_UP_FAIL';
 
+const API_URI = process.env.REACT_APP_API_URI;
+
 export const listMealOrders = () => {
   return async (dispatch) => {
     try {
       dispatch({ type: MEAL_ORDER_LIST_REQUEST });
 
-      const { data } = await axios.get('/api/mealorders');
+      const { data } = await axios.get(`${API_URI}/api/mealorders`);
 
       dispatch({ type: MEAL_ORDER_LIST_SUCCESS, payload: data });
     } catch (error) {
@@ -45,7 +47,7 @@ export const listMyMealOrders = () => {
     try {
       dispatch({ type: MEAL_ORDER_LIST_MY_REQUEST });
 
-      const { data } = await axios.get('/api/mealorders/myorders');
+      const { data } = await axios.get(`${API_URI}/api/mealorders/myorders`);
 
       dispatch({ type: MEAL_ORDER_LIST_MY_SUCCESS, payload: data });
     } catch (error) {
@@ -65,7 +67,7 @@ export const getMealOrderDetails = (id) => {
     try {
       dispatch({ type: MEAL_ORDER_DETAILS_REQUEST });
 
-      const { data } = await axios.get(`/api/mealorders/${id}`);
+      const { data } = await axios.get(`${API_URI}/api/mealorders/${id}`);
 
       dispatch({ type: MEAL_ORDER_DETAILS_SUCCESS, payload: data });
     } catch (error) {
@@ -108,7 +110,7 @@ export const orderMeal = (
         },
       };
 
-      await axios.post('/api/mealorders', body, config);
+      await axios.post(`${API_URI}/api/mealorders`, body, config);
 
       dispatch({ type: MEAL_ORDER_SUCCESS });
     } catch (error) {
@@ -134,7 +136,7 @@ export const markOrderasPickedUp = (id) => {
         },
       };
 
-      await axios.put(`/api/mealorders/${id}/picked`, {}, config);
+      await axios.put(`${API_URI}/api/mealorders/${id}/picked`, {}, config);
 
       dispatch({ type: ORDER_PICKED_UP_SUCCESS });
     } catch (error) {

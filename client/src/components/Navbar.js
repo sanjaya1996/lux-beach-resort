@@ -98,7 +98,11 @@ const Navbar = () => {
                   </Link>
                   <div className='dropdown-content'>
                     <Link to='/profile'>Profile</Link>
-                    <a href='/api/auth/logout'>Logout</a>
+                    <a
+                      href={`${process.env.REACT_APP_API_URI}/api/auth/logout`}
+                    >
+                      Logout
+                    </a>
                   </div>
                 </li>
               </>

@@ -17,6 +17,8 @@ import {
 } from '../../store/reducers/menu';
 import customFormReducer from '../../reusableFunctions/formReducer';
 
+const API_URI = process.env.REACT_APP_API_URI;
+
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
 
 const formReducer = (state, action) => {
@@ -237,7 +239,11 @@ const EditMealScreen = ({ match, history }) => {
         },
       };
 
-      const { data } = await axios.post('/api/upload/meal', formData, config);
+      const { data } = await axios.post(
+        `${API_URI}/api/upload/meal`,
+        formData,
+        config
+      );
 
       inputChangeHandler('imageUrl', data, true);
       setUploading(false);

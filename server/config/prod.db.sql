@@ -418,7 +418,7 @@ CREATE TABLE meals (
 INSERT INTO meals 
    (category, name, price, imageUrl, duration, ingredients, is_gluten_free, is_vegan, is_vegeterian, is_lactose_free)
 VALUES
-   ('Salmon Fish', 'Salmon Fish', 34.50, '/uploads\mealImage-1610490698463.jpg', 20, '350 gm grilled Salmon, Tossed Crisp vegetables in a tangy Lemon basil dressing.', true, false, false, true),
+   ('Salmon Fish', 'Salmon Fish', 34.50, 'https://lux-beach-resort.herokuapp.com/uploads\mealImage-1610490698463.jpg', 20, '350 gm grilled Salmon, Tossed Crisp vegetables in a tangy Lemon basil dressing.', true, false, false, true),
    ('Italian', 'Spaghetti with Tomato Sauce', 20.0, '/images/meals/meal-spaghettiBolognese.jpg', 20, 'Napoletana sauce, garlic, cherry tomato, basil and parmesan.', false, true, true, true),
    ('Quick & Easy', 'Classic Hawaii', 15.0, '/images/meals/meal-classicHawai.jpg', 10, '1 Slice White Bread, 1 Slice Ham, Pinapple Slice, Slice of Cheese and Butter', false, false, false, false),
    ('Hamburgers', 'Classic Hamburger', 14.5, '/images/meals/meal-classicHamburger.jpg', 45, '300g Cattle Hack, Tomato, Cucumber, Pickel, Onion and Ketchup', false, false, false, true);

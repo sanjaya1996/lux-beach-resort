@@ -20,12 +20,14 @@ export const MAKE_PAYMENT_REQUEST = 'MAKE_PAYMENT_REQUEST';
 export const MAKE_PAYMENT_SUCCESS = 'MAKE_PAYMENT_SUCCESS';
 export const MAKE_PAYMENT_FAIL = 'MAKE_PAYMENT_FAIL';
 
+const API_URI = process.env.REACT_APP_API_URI;
+
 export const listMyBookings = () => {
   return async (dispatch) => {
     try {
       dispatch({ type: BOOKING_LIST_MY_REQUEST });
 
-      const { data } = await axios.get('/api/bookings/mybookings');
+      const { data } = await axios.get(`${API_URI}/api/bookings/mybookings`);
 
       dispatch({ type: BOOKING_LIST_MY_SUCCESS, payload: data });
     } catch (error) {
@@ -45,7 +47,9 @@ export const listBookings = () => {
     try {
       dispatch({ type: BOOKING_LIST_REQUEST });
 
-      const { data } = await axios.get('/api/bookings/adminbookinglist');
+      const { data } = await axios.get(
+        `${API_URI}/api/bookings/adminbookinglist`
+      );
 
       dispatch({ type: BOOKING_LIST_SUCCESS, payload: data });
     } catch (error) {
@@ -65,7 +69,7 @@ export const getBookingDetails = (id) => {
     try {
       dispatch({ type: BOOKING_DETAILS_REQUEST });
 
-      const { data } = await axios.get(`/api/bookings/${id}`);
+      const { data } = await axios.get(`${API_URI}/api/bookings/${id}`);
 
       dispatch({ type: BOOKING_DETAILS_SUCCESS, payload: data });
     } catch (error) {
@@ -102,12 +106,14 @@ export const bookRoom = (bookingDetails, type) => {
         'You have successfully booked your room, We will contact you soon. Thanks !';
 
       if (isAuthenticated && type === 'paid') {
-        url = `/api/bookings/${bookingDetails.roomId}/${user.id}?paid=${true}`;
+        url = `${API_URI}/api/bookings/${bookingDetails.roomId}/${
+          user.id
+        }?paid=${true}`;
         console.log(url);
       } else if (type === 'paid') {
-        url = `/api/bookings/${bookingDetails.roomId}?paid=${true}`;
+        url = `${API_URI}/api/bookings/${bookingDetails.roomId}?paid=${true}`;
       } else {
-        url = '/api/bookings';
+        url = `${API_URI}/api/bookings`;
         title = 'Email Sent!';
         message = `Email has been sent to <<${bookingDetails.email}>>. Please confirm your booking from your email. Thanks`;
       }
@@ -165,7 +171,7 @@ export const payAndBookRoom = (
         'You have successfully booked your room, We will contact you soon. Thanks !';
 
       const { data } = await axios.post(
-        `/api/bookings/pay/${roomId}`,
+        `${API_URI}/api/bookings/pay/${roomId}`,
         body,
         config
       );
@@ -198,7 +204,7 @@ export const payBooking = (token, total, bookingId) => {
       };
 
       await axios.put(
-        `/api/bookings/${bookingId}/payment`,
+        `${API_URI}/api/bookings/${bookingId}/payment`,
         {
           token,
           amount: total,

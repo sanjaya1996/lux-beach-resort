@@ -3,10 +3,7 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const db = require('./db.js');
 
-const baseUrl =
-  process.env.NODE_ENV === 'development'
-    ? 'http://localhost:3000'
-    : 'https://luxbeachresort.herokuapp.com';
+const baseUrl = process.env.BASE_URL;
 
 // Find or Create user function after authProvider response
 const findOrCreateUser = async (profile, done) => {

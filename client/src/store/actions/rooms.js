@@ -26,15 +26,17 @@ export const CHECK_AVAILABILITY_REQUEST = 'CHECK_AVAILABILITY_REQUEST';
 export const CHECK_AVAILABILITY_SUCCESS = 'CHECK_AVAILABILITY_SUCCESS';
 export const CHECK_AVAILABILITY_FAIL = 'CHECK_AVAILABILITY_FAIL';
 
+const API_URI = process.env.REACT_APP_API_URI;
+
 export const listRooms = () => {
   return async (dispatch) => {
     try {
       dispatch({ type: ROOM_LIST_REQUEST });
 
-      const { data: rooms } = await axios.get('/api/rooms');
+      const { data: rooms } = await axios.get(`${API_URI}/api/rooms`);
 
       const { data: currentBookings } = await axios.get(
-        '/api/bookings/current'
+        `${API_URI}/api/bookings/current`
       );
 
       dispatch({
@@ -89,7 +91,7 @@ export const listRoomDetails = (id) => {
     try {
       dispatch({ type: ROOM_DETAILS_REQUEST });
 
-      const { data } = await axios.get(`/api/rooms/${id}`);
+      const { data } = await axios.get(`${API_URI}/api/rooms/${id}`);
 
       dispatch({ type: ROOM_DETAILS_SUCCESS, payload: data });
     } catch (err) {
@@ -115,7 +117,7 @@ export const createRoom = (room) => {
         },
       };
 
-      const { data } = await axios.post('/api/rooms', room, config);
+      const { data } = await axios.post(`${API_URI}/api/rooms`, room, config);
 
       dispatch({ type: ROOM_CREATE_SUCCESS, payload: data });
     } catch (error) {
@@ -135,7 +137,7 @@ export const deleteRoom = (id) => {
     try {
       dispatch({ type: ROOM_DELETE_REQUEST });
 
-      await axios.delete(`/api/rooms/${id}`);
+      await axios.delete(`${API_URI}/api/rooms/${id}`);
 
       dispatch({ type: ROOM_DELETE_SUCCESS });
     } catch (error) {
@@ -161,7 +163,11 @@ export const updateRoom = (room) => {
         },
       };
 
-      const { data } = await axios.put(`/api/rooms/${room.id}`, room, config);
+      const { data } = await axios.put(
+        `${API_URI}/api/rooms/${room.id}`,
+        room,
+        config
+      );
 
       dispatch({ type: ROOM_UPDATE_SUCCESS, payload: data });
     } catch (error) {
@@ -182,7 +188,7 @@ export const checkAvailability = (id, checkin, checkout, guests) => {
       dispatch({ type: CHECK_AVAILABILITY_REQUEST });
 
       const { data } = await axios.get(
-        `/api/checkavailability/${id}?guests=${guests}&checkin=${checkin}&checkout=${checkout}`
+        `${API_URI}/api/checkavailability/${id}?guests=${guests}&checkin=${checkin}&checkout=${checkout}`
       );
 
       dispatch({

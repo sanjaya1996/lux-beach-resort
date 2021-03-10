@@ -15,6 +15,8 @@ import Title from '../../components/Title';
 import Input from '../../components/Input';
 import customFormReducer from '../../reusableFunctions/formReducer';
 
+const API_URI = process.env.REACT_APP_API_URI;
+
 const errorTextStyles = {
   padding: 0,
   fontWeight: 'normal',
@@ -205,7 +207,7 @@ const EditRoomScreen = ({ match, history }) => {
       };
 
       const { data } = await axios.post(
-        '/api/upload/roomimages',
+        `${API_URI}/api/upload/roomimages`,
         formData,
         config
       );
