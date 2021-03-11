@@ -22,9 +22,15 @@ const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 require('./config/passport')(passport);
 
 const app = express();
-
 app.use(express.json());
-app.use(cors({ credentials: true, origin: process.env.ORIGIN_URI }));
+
+const corsConfig = {
+  origin: true,
+  credentials: true,
+};
+
+app.use(cors(corsConfig));
+app.options('*', cors(corsConfig));
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));

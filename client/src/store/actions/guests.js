@@ -1,4 +1,5 @@
 import axios from 'axios';
+axios.defaults.withCredentials = true;
 
 export const GUEST_LIST_REQUEST = 'GUEST_LIST_REQUEST';
 export const GUEST_LIST_SUCCESS = 'GUEST_LIST_SUCCESS';
@@ -130,12 +131,7 @@ export const getCurrentUser = () => {
     try {
       dispatch({ type: CURRENT_USER_REQUEST });
 
-      const config = { withCredentials: true };
-
-      const { data } = await axios.get(
-        `${API_URI}/api/auth/currentuser`,
-        config
-      );
+      const { data } = await axios.get(`${API_URI}/api/auth/currentuser`);
 
       dispatch({ type: CURRENT_USER_SUCCESS, payload: data });
     } catch (error) {
