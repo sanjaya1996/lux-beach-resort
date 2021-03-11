@@ -389,18 +389,31 @@ const PlaceOrderScreen = ({ history }) => {
 
         <div style={{ display: 'inline-block' }}>
           {formState.formIsValid ? (
-            <StripeCheckout
-              stripeKey={process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY}
-              token={makePayment}
-              name={'lux-beach-resort'}
-              amount={cart.totalPrice * 100}
-              description='meal order'
-              currency='AUD'
-            >
-              <button type='button' className='btn-primary action-btn'>
-                {`Pay for $${cart.totalPrice}`}
-              </button>
-            </StripeCheckout>
+            <>
+              <StripeCheckout
+                stripeKey={process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY}
+                token={makePayment}
+                name={'lux-beach-resort'}
+                amount={cart.totalPrice * 100}
+                description='meal order'
+                currency='AUD'
+              >
+                <button type='button' className='btn-primary action-btn'>
+                  {`Pay for $${cart.totalPrice}`}
+                </button>
+              </StripeCheckout>
+              <p
+                style={{
+                  fontSize: '0.65rem',
+                  fontWeight: 'lighter',
+                  fontStyle: 'italic',
+                  padding: 10,
+                }}
+              >
+                TEST ME- Email: test@yahoo.com, Card num: 4242 4242 4242 4242,
+                MM/YY : 12/21, CVC: 123
+              </p>
+            </>
           ) : (
             <button
               type='button'

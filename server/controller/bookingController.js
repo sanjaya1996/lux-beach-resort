@@ -115,10 +115,10 @@ const updateBookingToPaid = async (req, res, next) => {
 // @access  Public
 const createBooking = async (req, res, next) => {
   try {
-    const guestId = req.guestId || req.user.id;
+    const guestId = req.user.id || req.guestId;
     const roomId = req.params.roomId;
     const isPaid = req.is_paid || false;
-    const paidAt = req.is_paid ? 'CURRENT_TIMESTAMP' : null;
+    const paidAt = req.is_paid ? new Date().toISOString() : null;
     let {
       bookingDetails: { checkInDate, checkOutDate, amount },
     } = req.body;

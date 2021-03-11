@@ -3,12 +3,14 @@ const passport = require('passport');
 
 const router = express.Router();
 
+const originUri = process.env.ORIGIN_URI;
+
 // Login with facebook route
 router.get('/facebook', passport.authenticate('facebook', { scope: 'email' }));
 router.get(
   '/facebook/callback',
-  passport.authenticate('facebook', { failureRedirect: '/login' }),
-  (req, res) => res.redirect('/')
+  passport.authenticate('facebook', { failureRedirect: `${originUri}/login` }),
+  (req, res) => res.redirect(originUri)
 );
 
 // Login with google route
@@ -20,7 +22,7 @@ router.get(
 router.get(
   '/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
-  (req, res) => res.redirect('http://localhost:3000')
+  (req, res) => res.redirect(originUri)
 );
 
 // Get Currently authenticated User
@@ -37,7 +39,7 @@ router.get('/currentuser', (req, res) => {
 
 router.get('/logout', (req, res) => {
   req.logout();
-  res.redirect('/login');
+  res.redirect(`${originUri}/login`);
 });
 
 module.exports = router;

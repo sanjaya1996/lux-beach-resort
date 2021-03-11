@@ -27,9 +27,12 @@ export const listMyBookings = () => {
     try {
       dispatch({ type: BOOKING_LIST_MY_REQUEST });
 
-      const { data } = await axios.get(`${API_URI}/api/bookings/mybookings`, {
-        withCredentials: true,
-      });
+      const config = { withCredentials: true };
+
+      const { data } = await axios.get(
+        `${API_URI}/api/bookings/mybookings`,
+        config
+      );
 
       dispatch({ type: BOOKING_LIST_MY_SUCCESS, payload: data });
     } catch (error) {
@@ -49,11 +52,11 @@ export const listBookings = () => {
     try {
       dispatch({ type: BOOKING_LIST_REQUEST });
 
+      const config = { withCredentials: true };
+
       const { data } = await axios.get(
         `${API_URI}/api/bookings/adminbookinglist`,
-        {
-          withCredentials: true,
-        }
+        config
       );
 
       dispatch({ type: BOOKING_LIST_SUCCESS, payload: data });
@@ -74,9 +77,9 @@ export const getBookingDetails = (id) => {
     try {
       dispatch({ type: BOOKING_DETAILS_REQUEST });
 
-      const { data } = await axios.get(`${API_URI}/api/bookings/${id}`, {
-        withCredentials: true,
-      });
+      const config = { withCredentials: true };
+
+      const { data } = await axios.get(`${API_URI}/api/bookings/${id}`, config);
 
       dispatch({ type: BOOKING_DETAILS_SUCCESS, payload: data });
     } catch (error) {
@@ -105,6 +108,7 @@ export const bookRoom = (bookingDetails, type) => {
         headers: {
           'Content-Type': 'application/json',
         },
+        withCredentials: true,
       };
 
       let url = '';
@@ -125,14 +129,7 @@ export const bookRoom = (bookingDetails, type) => {
         message = `Email has been sent to <<${bookingDetails.email}>>. Please confirm your booking from your email. Thanks`;
       }
 
-      const { data } = await axios.post(
-        url,
-        {
-          withCredentials: true,
-        },
-        bookingDetails,
-        config
-      );
+      const { data } = await axios.post(url, bookingDetails, config);
       console.log(data);
       dispatch({ type: ROOM_BOOKING_SUCCESS, payload: { title, message } });
     } catch (error) {
@@ -178,6 +175,7 @@ export const payAndBookRoom = (
         headers: {
           'Content-Type': 'application/json',
         },
+        withCredentials: true,
       };
 
       const messageTitle = 'Successfully booked!';
@@ -215,6 +213,7 @@ export const payBooking = (token, total, bookingId) => {
         headers: {
           'Content-Type': 'application/json',
         },
+        withCredentials: true,
       };
 
       await axios.put(
