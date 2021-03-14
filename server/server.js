@@ -25,13 +25,14 @@ const app = express();
 app.use(express.json());
 
 const corsConfig = {
-  origin: true,
+  origin: process.env.ORIGIN_URI,
   credentials: true,
 };
 
 app.set('trust proxy', 1);
 
 app.use(cors(corsConfig));
+app.options('*', cors(corsConfig));
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
@@ -40,10 +41,9 @@ if (process.env.NODE_ENV === 'development') {
 // Cookie Session
 app.use(
   cookieSession({
-    name: 'session', // default is also session
+    name: 'mycookie session', // default is also session
     keys: [process.env.COOKIE_SECRET_KEY],
     maxAge: 24 * 60 * 60 * 1000,
-    sameSite: process.env.NODE_ENV === 'development',
     secure: process.env.NODE_ENV === 'production',
   })
 );
