@@ -1,9 +1,10 @@
+const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const db = require('./db.js');
 
-const baseUrl = process.env.BASE_URL;
+const baseUrl = process.env.API_URI;
 
 // Find or Create user function after authProvider response
 const findOrCreateUser = async (profile, done) => {
@@ -48,51 +49,50 @@ const findOrCreateUser = async (profile, done) => {
   }
 };
 
-// MAIN PASSPORT EXPORT FUNCTION
-module.exports = function (passport) {
-  // Facebook Strategy
-  passport.use(
-    new FacebookStrategy(
-      {
-        clientID: process.env.FACEBOOK_APP_ID,
-        clientSecret: process.env.FACEBOOK_APP_SECRET,
-        callbackURL: `${baseUrl}/api/auth/facebook/callback`,
-        profileFields: [
-          'id',
-          'displayName',
-          'gender',
-          'picture.type(large)',
-          'email',
-        ],
-      },
-      (accessToken, refreshToken, profile, done) => {
-        findOrCreateUser(profile, done);
-      }
-    )
-  );
+// Facebook Strategy
+passport.use(
+  new FacebookStrategy(
+    {
+      clientID: process.env.FACEBOOK_APP_ID,
+      clientSecret: process.env.FACEBOOK_APP_SECRET,
+      callbackURL: `${baseUrl}/api/auth/facebook/callback`,
+      profileFields: [
+        'id',
+        'displayName',
+        'gender',
+        'picture.type(large)',
+        'email',
+      ],
+    },
+    (accessToken, refreshToken, profile, done) => {
+      findOrCreateUser(profile, done);
+    }
+  )
+);
 
-  // Google Strategy
-  passport.use(
-    new GoogleStrategy(
-      {
-        clientID: process.env.GOOGLE_CLIENT_ID,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: `${baseUrl}/api/auth/google/callback`,
-      },
-      (accessToken, refreshToken, profile, done) => {
-        findOrCreateUser(profile, done);
-      }
-    )
-  );
+// Google Strategy
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: `${baseUrl}/api/auth/google/callback`,
+    },
+    (accessToken, refreshToken, profile, done) => {
+      findOrCreateUser(profile, done);
+    }
+  )
+);
 
-  // Serialize and Deserialize User
-  passport.serializeUser((user, done) => {
-    done(null, user.id);
+// Serialize and Deserialize User
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser((id, done) => {
+  db.query('SELECT * FROM guests WHERE id = $1', [id]).then((res) => {
+    done(null, res.rows[0]);
   });
+});
 
-  passport.deserializeUser((id, done) => {
-    db.query('SELECT * FROM guests WHERE id = $1', [id]).then((res) => {
-      done(null, res.rows[0]);
-    });
-  });
-};
+module.exports = passport;

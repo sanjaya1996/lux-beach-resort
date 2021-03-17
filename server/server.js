@@ -1,14 +1,12 @@
 const express = require('express');
+require('dotenv').config();
+
 const cors = require('cors');
-const dotenv = require('dotenv');
 const morgan = require('morgan');
 const path = require('path');
-const passport = require('passport');
 const cookieSession = require('cookie-session');
 
-// Load config
-dotenv.config();
-
+const passport = require('./config/passport');
 const authRoutes = require('./routes/authRoutes');
 const roomRoutes = require('./routes/roomRoutes');
 const menuRoutes = require('./routes/menuRoutes');
@@ -18,8 +16,6 @@ const bookingRoutes = require('./routes/bookingRoutes');
 const guestRoutes = require('./routes/guestRoutes');
 const checkAvailabilityRoutes = require('./routes/checkAvailabilityRoutes');
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
-// Passport config
-require('./config/passport')(passport);
 
 const app = express();
 app.use(express.json());
@@ -44,7 +40,7 @@ app.use(
     name: 'mycookie session', // default is also session
     keys: [process.env.COOKIE_SECRET_KEY],
     maxAge: 24 * 60 * 60 * 1000,
-    secure: process.env.NODE_ENV === 'production',
+    secure: true,
   })
 );
 
