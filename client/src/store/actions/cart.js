@@ -6,11 +6,9 @@ export const CART_REMOVE_ROOM = 'CART_REMOVE_ROOM';
 export const CART_REMOVE_MEAL = 'CART_REMOVE_MEAL';
 export const CART_ADD_GUEST_DETAILS = 'CART_ADD_GUEST_DETAILS';
 
-const API_URI = process.env.REACT_APP_API_URI;
-
 export const addToCartRoom = (id, checkInDate, checkOutDate, guests) => {
   return async (dispatch, getState) => {
-    const { data } = await axios.get(`${API_URI}/api/rooms/${id}`);
+    const { data } = await axios.get(`/api/rooms/${id}`);
 
     dispatch({
       type: CART_ADD_ROOM,

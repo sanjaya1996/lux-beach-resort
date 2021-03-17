@@ -20,8 +20,6 @@ export const ORDER_PICKED_UP_REQUEST = 'ORDER_PICKED_UP_REQUEST';
 export const ORDER_PICKED_UP_SUCCESS = 'ORDER_PICKED_UP_SUCCESS';
 export const ORDER_PICKED_UP_FAIL = 'ORDER_PICKED_UP_FAIL';
 
-const API_URI = process.env.REACT_APP_API_URI;
-
 export const listMealOrders = () => {
   return async (dispatch) => {
     try {
@@ -29,7 +27,7 @@ export const listMealOrders = () => {
 
       const config = { withCredentials: true };
 
-      const { data } = await axios.get(`${API_URI}/api/mealorders`, config);
+      const { data } = await axios.get('/api/mealorders', config);
 
       dispatch({ type: MEAL_ORDER_LIST_SUCCESS, payload: data });
     } catch (error) {
@@ -51,10 +49,7 @@ export const listMyMealOrders = () => {
 
       const config = { withCredentials: true };
 
-      const { data } = await axios.get(
-        `${API_URI}/api/mealorders/myorders`,
-        config
-      );
+      const { data } = await axios.get('/api/mealorders/myorders', config);
 
       dispatch({ type: MEAL_ORDER_LIST_MY_SUCCESS, payload: data });
     } catch (error) {
@@ -76,10 +71,7 @@ export const getMealOrderDetails = (id) => {
 
       const config = { withCredentials: true };
 
-      const { data } = await axios.get(
-        `${API_URI}/api/mealorders/${id}`,
-        config
-      );
+      const { data } = await axios.get(`/api/mealorders/${id}`, config);
 
       dispatch({ type: MEAL_ORDER_DETAILS_SUCCESS, payload: data });
     } catch (error) {
@@ -123,7 +115,7 @@ export const orderMeal = (
         withCredentials: true,
       };
 
-      await axios.post(`${API_URI}/api/mealorders`, body, config);
+      await axios.post('/api/mealorders', body, config);
 
       dispatch({ type: MEAL_ORDER_SUCCESS });
     } catch (error) {
@@ -150,7 +142,7 @@ export const markOrderasPickedUp = (id) => {
         withCredentials: true,
       };
 
-      await axios.put(`${API_URI}/api/mealorders/${id}/picked`, {}, config);
+      await axios.put(`/api/mealorders/${id}/picked`, {}, config);
 
       dispatch({ type: ORDER_PICKED_UP_SUCCESS });
     } catch (error) {

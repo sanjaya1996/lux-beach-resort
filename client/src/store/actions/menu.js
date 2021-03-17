@@ -20,14 +20,12 @@ export const MEAL_UPDATE_REQUEST = 'MEAL_UPDATE_REQUEST';
 export const MEAL_UPDATE_SUCCESS = 'MEAL_UPDATE_SUCCESS';
 export const MEAL_UPDATE_FAIL = 'MEAL_UPDATE_FAIL';
 
-const API_URI = process.env.REACT_APP_API_URI;
-
 export const listMeals = () => {
   return async (dispatch) => {
     try {
       dispatch({ type: MEAL_LIST_REQUEST });
 
-      const { data } = await axios.get(`${API_URI}/api/menu`);
+      const { data } = await axios.get('/api/menu');
 
       dispatch({ type: MEAL_LIST_SUCCESS, payload: data });
     } catch (error) {
@@ -47,7 +45,7 @@ export const listMealDetails = (id) => {
     try {
       dispatch({ type: MEAL_DETAILS_REQUEST });
 
-      const { data } = await axios.get(`${API_URI}/api/menu/${id}`);
+      const { data } = await axios.get(`/api/menu/${id}`);
 
       dispatch({ type: MEAL_DETAILS_SUCCESS, payload: data });
     } catch (error) {
@@ -69,7 +67,7 @@ export const deleteMeal = (id) => {
 
       const config = { withCredentials: true };
 
-      await axios.delete(`${API_URI}/api/menu/${id}`, config);
+      await axios.delete(`/api/menu/${id}`, config);
 
       dispatch({ type: MEAL_DELETE_SUCCESS });
     } catch (error) {
@@ -96,7 +94,7 @@ export const createMeal = (meal) => {
         withCredentials: true,
       };
 
-      const { data } = await axios.post(`${API_URI}/api/menu`, meal, config);
+      const { data } = await axios.post('/api/menu', meal, config);
 
       dispatch({ type: MEAL_CREATE_SUCCESS, payload: data });
     } catch (error) {
@@ -123,11 +121,7 @@ export const updateMeal = (meal) => {
         withCredentials: true,
       };
 
-      const { data } = await axios.put(
-        `${API_URI}/api/menu/${meal.id}`,
-        meal,
-        config
-      );
+      const { data } = await axios.put(`/api/menu/${meal.id}`, meal, config);
 
       dispatch({ type: MEAL_UPDATE_SUCCESS, payload: data });
     } catch (error) {

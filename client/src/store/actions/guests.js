@@ -27,8 +27,6 @@ export const USER_UPDATE_PROFILE_FAIL = 'USER_UPDATE_PROFILE_FAIL';
 
 export const CURRENT_USER_UPDATE = 'CURRENT_USER_UPDATE';
 
-const API_URI = process.env.REACT_APP_API_URI;
-
 export const listGuests = () => {
   return async (dispatch) => {
     try {
@@ -36,7 +34,7 @@ export const listGuests = () => {
 
       const config = { withCredentials: true };
 
-      const { data } = await axios.get(`${API_URI}/api/guests`, config);
+      const { data } = await axios.get('/api/guests', config);
 
       dispatch({ type: GUEST_LIST_SUCCESS, payload: data });
     } catch (error) {
@@ -58,7 +56,7 @@ export const getGuestDetails = (id) => {
 
       const config = { withCredentials: true };
 
-      const { data } = await axios.get(`${API_URI}/api/guests/${id}`, config);
+      const { data } = await axios.get(`/api/guests/${id}`, config);
 
       dispatch({ type: GUEST_DETAILS_SUCCESS, payload: data });
     } catch (error) {
@@ -80,7 +78,7 @@ export const deleteGuest = (id) => {
 
       const config = { withCredentials: true };
 
-      await axios.delete(`${API_URI}/api/guests/${id}`, config);
+      await axios.delete(`/api/guests/${id}`, config);
 
       dispatch({ type: GUEST_DELETE_SUCCESS });
     } catch (error) {
@@ -108,7 +106,7 @@ export const updateGuest = (id, email, phone, title, isAdmin) => {
       };
 
       await axios.put(
-        `${API_URI}/api/guests/${id}`,
+        `/api/guests/${id}`,
         { email, phone, title, isAdmin },
         config
       );
@@ -131,7 +129,7 @@ export const getCurrentUser = () => {
     try {
       dispatch({ type: CURRENT_USER_REQUEST });
 
-      const { data } = await axios.get(`${API_URI}/api/auth/currentuser`);
+      const { data } = await axios.get(`/api/auth/currentuser`);
 
       dispatch({ type: CURRENT_USER_SUCCESS, payload: data });
     } catch (error) {
@@ -154,7 +152,7 @@ export const updateUserProfile = (phone, email, title) => {
       const config = { withCredentials: true };
 
       const { data } = await axios.put(
-        `${API_URI}/api/guests/profile`,
+        `/api/guests/profile`,
         { phone, email, title },
         config
       );

@@ -40,7 +40,7 @@ app.use(
     name: 'mycookie session', // default is also session
     keys: [process.env.COOKIE_SECRET_KEY],
     maxAge: 24 * 60 * 60 * 1000,
-    secure: true,
+    secure: process.env === 'production',
   })
 );
 
